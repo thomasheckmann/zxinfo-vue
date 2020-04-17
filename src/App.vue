@@ -1,28 +1,34 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app id="inspire">
+    <v-app-bar app clipped-left dark color="black">
+      <v-app-bar-nav-icon />
+      <v-toolbar-title>ZXInfo v2</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <div v-if="$vuetify.breakpoint.xs">XS</div>
+      <div v-if="$vuetify.breakpoint.sm">SM</div>
+      <div v-if="$vuetify.breakpoint.md">MD</div>
+      <div v-if="$vuetify.breakpoint.lg">LG</div>
+      <div v-if="$vuetify.breakpoint.xl">XL</div>
+    </v-app-bar>
+
+    <v-content>
+      <GamesListCards />
+    </v-content>
+
+    <v-footer app>
+      <span>&copy; 2019</span>
+    </v-footer>
+  </v-app>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import GamesListCards from "@/components/GamesListCards";
 export default {
-  name: 'App',
+  name: "App",
+  data: () => ({
+    //
+  }),
   components: {
-    HelloWorld
-  }
-}
+    GamesListCards,
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
