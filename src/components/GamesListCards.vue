@@ -1,5 +1,8 @@
 <template>
-  <v-container justify-start>
+  <v-container justify-start class="scroll-y">
+    <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary" @click="toTop">
+      <v-icon>keyboard_arrow_up</v-icon>
+    </v-btn>
     <v-navigation-drawer app temporary right v-model="filterdrawer" width="340">
       <template>
         <v-card class="xmx-auto">
@@ -19,18 +22,19 @@
                 </v-list-item-content>
               </template>
               <v-list-item v-for="subItem in group.items" :key="subItem.key">
-                <v-list-item-action>
-                  <v-checkbox dense color="primary" @change="toggle(subItem.key, facets[key].selected)"></v-checkbox>
+                <v-list-item-action class="ma-0">
+                  <v-checkbox color="primary" @change="toggle(subItem.key, facets[key].selected)"></v-checkbox>
                 </v-list-item-action>
-                <v-list-item-content>
+                <v-list-item-content class="py-0 pl-4">
                   <v-list-item-title v-text="subItem.key"></v-list-item-title>
                 </v-list-item-content>
-                <v-list-item-action>
+                <v-list-item-action class="ma-0">
                   <v-list-item-action-text v-text="subItem.doc_count"></v-list-item-action-text>
                 </v-list-item-action>
               </v-list-item>
             </v-list-group>
           </v-list>
+          <v-divider></v-divider>
           <v-row align="center" justify="center">
             <v-col class="text-center" cols="12" sm="4">
               <div class="my-2">
@@ -47,20 +51,23 @@
       </template>
     </v-navigation-drawer>
 
-    <v-text-field
-      v-model="searchterm"
-      label="What is your favorite game or author?"
-      single-line
-      full-width
-      hide-details
-      clearable
-      :append-icon="'mdi-magnify'"
-      @click:append="submit"
-      :append-outer-icon="'mdi-filter-variant'"
-      @click:append-outer="filterdrawer = !filterdrawer"
-      @keyup.enter="submit"
-      @keypress.enter.native.prevent=""
-    ></v-text-field>
+    <v-toolbar flat>
+      <v-text-field
+        v-model="searchterm"
+        label="What is your favorite game or author?"
+        single-line
+        full-width
+        hide-details
+        clearable
+        :append-icon="'mdi-magnify'"
+        @click:append="submit"
+        :append-outer-icon="'mdi-filter-variant'"
+        @click:append-outer="filterdrawer = !filterdrawer"
+        @keyup.enter="submit"
+        @keypress.enter.native.prevent=""
+      ></v-text-field>
+    </v-toolbar>
+
     <v-system-bar v-if="!loading">{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</v-system-bar>
     <v-row :align="'start'" :justify="'start'" dense>
       <v-col v-for="card in cards" :key="card.fulltitle" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
@@ -120,6 +127,7 @@ export default {
         availability: { icon: "mdi-check-circle", title: "Availability", items: [], selected: [], paramname: "availability" },
       },
       filterdrawer: null,
+      fab: false,
       loading: true,
       searchterm: "",
       searchTimeOf: 0,
@@ -252,6 +260,14 @@ export default {
         this.facets[agg].selected = [];
       }
       this.submit();
+    },
+    onScroll(e) {
+      if (typeof window === "undefined") return;
+      const top = window.pageYOffset || e.target.scrollTop || 0;
+      this.fab = top > 20;
+    },
+    toTop() {
+      this.$vuetify.goTo(0);
     },
   },
   created() {
