@@ -28,7 +28,7 @@ npm run lint
 
 ```
 docker build . -t zxinfo-vue
-docker run -d -p 8080:80 zxinfo-vue
+docker run -d -p 9000:80 zxinfo-vue
 ```
 
 ### Customize configuration
