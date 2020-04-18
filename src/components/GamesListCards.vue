@@ -23,7 +23,7 @@
               </template>
               <v-list-item v-for="subItem in group.items" :key="subItem.key">
                 <v-list-item-action class="ma-0">
-                  <v-checkbox color="primary" @change="toggle(subItem.key, facets[key].selected)"></v-checkbox>
+                  <v-checkbox color="primary" v-model="facets[key].selected[subItem.key]" :value="subItem.key"></v-checkbox>
                 </v-list-item-action>
                 <v-list-item-content class="py-0 pl-4">
                   <v-list-item-title v-text="subItem.key"></v-list-item-title>
@@ -36,12 +36,12 @@
           </v-list>
           <v-divider></v-divider>
           <v-row align="center" justify="center">
-            <v-col class="text-center" cols="12" sm="4">
+            <v-col class="text-center" cols="4">
               <div class="my-2">
                 <v-btn @click="submit" color="primary">FILTER</v-btn>
               </div>
             </v-col>
-            <v-col class="text-center" cols="12" sm="4">
+            <v-col class="text-center" cols="4">
               <div class="my-2">
                 <v-btn @click="filterdrawer = !filterdrawer">CLOSE</v-btn>
               </div>
@@ -71,11 +71,18 @@
 
     <!-- chip section for filters -->
     <v-row justify="start" align="center">
-      <div class="py-0" v-for="(group, key) in activeFacets" :key="key">
-        <v-chip v-for="(item, k) in group.selected" :key="k" class="ma-2" x-small outlined label>
-          <v-icon left x-small>{{ group.icon }}</v-icon> {{ item }}</v-chip
-        >
-      </div>
+      <v-chip
+        v-for="(item, id) in activeFacetsForChips"
+        :key="id"
+        class="ma-2"
+        x-small
+        outlined
+        label
+        close
+        @click:close="uncheck(item.group, item.value)"
+      >
+        <v-icon left x-small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip
+      >
     </v-row>
 
     <v-system-bar v-if="!loading">{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</v-system-bar>
@@ -172,7 +179,13 @@ export default {
 
       // add filters
       for (var agg in this.facets) {
-        p[this.facets[agg].paramname] = this.facets[agg].selected;
+        var selected = [];
+        for (var sel in this.facets[agg].selected) {
+          if (this.facets[agg].selected[sel]) {
+            selected.push(this.facets[agg].selected[sel]);
+          }
+        }
+        p[this.facets[agg].paramname] = selected;
       }
       // QUeryBuilder Helper
       var buildQuery = function(data) {
@@ -254,16 +267,9 @@ export default {
           this.loading = false;
         });
     },
-    toggle(item, list) {
-      var idx = list.indexOf(item);
-      if (idx > -1) {
-        list.splice(idx, 1);
-      } else {
-        list.push(item);
-      }
-    },
-    exists(item, list) {
-      return list.indexOf(item) > -1;
+    uncheck(group, value) {
+      this.facets[group].selected[value] = null;
+      this.submit();
     },
     resetfilters() {
       for (var agg in this.facets) {
@@ -308,6 +314,17 @@ export default {
       for (var agg in this.facets) {
         if (this.facets[agg].items.length) {
           active[agg] = this.facets[agg];
+        }
+      }
+      return active;
+    },
+    activeFacetsForChips: function() {
+      var active = [];
+      for (var group in this.facets) {
+        for (var item in this.facets[group].selected) {
+          if (this.facets[group].selected[item]) {
+            active.push({ icon: this.facets[group].icon, group: group, value: this.facets[group].selected[item] });
+          }
         }
       }
       return active;
