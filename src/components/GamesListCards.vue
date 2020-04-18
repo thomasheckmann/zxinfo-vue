@@ -41,12 +41,13 @@
                 <v-btn @click="submit" color="primary">FILTER</v-btn>
               </div>
             </v-col>
-            <v-col class="text-center" cols="4">
+            <v-col class="text-center" cols="6">
               <div class="my-2">
                 <v-btn @click="filterdrawer = !filterdrawer">CLOSE</v-btn>
               </div>
             </v-col>
           </v-row>
+          <v-system-bar color="teal" dense dark></v-system-bar>
         </v-card>
       </template>
     </v-navigation-drawer>
@@ -75,13 +76,13 @@
         v-for="(item, id) in activeFacetsForChips"
         :key="id"
         class="ma-2"
-        x-small
+        mall
         outlined
         label
         close
         @click:close="uncheck(item.group, item.value)"
       >
-        <v-icon left x-small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip
+        <v-icon left small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip
       >
     </v-row>
 
