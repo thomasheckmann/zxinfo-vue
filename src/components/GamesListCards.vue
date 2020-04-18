@@ -47,7 +47,7 @@
               </div>
             </v-col>
           </v-row>
-          <v-system-bar color="teal" dense dark></v-system-bar>
+          <v-system-bar color="teal" window dark></v-system-bar>
         </v-card>
       </template>
     </v-navigation-drawer>
