@@ -5,7 +5,7 @@
     </v-btn>
     <v-navigation-drawer app temporary right v-model="filterdrawer" width="340">
       <template>
-        <v-card class="xmx-auto">
+        <v-card>
           <v-toolbar color="teal" dark>
             <v-toolbar-title>Filtering options</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -51,6 +51,7 @@
       </template>
     </v-navigation-drawer>
 
+    <!-- search bar -->
     <v-toolbar flat>
       <v-text-field
         v-model="searchterm"
@@ -67,6 +68,15 @@
         @keypress.enter.native.prevent=""
       ></v-text-field>
     </v-toolbar>
+
+    <!-- chip section for filters -->
+    <v-row justify="start" align="center">
+      <div class="py-0" v-for="(group, key) in activeFacets" :key="key">
+        <v-chip v-for="(item, k) in group.selected" :key="k" class="ma-2" x-small outlined label>
+          <v-icon left x-small>{{ group.icon }}</v-icon> {{ item }}</v-chip
+        >
+      </div>
+    </v-row>
 
     <v-system-bar v-if="!loading">{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</v-system-bar>
     <v-row :align="'start'" :justify="'start'" dense>
