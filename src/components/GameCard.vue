@@ -20,6 +20,21 @@
       <div class="d-inline-block text-truncate" style="max-width: 100%;">
         {{ entry.type }}
       </div>
+      <div>
+        <v-rating
+          v-model="entry.score.score"
+          background-color="grey lighten-1"
+          color="red lighten-2"
+          full-icon="mdi-heart"
+          half-icon="mdi-heart-half-full"
+          empty-icon="mdi-heart-outline"
+          half-increments
+          x-small
+          dense
+          readonly
+          length="10"
+        ></v-rating>
+      </div>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -94,6 +109,10 @@ export default {
       } else {
         entry.type = this.GameData._source.type + "/" + this.GameData._source.subtype;
       }
+
+      entry.score = {};
+      entry.score.score = this.GameData._source.score.score;
+      entry.score.votes = this.GameData._source.score.votes;
       return entry;
     },
   },
