@@ -18,7 +18,7 @@
     </v-content>
 
     <v-footer app>
-      <span>&copy; 2019</span>
+      <span>&copy; 2020 ZXInfo - info@zxinfo.dk</span>
     </v-footer>
   </v-app>
 </template>
