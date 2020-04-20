@@ -88,9 +88,9 @@
 
     <v-system-bar v-if="!loading">{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</v-system-bar>
     <v-row :align="'start'" :justify="'start'" dense>
-      <v-col v-for="card in cards" :key="card.fulltitle" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
+      <v-col v-for="(card, index) in cards" :key="index" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
         <v-responsive :aspect-ratio="1 / 1">
-          <GameCard v-bind:GameData="card" />
+          <GameCard v-bind:GameData="card" :id="index / getPageSize == pageindex - 1 ? pageindex : ''" />
         </v-responsive>
       </v-col>
     </v-row>
@@ -110,7 +110,7 @@ import axios from "axios";
 var dataURL = "https://api.zxinfo.dk/api/zxinfo/v2/search?";
 
 export default {
-  name: "ThisIsMyName",
+  name: "EntrySearch",
   data() {
     return {
       facets: {
