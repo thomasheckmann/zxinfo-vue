@@ -116,11 +116,12 @@
                 <v-chip
                   v-for="(platform, i) in entry.otherPlatforms"
                   :key="i"
-                  class="ma-2"
+                  class="ma-1"
                   small
                   outlined
                   label
                   @click="openUrl(platform.url)"
+                  :disabled="platform.url == null"
                 >
                   {{ platform.name }} <v-icon small right>mdi-link</v-icon>
                 </v-chip>
@@ -272,11 +273,5 @@ export default {
 /* disable hover effect on table */
 .v-data-table /deep/ tbody /deep/ tr:hover:not(.v-data-table__expanded__content) {
   background: #ffffff !important;
-}
-
-/* dense. extra dense! */
-.v-list-item--dense,
-.v-list--dense .v-list-item {
-  min-height: 16px;
 }
 </style>
