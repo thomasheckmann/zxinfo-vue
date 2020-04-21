@@ -79,7 +79,7 @@
         v-for="(item, id) in activeFacetsForChips"
         :key="id"
         class="ma-2"
-        mall
+        small
         outlined
         label
         close

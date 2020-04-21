@@ -1,18 +1,21 @@
 <template>
-  <v-card class="mx-auto" max-width="80%" v-if="isLoaded">
+  <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="isLoaded">
     <v-list-item two-line>
       <v-list-item-content>
         <v-list-item-title class="headline">{{ entry.title }}</v-list-item-title>
-        <v-list-item-subtitle>{{ entry.yearofrelease }} {{ entry.publisher }} {{ entry.publisher_country }}</v-list-item-subtitle>
+        <v-list-item-subtitle
+          >{{ entry.originalReleaseYear }} {{ entry.originalPublisher }}
+          {{ entry.originalPublisherCountry }}</v-list-item-subtitle
+        >
       </v-list-item-content>
     </v-list-item>
 
     <v-card-text class="pa-0">
-      <v-row align="center">
-        <v-col cols="4">
+      <v-row align="start">
+        <v-col cols="6" :xl="6" :lg="6" :md="6" :sm="6" :xs="6">
           <v-img :src="entry.screenurl" :alt="entry.title" width="256"></v-img>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="6" :xl="6" :lg="6" :md="6" :sm="6" :xs="6">
           {{ entry.machinetype }}<br />{{ entry.genre }}<br />
           <v-rating
             v-model="entry.score.score"
@@ -28,7 +31,6 @@
             length="10"
           ></v-rating>
         </v-col>
-        <v-col cols="4"> </v-col>
       </v-row>
     </v-card-text>
     <v-divider></v-divider>
@@ -36,7 +38,7 @@
       <template v-slot:default>
         <tbody>
           <tr>
-            <td class="font-weight-bold" width="25%">Title</td>
+            <td class="font-weight-bold" width="33%">Title</td>
             <td>{{ entry.title }}</td>
           </tr>
           <tr>
@@ -45,19 +47,27 @@
           </tr>
           <tr>
             <td class="font-weight-bold">Orignial Release Year</td>
-            <td>{{ entry.originalReleaseYear }}</td>
+            <td valign="top">{{ entry.originalReleaseYear }}</td>
           </tr>
           <tr>
             <td class="font-weight-bold">Orignial Publisher</td>
-            <td>{{ entry.originalPublisher }} {{ entry.originalPublisherCountry }}</td>
+            <td valign="top">{{ entry.originalPublisher }} {{ entry.originalPublisherCountry }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Authors</td>
-            <td></td>
+            <td class="font-weight-bold" valign="top">Authors</td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle>{{ author.name }} {{ author.country }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
           </tr>
           <tr>
             <td class="font-weight-bold">Message Language</td>
-            <td></td>
+            <td valign="top">{{ entry.messageLanguage }}</td>
           </tr>
           <tr>
             <td class="font-weight-bold">Machine Type</td>
@@ -68,24 +78,54 @@
             <td>{{ entry.genre }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Control Options</td>
-            <td></td>
+            <td class="font-weight-bold" valign="top">Control Options</td>
+            <td>
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(control, i) in entry.controlOptions" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle>{{ control }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
           </tr>
           <tr>
             <td class="font-weight-bold">Original Price</td>
-            <td></td>
+            <td>{{ entry.originalPriceAmount }} {{ entry.originalPriceCurrency }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Comments</td>
+            <td class="font-weight-bold" valign="top">Comments</td>
             <td>{{ entry.comments }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Features</td>
-            <td></td>
+            <td class="font-weight-bold" valign="top">Features</td>
+            <td>
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(feature, i) in entry.features" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle>{{ feature }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Other platforms</td>
-            <td></td>
+            <td class="font-weight-bold" valign="top">Other platforms</td>
+            <td>
+              <v-row justify="start" align="center">
+                <v-chip
+                  v-for="(platform, i) in entry.otherPlatforms"
+                  :key="i"
+                  class="ma-2"
+                  small
+                  outlined
+                  label
+                  @click="openUrl(platform.url)"
+                >
+                  {{ platform.name }} <v-icon small right>mdi-link</v-icon>
+                </v-chip>
+              </v-row>
+            </td>
           </tr>
         </tbody>
       </template>
@@ -93,7 +133,7 @@
     <v-divider></v-divider>
 
     <v-card-actions>
-      <v-btn text>Full Report</v-btn>
+      <v-btn text>BUTTON</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -113,6 +153,9 @@ export default {
     this.loadentry();
   },
   methods: {
+    openUrl: function(url) {
+      window.open(url);
+    },
     loadentry() {
       this.isLoaded = false;
       axios
@@ -140,11 +183,24 @@ export default {
       entry.originalPublisher = "";
       entry.originalPublisherCountry = "";
       if (this.GameData._source.publisher.length) {
-        entry.publisher = this.GameData._source.publisher[0].name;
+        entry.originalPublisher = this.GameData._source.publisher[0].name;
         if (this.GameData._source.publisher[0].country !== undefined) {
-          entry.publisher_country = "(" + this.GameData._source.publisher[0].country + ")";
+          entry.originalPublisherCountry = "(" + this.GameData._source.publisher[0].country + ")";
         }
       }
+
+      entry.authors = [];
+      if (this.GameData._source.authors.length) {
+        for (var author in this.GameData._source.authors[0].authors) {
+          var country = this.GameData._source.authors[0].authors[author].country;
+          entry.authors.push({
+            name: this.GameData._source.authors[0].authors[author].name,
+            country: country == undefined ? "" : "(" + country + ")",
+          });
+        }
+      }
+
+      entry.messageLanguage = this.GameData._source.messagelanguage;
 
       if (this.GameData._source.machinetype === undefined) {
         entry.machinetype = "-";
@@ -157,7 +213,32 @@ export default {
         entry.genre = this.GameData._source.type + "/" + this.GameData._source.subtype;
       }
 
+      entry.controlOptions = [];
+      for (var control in this.GameData._source.controls) {
+        entry.controlOptions.push(this.GameData._source.controls[control].control);
+      }
+
+      // original price: missing 0007869
+      if (this.GameData._source.originalprice) {
+        entry.originalPriceAmount = this.GameData._source.originalprice[0].amount;
+        entry.originalPriceCurrency = this.GameData._source.originalprice[0].currency;
+      } else {
+        entry.originalPriceAmount = "";
+        entry.originalPriceCurrency = "";
+      }
+
       entry.comments = this.GameData._source.remarks;
+
+      // features: multiple 0012733
+      entry.features = [];
+      for (var feature in this.GameData._source.features) {
+        entry.features.push(this.GameData._source.features[feature].name);
+      }
+
+      entry.otherPlatforms = [];
+      for (var platform in this.GameData._source.othersystems) {
+        entry.otherPlatforms.push(this.GameData._source.othersystems[platform]);
+      }
 
       // handle screens, make one a "cover"
       entry.screenurl = "https://zxinfo.dk/media/images/empty.png";
@@ -188,7 +269,14 @@ export default {
 };
 </script>
 <style scoped>
+/* disable hover effect on table */
 .v-data-table /deep/ tbody /deep/ tr:hover:not(.v-data-table__expanded__content) {
   background: #ffffff !important;
+}
+
+/* dense. extra dense! */
+.v-list-item--dense,
+.v-list--dense .v-list-item {
+  min-height: 16px;
 }
 </style>
