@@ -1,8 +1,14 @@
 <template>
   <v-container justify-start class="scroll-y">
+    <!-- dialog for game info -->
+    <GameInfoDialog v-bind:show="dialog" v-bind:entryid="dialogEntryID" @close="dialog = false"></GameInfoDialog>
+
+    <!-- FAB button for scroll to top -->
     <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary" @click="toTop">
       <v-icon>keyboard_arrow_up</v-icon>
     </v-btn>
+
+    <!-- Navigation drawer -->
     <v-navigation-drawer app temporary right v-model="filterdrawer" width="340">
       <template>
         <v-card>
@@ -89,7 +95,7 @@
     <v-system-bar v-if="!loading">{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</v-system-bar>
     <v-row :align="'start'" :justify="'start'" dense>
       <v-col v-for="(card, index) in cards" :key="index" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
-        <v-responsive :aspect-ratio="1 / 1">
+        <v-responsive :aspect-ratio="1 / 1" @click="showinfo(card._id)">
           <GameCard v-bind:GameData="card" :id="index / getPageSize == pageindex - 1 ? pageindex : ''" />
         </v-responsive>
       </v-col>
@@ -105,6 +111,7 @@
 </template>
 <script>
 import GameCard from "@/components/GameCard";
+import GameInfoDialog from "@/components/GameInfoDialog";
 import axios from "axios";
 
 var dataURL = "https://api.zxinfo.dk/api/zxinfo/v2/search?";
@@ -113,6 +120,8 @@ export default {
   name: "EntrySearch",
   data() {
     return {
+      dialog: false,
+      dialogEntryID: 0,
       facets: {
         // key = name in agg output, paramname = parameter name for search
         machinetypes: { icon: "mdi-desktop-classic", title: "Machine type", items: [], selected: [], paramname: "machinetype" },
@@ -157,6 +166,10 @@ export default {
     };
   },
   methods: {
+    showinfo(entryid) {
+      this.dialog = true;
+      this.dialogEntryID = entryid;
+    },
     init() {
       this.loading = false;
       this.searchTimeOf = 0;
@@ -333,6 +346,7 @@ export default {
   },
   components: {
     GameCard,
+    GameInfoDialog,
   },
 };
 </script>
