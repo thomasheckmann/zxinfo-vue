@@ -41,7 +41,7 @@
             <td class="font-weight-bold" width="33%">Title</td>
             <td>{{ entry.title }}</td>
           </tr>
-          <tr>
+          <tr v-if="isDevelopment">
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
@@ -261,6 +261,9 @@ export default {
     screenurl: imageHelper.screenurl,
   },
   computed: {
+    isDevelopment() {
+      return process.env.NODE_ENV == "development";
+    },
     // cleaned version of JSON
 
     /*
@@ -285,6 +288,7 @@ export default {
      * BOOK: 2000388
      */
     entry() {
+      console.log(process.env.NODE_ENV);
       let entry = {};
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.fulltitle;
