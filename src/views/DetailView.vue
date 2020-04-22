@@ -46,7 +46,7 @@
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Orignial Release Year</td>
+            <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Orignial Release Year</td>
             <td valign="top">{{ entry.originalReleaseYear }}</td>
           </tr>
           <tr>
@@ -60,6 +60,21 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle>{{ author.name }} {{ author.country }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+          <tr>
+            <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Mod from</td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(mod, i) in entry.modFrom" :key="i" two-line>
+                  <v-list-item-content class="py-1">
+                    <router-link :to="'/details/' + mod.id">
+                      <v-list-item-subtitle>{{ mod.title }} - {{ mod.publisher }}</v-list-item-subtitle>
+                    </router-link>
+                    <v-list-item-subtitle>{{ mod.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -181,7 +196,20 @@ export default {
      * Main test cases:
      *
      * GAME: 0002259 (Author without country)
+     * In compilation: 0002259
      * original price: missing 0007869
+     * mod from: 0032032
+     * Inspiration for: 3012
+     * Modified by: 3012
+     * Can be edited with: 3012
+     * Competitions: 3012
+     * Series: 3012
+     *
+     * Multi-Turn type: 3067
+     * Maximum players: 3067
+     *
+     * COMPILATION: 11372, 11869
+     * compilation content: 11372, 11869
      * HARDWARE: 1000220
      * BOOK: 2000388
      */
@@ -210,6 +238,16 @@ export default {
             country: country == undefined ? "" : "(" + country + ")",
           });
         }
+      }
+
+      entry.modFrom = [];
+      for (var mod in this.GameData._source.mod_of) {
+        entry.modFrom.push({
+          id: this.GameData._source.mod_of[mod].id,
+          title: this.GameData._source.mod_of[mod].title,
+          machinetype: this.GameData._source.mod_of[mod].machinetype,
+          publisher: this.GameData._source.mod_of[mod].publisher,
+        });
       }
 
       entry.messageLanguage = this.GameData._source.messagelanguage;
@@ -278,6 +316,12 @@ export default {
     },
   },
   components: {},
+  watch: {
+    $route() {
+      // console.log(to + " -> " + from);
+      this.loadentry();
+    },
+  },
 };
 </script>
 <style scoped>
