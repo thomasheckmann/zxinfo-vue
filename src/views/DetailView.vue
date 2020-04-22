@@ -214,6 +214,17 @@
               </v-row>
             </td>
           </tr>
+          <tr :style="!entry.releases.length && !isDevelopment ? 'display: none;' : ''">
+            <td width="33%" colspan="2" class="pa-0">
+              <v-data-table
+                :headers="entry.releases.headers"
+                :items="entry.releases"
+                disable-sort
+                hide-default-footer
+                dense
+              ></v-data-table>
+            </td>
+          </tr>
         </tbody>
       </template>
     </v-simple-table>
@@ -399,6 +410,29 @@ export default {
       for (var platform in this.GameData._source.othersystems) {
         entry.otherPlatforms.push(this.GameData._source.othersystems[platform]);
       }
+
+      entry.releases = [];
+      for (var release in this.GameData._source.releases) {
+        if (
+          this.GameData._source.releases[release].release > 0 &&
+          entry.releases
+            .map(function(e) {
+              return e.release;
+            })
+            .indexOf(this.GameData._source.releases[release].release) < 0
+        ) {
+          entry.releases.push(this.GameData._source.releases[release]);
+        } else {
+          console.log(release + " ALREADY EXISTS");
+        }
+      }
+      entry.releases.headers = [
+        { text: "Release #", value: "release" },
+        { text: "Publisher", value: "publisher" },
+        { text: "Year", value: "yearofrelease" },
+        { text: "Price", value: "releaseprice" },
+        { text: "Title", value: "as_title" },
+      ];
 
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
