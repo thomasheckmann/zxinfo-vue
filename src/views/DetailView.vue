@@ -65,6 +65,22 @@
               </v-list>
             </td>
           </tr>
+          <tr :style="!entry.licensed && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.licensed ? 'font-weight-bold' : 'font-weight-light'" valign="top">Tie-in Licence</td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(license, i) in entry.licensed" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle
+                      >{{ license.name }}({{ license.country }}) - {{ license.type }}:
+                      {{ license.originalname }}</v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+
           <tr :style="!entry.modFrom.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Mod from
@@ -214,15 +230,76 @@
               </v-row>
             </td>
           </tr>
-          <tr :style="!entry.releases.length && !isDevelopment ? 'display: none;' : ''">
-            <td width="33%" colspan="2" class="pa-0">
-              <v-data-table
-                :headers="entry.releases.headers"
-                :items="entry.releases"
-                disable-sort
-                hide-default-footer
-                dense
-              ></v-data-table>
+          <tr :style="!(entry.releases.length > 1) && !isDevelopment ? 'display: none;' : ''">
+            <td colspan="2" class="pa-0">
+              <v-expansion-panels class="pa-0">
+                <v-expansion-panel>
+                  <v-expansion-panel-header :class="entry.releases.length > 1 ? 'font-weight-bold' : 'font-weight-light'"
+                    >Releases</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.releases.headers"
+                      :items="entry.releases"
+                      disable-sort
+                      hide-default-footer
+                      dense
+                      :mobile-breakpoint="0"
+                    ></v-data-table>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </td>
+          </tr>
+          <tr :style="!entry.inspirationFor.length && !isDevelopment ? 'display: none;' : ''">
+            <td colspan="2" class="pa-0">
+              <v-expansion-panels class="pa-0">
+                <v-expansion-panel>
+                  <v-expansion-panel-header :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Inspiration for</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(inspiration, i) in entry.inspirationFor" :key="i">
+                        <v-list-item-content class="py-1">
+                          <router-link :to="'/details/' + inspiration.id">
+                            <v-list-item-subtitle
+                              >{{ inspiration.title }} - {{ inspiration.publisher }} ({{
+                                inspiration.machinetype
+                              }})</v-list-item-subtitle
+                            ></router-link
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </td>
+          </tr>
+          <tr :style="!entry.modifiedBy.length && !isDevelopment ? 'display: none;' : ''">
+            <td colspan="2" class="pa-0">
+              <v-expansion-panels class="pa-0">
+                <v-expansion-panel>
+                  <v-expansion-panel-header :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Modified by</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(modified, i) in entry.modifiedBy" :key="i">
+                        <v-list-item-content class="py-1">
+                          <router-link :to="'/details/' + modified.id">
+                            <v-list-item-subtitle
+                              >{{ modified.title }} - {{ modified.publisher }} ({{ modified.machinetype }})</v-list-item-subtitle
+                            ></router-link
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </td>
           </tr>
         </tbody>
@@ -326,6 +403,8 @@ export default {
         }
       }
 
+      entry.licensed = this.GameData._source.licensed;
+
       entry.modFrom = [];
       for (var mod in this.GameData._source.mod_of) {
         if (this.GameData._source.mod_of[mod].is_mod) {
@@ -422,17 +501,37 @@ export default {
             .indexOf(this.GameData._source.releases[release].release) < 0
         ) {
           entry.releases.push(this.GameData._source.releases[release]);
-        } else {
-          console.log(release + " ALREADY EXISTS");
         }
       }
-      entry.releases.headers = [
-        { text: "Release #", value: "release" },
-        { text: "Publisher", value: "publisher" },
-        { text: "Year", value: "yearofrelease" },
-        { text: "Price", value: "releaseprice" },
-        { text: "Title", value: "as_title" },
-      ];
+
+      if (this.$vuetify.breakpoint.smAndUp) {
+        entry.releases.headers = [
+          { text: "#", value: "release" },
+          { text: "Publisher", value: "publisher" },
+          { text: "Year", value: "yearofrelease" },
+          { text: "Price", value: "releaseprice" },
+          { text: "Title", value: "as_title" },
+        ];
+      } else {
+        entry.releases.headers = [
+          { text: "#", value: "release" },
+          { text: "Publisher", value: "publisher" },
+          { text: "Year", value: "yearofrelease" },
+          { text: "Title", value: "as_title" },
+        ];
+      }
+
+      entry.inspirationFor = [];
+      entry.modifiedBy = [];
+      for (var modby in this.GameData._source.modified_by) {
+        var modbyitem = this.GameData._source.modified_by[modby];
+        modbyitem.machinetype = "FIX IN ZXDB-ES";
+        if (this.GameData._source.modified_by[modby].is_mod) {
+          entry.modifiedBy.push(modbyitem);
+        } else {
+          entry.inspirationFor.push(modbyitem);
+        }
+      }
 
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
