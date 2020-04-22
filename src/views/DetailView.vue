@@ -70,7 +70,7 @@
             <td valign="top">{{ entry.messageLanguage }}</td>
           </tr>
           <tr>
-            <td :class="entry.authors.machinetype == '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
+            <td :class="entry.machinetype != '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
             <td>{{ entry.machinetype }}</td>
           </tr>
           <tr>
