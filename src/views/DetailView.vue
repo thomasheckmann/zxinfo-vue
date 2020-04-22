@@ -41,7 +41,7 @@
             <td class="font-weight-bold" width="33%">Title</td>
             <td>{{ entry.title }}</td>
           </tr>
-          <tr :style="!entry.alsoKnownAs && isDevelopment ? '' : 'display: none;'">
+          <tr :style="!isDevelopment && !entry.alsoKnownAs ? 'display: none;' : ''">
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
@@ -53,7 +53,7 @@
             <td class="font-weight-bold">Orignial Publisher</td>
             <td valign="top">{{ entry.originalPublisher }} {{ entry.originalPublisherCountry }}</td>
           </tr>
-          <tr>
+          <tr :style="!entry.authors.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.authors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authors</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
@@ -65,7 +65,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.modFrom.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Mod from
             </td>
@@ -82,7 +82,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.inspiredBy.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.inspiredBy.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Inspired by
             </td>
@@ -103,7 +103,7 @@
             <td :class="entry.messageLanguage ? 'font-weight-bold' : 'font-weight-light'">Message Language</td>
             <td valign="top">{{ entry.messageLanguage }}</td>
           </tr>
-          <tr>
+          <tr :style="entry.machinetype == '-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.machinetype != '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
             <td>{{ entry.machinetype }}</td>
           </tr>
@@ -111,15 +111,15 @@
             <td class="font-weight-bold">Genre</td>
             <td>{{ entry.genre }}</td>
           </tr>
-          <tr>
+          <tr :style="!entry.maximumPlayers && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.maximumPlayers ? 'font-weight-bold' : 'font-weight-light'">Maximum Players</td>
             <td valign="top">{{ entry.maximumPlayers }}</td>
           </tr>
-          <tr>
+          <tr :style="!entry.multiTurnType && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.multiTurnType ? 'font-weight-bold' : 'font-weight-light'">Multi-Turn Type</td>
             <td valign="top">{{ entry.multiTurnType }}</td>
           </tr>
-          <tr>
+          <tr :style="!entry.controlOptions.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.controlOptions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Control Options
             </td>
@@ -133,15 +133,15 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.originalPriceAmount && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalPriceAmount ? 'font-weight-bold' : 'font-weight-light'">Original Price</td>
             <td>{{ entry.originalPriceAmount }} {{ entry.originalPriceCurrency }}</td>
           </tr>
-          <tr>
+          <tr :style="!entry.comments && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.comments ? 'font-weight-bold' : 'font-weight-light'" valign="top">Comments</td>
             <td>{{ entry.comments }}</td>
           </tr>
-          <tr>
+          <tr :style="!entry.features.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.features.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Features</td>
             <td>
               <v-list flat dense class="pa-0">
@@ -153,7 +153,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.competitions.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.competitions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Competitions</td>
             <td>
               <v-list flat dense class="pa-0">
@@ -165,7 +165,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.authoredWith.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.authoredWith.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authored with</td>
             <td>
               <v-list flat dense class="pa-0">
@@ -180,7 +180,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.authoring.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Programs authored</td>
             <td>
               <v-list flat dense class="pa-0">
@@ -195,7 +195,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.otherPlatforms.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Other platforms</td>
             <td>
               <v-row justify="start" align="center">
