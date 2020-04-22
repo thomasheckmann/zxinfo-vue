@@ -66,7 +66,9 @@
             </td>
           </tr>
           <tr>
-            <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Mod from</td>
+            <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
+              Mod from
+            </td>
             <td valign="top">
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(mod, i) in entry.modFrom" :key="i" two-line>
@@ -75,6 +77,23 @@
                       <v-list-item-subtitle>{{ mod.title }} - {{ mod.publisher }}</v-list-item-subtitle>
                     </router-link>
                     <v-list-item-subtitle>{{ mod.machinetype }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+          <tr>
+            <td :class="entry.inspiredBy.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
+              Inspired by
+            </td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(insp, i) in entry.inspiredBy" :key="i" two-line>
+                  <v-list-item-content class="py-1">
+                    <router-link :to="'/details/' + insp.id">
+                      <v-list-item-subtitle>{{ insp.title }} - {{ insp.publisher }}</v-list-item-subtitle>
+                    </router-link>
+                    <v-list-item-subtitle>{{ insp.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -264,12 +283,25 @@ export default {
 
       entry.modFrom = [];
       for (var mod in this.GameData._source.mod_of) {
-        entry.modFrom.push({
-          id: this.GameData._source.mod_of[mod].id,
-          title: this.GameData._source.mod_of[mod].title,
-          machinetype: this.GameData._source.mod_of[mod].machinetype,
-          publisher: this.GameData._source.mod_of[mod].publisher,
-        });
+        if (this.GameData._source.mod_of[mod].is_mod) {
+          entry.modFrom.push({
+            id: this.GameData._source.mod_of[mod].id,
+            title: this.GameData._source.mod_of[mod].title,
+            machinetype: this.GameData._source.mod_of[mod].machinetype,
+            publisher: this.GameData._source.mod_of[mod].publisher,
+          });
+        }
+      }
+      entry.inspiredBy = [];
+      for (var insp in this.GameData._source.mod_of) {
+        if (!this.GameData._source.mod_of[mod].is_mod) {
+          entry.inspiredBy.push({
+            id: this.GameData._source.mod_of[insp].id,
+            title: this.GameData._source.mod_of[insp].title,
+            machinetype: this.GameData._source.mod_of[insp].machinetype,
+            publisher: this.GameData._source.mod_of[insp].publisher,
+          });
+        }
       }
 
       entry.messageLanguage = this.GameData._source.messagelanguage;
@@ -310,7 +342,6 @@ export default {
 
       entry.competitions = [];
       for (var competition in this.GameData._source.competition) {
-        console.log(this.GameData._source.competition[competition].name);
         entry.competitions.push(this.GameData._source.competition[competition].name);
       }
 
