@@ -45,12 +45,12 @@
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
-          <tr>
+          <tr :style="entry.originalReleaseYear == '-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Orignial Release Year</td>
             <td valign="top">{{ entry.originalReleaseYear }}</td>
           </tr>
-          <tr>
-            <td class="font-weight-bold">Orignial Publisher</td>
+          <tr :style="!entry.originalPublisher && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.originalPublisher ? 'font-weight-bold' : 'font-weight-light'">Orignial Publisher</td>
             <td valign="top">{{ entry.originalPublisher }} {{ entry.originalPublisherCountry }}</td>
           </tr>
           <tr :style="!entry.authors.length && !isDevelopment ? 'display: none;' : ''">
@@ -99,7 +99,7 @@
               </v-list>
             </td>
           </tr>
-          <tr>
+          <tr :style="!entry.messageLanguage && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.messageLanguage ? 'font-weight-bold' : 'font-weight-light'">Message Language</td>
             <td valign="top">{{ entry.messageLanguage }}</td>
           </tr>
@@ -107,8 +107,8 @@
             <td :class="entry.machinetype != '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
             <td>{{ entry.machinetype }}</td>
           </tr>
-          <tr>
-            <td class="font-weight-bold">Genre</td>
+          <tr :style="entry.genre == '-/-' && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.genre != '-/-' ? 'font-weight-bold' : 'font-weight-light'">Genre</td>
             <td>{{ entry.genre }}</td>
           </tr>
           <tr :style="!entry.maximumPlayers && !isDevelopment ? 'display: none;' : ''">
