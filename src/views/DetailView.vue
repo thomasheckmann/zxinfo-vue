@@ -41,7 +41,7 @@
             <td class="font-weight-bold" width="33%">Title</td>
             <td>{{ entry.title }}</td>
           </tr>
-          <tr v-if="isDevelopment">
+          <tr :style="!entry.alsoKnownAs && isDevelopment ? '' : 'display: none;'">
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
