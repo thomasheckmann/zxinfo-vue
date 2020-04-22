@@ -166,6 +166,36 @@
             </td>
           </tr>
           <tr>
+            <td :class="entry.authoredWith.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authored with</td>
+            <td>
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(authoredwith, i) in entry.authoredWith" :key="i" two-line>
+                  <v-list-item-content class="py-1">
+                    <router-link :to="'/details/' + authoredwith.id">
+                      <v-list-item-subtitle>{{ authoredwith.title }} - {{ authoredwith.publisher }}</v-list-item-subtitle>
+                    </router-link>
+                    <v-list-item-subtitle>{{ authoredwith.machinetype }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+          <tr>
+            <td :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Programs authored</td>
+            <td>
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(authoring, i) in entry.authoring" :key="i">
+                  <v-list-item-content class="py-1">
+                    <router-link :to="'/details/' + authoring.id">
+                      <v-list-item-subtitle>{{ authoring.title }} - {{ authoring.publisher }}</v-list-item-subtitle>
+                    </router-link>
+                    <v-list-item-subtitle>{{ authoring.machinetype }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+          <tr>
             <td :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Other platforms</td>
             <td>
               <v-row justify="start" align="center">
@@ -343,6 +373,22 @@ export default {
       entry.competitions = [];
       for (var competition in this.GameData._source.competition) {
         entry.competitions.push(this.GameData._source.competition[competition].name);
+      }
+
+      entry.authoredWith = [];
+      for (var authoredwith in this.GameData._source.authored) {
+        var authoredwithitem = this.GameData._source.authored[authoredwith];
+        authoredwithitem.id = "FIX IN ZXDB-ES";
+        authoredwithitem.machinetype = "FIX IN ZXINFO-ES";
+        entry.authoredWith.push(authoredwithitem);
+      }
+
+      entry.authoring = [];
+      for (var authoring in this.GameData._source.authoring) {
+        var authoringitem = this.GameData._source.authoring[authoring];
+        authoringitem.id = "FIX IN ZXDB-ES";
+        authoringitem.machinetype = "FIX IN ZXINFO-ES";
+        entry.authoring.push(authoringitem);
       }
 
       entry.otherPlatforms = [];
