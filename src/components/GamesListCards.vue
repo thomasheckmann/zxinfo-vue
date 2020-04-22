@@ -78,7 +78,7 @@
       <v-chip
         v-for="(item, id) in activeFacetsForChips"
         :key="id"
-        class="ma-2"
+        c
         small
         outlined
         label
@@ -295,7 +295,6 @@ export default {
     },
   },
   mounted() {
-    console.log("MOUNTED");
     this.loadMore();
   },
   computed: {

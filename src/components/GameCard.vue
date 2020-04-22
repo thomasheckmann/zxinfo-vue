@@ -51,9 +51,14 @@
   </v-card>
 </template>
 <script>
+import imageHelper from "@/helpers/image-helper";
+
 export default {
   name: "GameCard",
   props: ["GameData"],
+  methods: {
+    screenurl: imageHelper.screenurl,
+  },
   computed: {
     // cleaned version of JSON
     entry() {
@@ -73,24 +78,6 @@ export default {
         entry.machinetype = this.GameData._source.machinetype;
       }
 
-      // handle screens, make one a "cover"
-      entry.screenurl = "https://zxinfo.dk/media/images/empty.png";
-      if (this.GameData._source.type === "Compilation") {
-        entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
-      } else if (this.GameData._source.screens.length) {
-        let screen = this.GameData._source.screens[0];
-        if (screen.url.startsWith("/pub/sinclair/books-pics")) {
-          entry.screenurl = "https://zxinfo.dk/media" + screen.url.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
-        } else if (screen.url.startsWith("/zxscreen")) {
-          entry.screenurl = "https://zxinfo.dk/media" + screen.url;
-        } else if (screen.url.startsWith("/pub")) {
-          entry.screenurl = "https://spectrumcomputing.co.uk/" + screen.url;
-        } else if (screen.url.startsWith("/zxdb/sinclair/pics/hw/")) {
-          entry.screenurl = "https://zxinfo.dk/media" + screen.url.replace("/zxdb/sinclair/pics/hw/", "/thumbs/hardware-pics/");
-        } else {
-          console.log("UKNOWN ACTION(" + this.GameData._id + "): " + screen.url);
-        }
-      }
       // 0: publisher = main
       if (this.GameData._source.publisher.length) {
         entry.publisher = this.GameData._source.publisher[0].name;
@@ -113,6 +100,8 @@ export default {
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
       entry.score.votes = this.GameData._source.score.votes;
+      entry.screenurl = this.screenurl(this.GameData);
+
       return entry;
     },
   },

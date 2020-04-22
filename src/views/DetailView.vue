@@ -93,6 +93,14 @@
             <td>{{ entry.genre }}</td>
           </tr>
           <tr>
+            <td :class="entry.maximumPlayers ? 'font-weight-bold' : 'font-weight-light'">Maximum Players</td>
+            <td valign="top">{{ entry.maximumPlayers }}</td>
+          </tr>
+          <tr>
+            <td :class="entry.multiTurnType ? 'font-weight-bold' : 'font-weight-light'">Multi-Turn Type</td>
+            <td valign="top">{{ entry.multiTurnType }}</td>
+          </tr>
+          <tr>
             <td :class="entry.controlOptions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Control Options
             </td>
@@ -157,6 +165,7 @@
 </template>
 <script>
 import axios from "axios";
+import imageHelper from "@/helpers/image-helper";
 
 export default {
   name: "DetailView",
@@ -188,6 +197,7 @@ export default {
         })
         .finally(() => {});
     },
+    screenurl: imageHelper.screenurl,
   },
   computed: {
     // cleaned version of JSON
@@ -263,12 +273,14 @@ export default {
         entry.genre = this.GameData._source.type + "/" + this.GameData._source.subtype;
       }
 
+      entry.maximumPlayers = this.GameData._source.numberofplayers == undefined ? "" : this.GameData._source.numberofplayers;
+      entry.multiTurnType = this.GameData._source.multiplayermode == undefined ? "" : this.GameData._source.multiplayermode;
+
       entry.controlOptions = [];
       for (var control in this.GameData._source.controls) {
         entry.controlOptions.push(this.GameData._source.controls[control].control);
       }
 
-      // original price: missing 0007869
       if (this.GameData._source.originalprice) {
         entry.originalPriceAmount = this.GameData._source.originalprice[0].amount;
         entry.originalPriceCurrency = this.GameData._source.originalprice[0].currency;
@@ -279,7 +291,6 @@ export default {
 
       entry.comments = this.GameData._source.remarks;
 
-      // features: multiple 0012733
       entry.features = [];
       for (var feature in this.GameData._source.features) {
         entry.features.push(this.GameData._source.features[feature].name);
@@ -290,33 +301,17 @@ export default {
         entry.otherPlatforms.push(this.GameData._source.othersystems[platform]);
       }
 
-      // handle screens, make one a "cover"
-      entry.screenurl = "https://zxinfo.dk/media/images/empty.png";
-      if (this.GameData._source.type === "Compilation") {
-        entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
-      } else if (this.GameData._source.screens.length) {
-        let screen = this.GameData._source.screens[0];
-        if (screen.url.startsWith("/pub/sinclair/books-pics")) {
-          entry.screenurl = "https://zxinfo.dk/media" + screen.url.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
-        } else if (screen.url.startsWith("/zxscreen")) {
-          entry.screenurl = "https://zxinfo.dk/media" + screen.url;
-        } else if (screen.url.startsWith("/pub")) {
-          entry.screenurl = "https://spectrumcomputing.co.uk/" + screen.url;
-        } else if (screen.url.startsWith("/zxdb/sinclair/pics/hw/")) {
-          entry.screenurl = "https://zxinfo.dk/media" + screen.url.replace("/zxdb/sinclair/pics/hw/", "/thumbs/hardware-pics/");
-        } else {
-          console.log("UKNOWN ACTION(" + this.GameData._id + "): " + screen.url);
-        }
-      }
-
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
       entry.score.votes = this.GameData._source.score.votes;
+
+      entry.screenurl = this.screenurl(this.GameData);
       return entry;
     },
   },
   components: {},
   watch: {
+    // reload page when linking to new entry
     $route() {
       // console.log(to + " -> " + from);
       this.loadentry();
