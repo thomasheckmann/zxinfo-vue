@@ -135,6 +135,18 @@
             </td>
           </tr>
           <tr>
+            <td :class="entry.competitions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Competitions</td>
+            <td>
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(competition, i) in entry.competitions" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle>{{ competition }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+          <tr>
             <td :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Other platforms</td>
             <td>
               <v-row justify="start" align="center">
@@ -294,6 +306,12 @@ export default {
       entry.features = [];
       for (var feature in this.GameData._source.features) {
         entry.features.push(this.GameData._source.features[feature].name);
+      }
+
+      entry.competitions = [];
+      for (var competition in this.GameData._source.competition) {
+        console.log(this.GameData._source.competition[competition].name);
+        entry.competitions.push(this.GameData._source.competition[competition].name);
       }
 
       entry.otherPlatforms = [];
