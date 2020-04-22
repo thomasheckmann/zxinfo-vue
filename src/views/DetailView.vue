@@ -42,7 +42,7 @@
             <td>{{ entry.title }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Also known as</td>
+            <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
           <tr>
@@ -54,7 +54,7 @@
             <td valign="top">{{ entry.originalPublisher }} {{ entry.originalPublisherCountry }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold" valign="top">Authors</td>
+            <td :class="entry.authors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authors</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
@@ -66,11 +66,11 @@
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Message Language</td>
+            <td :class="entry.messageLanguage ? 'font-weight-bold' : 'font-weight-light'">Message Language</td>
             <td valign="top">{{ entry.messageLanguage }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Machine Type</td>
+            <td :class="entry.authors.machinetype == '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
             <td>{{ entry.machinetype }}</td>
           </tr>
           <tr>
@@ -78,7 +78,9 @@
             <td>{{ entry.genre }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold" valign="top">Control Options</td>
+            <td :class="entry.controlOptions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
+              Control Options
+            </td>
             <td>
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(control, i) in entry.controlOptions" :key="i">
@@ -90,15 +92,15 @@
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Original Price</td>
+            <td :class="entry.originalPriceAmount ? 'font-weight-bold' : 'font-weight-light'">Original Price</td>
             <td>{{ entry.originalPriceAmount }} {{ entry.originalPriceCurrency }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold" valign="top">Comments</td>
+            <td :class="entry.comments ? 'font-weight-bold' : 'font-weight-light'" valign="top">Comments</td>
             <td>{{ entry.comments }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold" valign="top">Features</td>
+            <td :class="entry.features.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Features</td>
             <td>
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(feature, i) in entry.features" :key="i">
@@ -110,7 +112,7 @@
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold" valign="top">Other platforms</td>
+            <td :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Other platforms</td>
             <td>
               <v-row justify="start" align="center">
                 <v-chip
@@ -174,6 +176,15 @@ export default {
   },
   computed: {
     // cleaned version of JSON
+
+    /*
+     * Main test cases:
+     *
+     * GAME: 0002259 (Author without country)
+     * original price: missing 0007869
+     * HARDWARE: 1000220
+     * BOOK: 2000388
+     */
     entry() {
       let entry = {};
       entry.id = this.GameData._id;
@@ -273,5 +284,11 @@ export default {
 /* disable hover effect on table */
 .v-data-table /deep/ tbody /deep/ tr:hover:not(.v-data-table__expanded__content) {
   background: #ffffff !important;
+}
+
+/* dense. extra dense! */
+.v-list-item--dense,
+.v-list--dense .v-list-item {
+  min-height: 16px;
 }
 </style>
