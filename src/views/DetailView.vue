@@ -218,8 +218,8 @@
           <!-- A LOT OF EXPANSION PANELS -->
           <tr>
             <td colspan="2" class="pa-0">
-              <!-- * RELEASES * -->
               <v-expansion-panels class="pa-0">
+                <!-- * RELEASES * -->
                 <v-expansion-panel :hidden="!(entry.releases.length > 1) && !isDevelopment">
                   <v-expansion-panel-header :class="entry.releases.length > 1 ? 'font-weight-bold' : 'font-weight-light'"
                     >Releases</v-expansion-panel-header
@@ -234,6 +234,26 @@
                       dense
                       :mobile-breakpoint="0"
                     ></v-data-table>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * AVAILABLE FORMATS * -->
+                <v-expansion-panel :hidden="!entry.availableformat.length > 1 && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Available formats</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-chip v-for="(format, i) in entry.availableformat" :key="i" class="ma-1" color="green" small outlined label>
+                      {{ format.format }} <v-icon small right>{{ getIconForDownload(format.type) }}</v-icon></v-chip
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * PROTECTION SCHEMES * -->
+                <v-expansion-panel :hidden="!entry.protectionscheme.length > 1 && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Protection schemes</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-chip v-for="(format, i) in entry.protectionscheme" :key="i" class="ma-1" small label> {{ format }}</v-chip>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <!-- * INSPIRATION FOR * -->
@@ -306,7 +326,7 @@
                 <!-- * IN COMPILATIONS  * -->
                 <v-expansion-panel :hidden="!entry.inCompilations.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >In compilations(FIX MULTIPLE IN ZXINFO-ES)</v-expansion-panel-header
+                    >In compilations</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
                     <v-data-table
@@ -320,6 +340,29 @@
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
                         <router-link :to="'/details/' + item.id">{{ item.title }} - {{ item.publisher }}</router-link>
+                      </template></v-data-table
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * COMPILATION CONTENT  * -->
+                <v-expansion-panel :hidden="!entry.compilationContent.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.compilationContent.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Compilation content</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.item_short_headers"
+                      :items="entry.compilationContent"
+                      disable-sort
+                      hide-default-header
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.title="{ item }">
+                        <router-link :to="'/details/' + item.id"
+                          >{{ side }} {{ item.title }} - {{ item.publisher }} ({{ item.variation }})</router-link
+                        >
                       </template></v-data-table
                     >
                   </v-expansion-panel-content>
@@ -354,6 +397,27 @@ export default {
     this.loadentry();
   },
   methods: {
+    getIconForDownload: function(file_type) {
+      switch (file_type) {
+        case "Snapshot image":
+        case "Computer/ZX Interface 2 cartridge ROM image dump":
+        case "DOCK cartridge ROM image dump":
+          return "mdi-archive";
+        case "Tape image":
+        case "Archive file":
+        case "Covertape version":
+        case "BUGFIX tape image":
+          return "mdi-cassette";
+        case "Disk image":
+          return "mdi-floppy";
+        case "Complete book":
+          return "mid-book-open-page-variant";
+        case "Electronic magazine":
+          return "mid-book-open";
+        default:
+          return "mdi-archive";
+      }
+    },
     openUrl: function(url) {
       window.open(url);
     },
@@ -401,7 +465,6 @@ export default {
      * BOOK: 2000388
      */
     entry() {
-      console.log(process.env.NODE_ENV);
       let entry = {};
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.fulltitle;
@@ -518,13 +581,42 @@ export default {
         entry.inCompilations.push(incompitem);
       }
 
+      entry.compilationContent = [];
+      for (var content in this.GameData._source.contents) {
+        var contentItem = this.GameData._source.contents[content];
+        contentItem.id = "FIX IN ZXDB-ES(id)";
+        contentItem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
+        entry.compilationContent.push(contentItem);
+      }
+
       entry.otherPlatforms = [];
       for (var platform in this.GameData._source.othersystems) {
         entry.otherPlatforms.push(this.GameData._source.othersystems[platform]);
       }
 
+      // iterate releases to find rereleases, downloads, available format and encodingschemes
       entry.releases = [];
+      entry.availableformat = [];
+      entry.protectionscheme = [];
+      entry.downloads = [];
+
       for (var release in this.GameData._source.releases) {
+        if (
+          this.GameData._source.releases[release].format &&
+          !entry.availableformat.find((obj) => obj.format == this.GameData._source.releases[release].format)
+        ) {
+          entry.availableformat.push({
+            format: this.GameData._source.releases[release].format,
+            type: this.GameData._source.releases[release].type,
+          });
+        }
+        if (
+          this.GameData._source.releases[release].encodingscheme &&
+          entry.protectionscheme.indexOf(this.GameData._source.releases[release].encodingscheme) < 0
+        ) {
+          entry.protectionscheme.push(this.GameData._source.releases[release].encodingscheme);
+        }
+
         if (
           /*this.GameData._source.releases[release].release !== 0 &&*/
           entry.releases
