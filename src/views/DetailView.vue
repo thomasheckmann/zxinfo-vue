@@ -230,16 +230,18 @@
               </v-row>
             </td>
           </tr>
-          <tr :style="!(entry.releases.length > 1) && !isDevelopment ? 'display: none;' : ''">
+          <!-- A LOT OF EXPANSION PANELS -->
+          <tr>
             <td colspan="2" class="pa-0">
+              <!-- * RELEASES * -->
               <v-expansion-panels class="pa-0">
-                <v-expansion-panel>
+                <v-expansion-panel :hidden="!(entry.releases.length > 1) && !isDevelopment">
                   <v-expansion-panel-header :class="entry.releases.length > 1 ? 'font-weight-bold' : 'font-weight-light'"
                     >Releases</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
                     <v-data-table
-                      class="pa-0"
+                      class="pl-0"
                       :headers="entry.releases.headers"
                       :items="entry.releases"
                       disable-sort
@@ -249,56 +251,53 @@
                     ></v-data-table>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-              </v-expansion-panels>
-            </td>
-          </tr>
-          <tr :style="!entry.inspirationFor.length && !isDevelopment ? 'display: none;' : ''">
-            <td colspan="2" class="pa-0">
-              <v-expansion-panels class="pa-0">
-                <v-expansion-panel>
+                <!-- * INSPIRATION FOR * -->
+                <v-expansion-panel :hidden="!entry.inspirationFor.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Inspiration for</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-list flat dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(inspiration, i) in entry.inspirationFor" :key="i">
-                        <v-list-item-content class="py-1">
-                          <router-link :to="'/details/' + inspiration.id">
-                            <v-list-item-subtitle
-                              >{{ inspiration.title }} - {{ inspiration.publisher }} ({{
-                                inspiration.machinetype
-                              }})</v-list-item-subtitle
-                            ></router-link
-                          >
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.item_short_headers"
+                      :items="entry.inspirationFor"
+                      disable-sort
+                      hide-default-header
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.title="{ item }">
+                        <router-link :to="'/details/' + item.id"
+                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})</router-link
+                        >
+                      </template></v-data-table
+                    >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-              </v-expansion-panels>
-            </td>
-          </tr>
-          <tr :style="!entry.modifiedBy.length && !isDevelopment ? 'display: none;' : ''">
-            <td colspan="2" class="pa-0">
-              <v-expansion-panels class="pa-0">
-                <v-expansion-panel>
+                <!-- *MODIFIED BY * -->
+                <v-expansion-panel :hidden="!entry.modifiedBy.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Modified by</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-list flat dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(modified, i) in entry.modifiedBy" :key="i">
-                        <v-list-item-content class="py-1">
-                          <router-link :to="'/details/' + modified.id">
-                            <v-list-item-subtitle
-                              >{{ modified.title }} - {{ modified.publisher }} ({{ modified.machinetype }})</v-list-item-subtitle
-                            ></router-link
-                          >
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.item_short_headers"
+                      :items="entry.modifiedBy"
+                      disable-sort
+                      hide-default-header
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.title="{ item }">
+                        <router-link :to="'/details/' + item.id"
+                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})</router-link
+                        >
+                      </template></v-data-table
+                    >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+                <!-- * INSPIRATION FOR * -->
               </v-expansion-panels>
             </td>
           </tr>
@@ -472,16 +471,16 @@ export default {
       entry.authoredWith = [];
       for (var authoredwith in this.GameData._source.authored) {
         var authoredwithitem = this.GameData._source.authored[authoredwith];
-        authoredwithitem.id = "FIX IN ZXDB-ES";
-        authoredwithitem.machinetype = "FIX IN ZXINFO-ES";
+        authoredwithitem.id = "FIX IN ZXDB-ES(id)";
+        authoredwithitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
         entry.authoredWith.push(authoredwithitem);
       }
 
       entry.authoring = [];
       for (var authoring in this.GameData._source.authoring) {
         var authoringitem = this.GameData._source.authoring[authoring];
-        authoringitem.id = "FIX IN ZXDB-ES";
-        authoringitem.machinetype = "FIX IN ZXINFO-ES";
+        authoringitem.id = "FIX IN ZXDB-ES(id)";
+        authoringitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
         entry.authoring.push(authoringitem);
       }
 
@@ -493,7 +492,7 @@ export default {
       entry.releases = [];
       for (var release in this.GameData._source.releases) {
         if (
-          this.GameData._source.releases[release].release > 0 &&
+          /*this.GameData._source.releases[release].release !== 0 &&*/
           entry.releases
             .map(function(e) {
               return e.release;
@@ -520,6 +519,8 @@ export default {
           { text: "Title", value: "as_title" },
         ];
       }
+
+      entry.item_short_headers = [{ text: "Title", value: "title" }];
 
       entry.inspirationFor = [];
       entry.modifiedBy = [];
@@ -561,5 +562,10 @@ export default {
 .v-list-item--dense,
 .v-list--dense .v-list-item {
   min-height: 16px;
+}
+
+/* remove padding from expansion-panel-content */
+.v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
+  padding: 0px;
 }
 </style>
