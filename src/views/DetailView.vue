@@ -196,21 +196,6 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.authoring.length && !isDevelopment ? 'display: none;' : ''">
-            <td :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Programs authored</td>
-            <td>
-              <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(authoring, i) in entry.authoring" :key="i">
-                  <v-list-item-content class="py-1">
-                    <router-link :to="'/details/' + authoring.id">
-                      <v-list-item-subtitle>{{ authoring.title }} - {{ authoring.publisher }}</v-list-item-subtitle>
-                    </router-link>
-                    <v-list-item-subtitle>{{ authoring.machinetype }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </td>
-          </tr>
           <tr :style="!entry.otherPlatforms.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Other platforms</td>
             <td>
@@ -297,7 +282,48 @@
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-                <!-- * INSPIRATION FOR * -->
+                <!-- * PROGRAMS AUTHORED WITH * -->
+                <v-expansion-panel :hidden="!entry.authoring.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Programs authored(FIX MULIPLE IN ZXINFO-ES)</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.item_short_headers"
+                      :items="entry.authoring"
+                      disable-sort
+                      hide-default-header
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.title="{ item }">
+                        <router-link :to="'/details/' + item.id">{{ item.title }} - {{ item.publisher }}</router-link>
+                      </template></v-data-table
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * IN COMPILATIONS  * -->
+                <v-expansion-panel :hidden="!entry.inCompilations.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >In compilations(FIX MULTIPLE IN ZXINFO-ES)</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.item_short_headers"
+                      :items="entry.inCompilations"
+                      disable-sort
+                      hide-default-header
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.title="{ item }">
+                        <router-link :to="'/details/' + item.id">{{ item.title }} - {{ item.publisher }}</router-link>
+                      </template></v-data-table
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </v-expansion-panels>
             </td>
           </tr>
@@ -482,6 +508,14 @@ export default {
         authoringitem.id = "FIX IN ZXDB-ES(id)";
         authoringitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
         entry.authoring.push(authoringitem);
+      }
+
+      entry.inCompilations = [];
+      for (var compilation in this.GameData._source.incompilations) {
+        var incompitem = this.GameData._source.incompilations[compilation];
+        incompitem.id = "FIX IN ZXDB-ES(id)";
+        incompitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
+        entry.inCompilations.push(incompitem);
       }
 
       entry.otherPlatforms = [];
