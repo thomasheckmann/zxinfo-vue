@@ -391,7 +391,7 @@
                     ></v-data-table>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-                <!-- * Tosec * -->
+                <!-- * TOSEC * -->
                 <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
                     >TOSEC Info</v-expansion-panel-header
@@ -400,7 +400,55 @@
                     <v-list flat dense class="pa-0">
                       <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
                         <v-list-item-content class="py-1">
-                          <v-list-item-subtitle>{{ tosec.url }}</v-list-item-subtitle>
+                          {{ tosec.url }}
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * Additional downloads  * -->
+                <v-expansion-panel :hidden="!entry.additionals.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Additional Downlod</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat outline dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(additional, i) in entry.additionals" :key="i" two-line>
+                        <v-list-item-content class="py-1">
+                          <v-list-item-subtitle>{{ additional.url }} </v-list-item-subtitle>
+                          <v-list-item-subtitle>{{ additional.type }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * Related links  * -->
+                <v-expansion-panel :hidden="!entry.relatedlinks.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Related links</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat outline dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(link, i) in entry.relatedlinks" :key="i" two-line>
+                        <v-list-item-content class="py-1">
+                          <v-list-item-subtitle>{{ link.sitename }} </v-list-item-subtitle>
+                          <v-list-item-subtitle>{{ link.link }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * Related sites  * -->
+                <v-expansion-panel :hidden="!entry.relatedsites.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.relatedsites.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Related sites</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat outline dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(link, i) in entry.relatedsites" :key="i" two-line>
+                        <v-list-item-content class="py-1">
+                          <v-list-item-subtitle>{{ link.sitename }} </v-list-item-subtitle>
+                          <v-list-item-subtitle>{{ link.link }}</v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list>
@@ -655,7 +703,6 @@ export default {
         ) {
           entry.protectionscheme.push(this.GameData._source.releases[release].encodingscheme);
         }
-
         if (
           /*this.GameData._source.releases[release].release !== 0 &&*/
           entry.releases
@@ -703,6 +750,12 @@ export default {
 
       entry.item_short_headers = [{ text: "Title", value: "title" }];
 
+      entry.additionals = [];
+      for (var aidx in this.GameData._source.additionals) {
+        var item = this.GameData._source.additionals[aidx];
+        entry.additionals.push(item);
+      }
+
       entry.inspirationFor = [];
       entry.modifiedBy = [];
       for (var modby in this.GameData._source.modified_by) {
@@ -716,6 +769,21 @@ export default {
       }
 
       entry.tosec = this.GameData._source.tosec;
+      entry.relatedlinks = this.GameData._source.relatedlinks;
+
+      // filter out some unused sites
+      entry.relatedsites = [];
+      for (var site in this.GameData._source.relatedsites) {
+        var siteItem = this.GameData._source.relatedsites[site];
+        switch (siteItem.sitename) {
+          case "Spectrum 2.0":
+          case "ZX-Art":
+          case "Spectrum Computing":
+          case "The Tipshop":
+          case "WorldOfSpectrum":
+            entry.relatedsites.push(siteItem);
+        }
+      }
 
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
