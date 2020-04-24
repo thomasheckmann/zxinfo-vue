@@ -59,7 +59,7 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ author.name }} {{ author.country }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ author.name }} {{ author.country }} {{ author.group }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -569,12 +569,15 @@ export default {
 
       entry.authors = [];
       if (this.GameData._source.authors.length) {
-        for (var author in this.GameData._source.authors[0].authors) {
-          var country = this.GameData._source.authors[0].authors[author].country;
-          entry.authors.push({
-            name: this.GameData._source.authors[0].authors[author].name,
-            country: country == undefined ? "" : "(" + country + ")",
-          });
+        for (var authorBlock in this.GameData._source.authors) {
+          for (var author in this.GameData._source.authors[authorBlock].authors) {
+            var country = this.GameData._source.authors[authorBlock].authors[author].country;
+            entry.authors.push({
+              name: this.GameData._source.authors[authorBlock].authors[author].name,
+              country: country == undefined ? "" : "(" + country + ")",
+              group: this.GameData._source.authors[authorBlock].group,
+            });
+          }
         }
       }
 
