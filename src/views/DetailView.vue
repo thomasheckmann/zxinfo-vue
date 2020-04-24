@@ -367,6 +367,45 @@
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+                <!-- * Download info * -->
+                <v-expansion-panel :hidden="!entry.downloads.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Download info</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.downloads.headers"
+                      :items="entry.downloads"
+                      disable-sort
+                      hide-default-header
+                      hide-default-footer
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.origin="{ item }">
+                        <v-simple-checkbox
+                          disabled
+                          v-bind:value="item.origin == 'Original release (O)'"
+                        ></v-simple-checkbox> </template
+                    ></v-data-table>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * Tosec * -->
+                <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >TOSEC Info</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
+                        <v-list-item-content class="py-1">
+                          <v-list-item-subtitle>{{ tosec.url }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </v-expansion-panels>
             </td>
           </tr>
@@ -627,7 +666,23 @@ export default {
         ) {
           entry.releases.push(this.GameData._source.releases[release]);
         }
+        if (this.GameData._source.releases[release].url) {
+          entry.downloads.push({
+            url: this.GameData._source.releases[release].url,
+            type: this.GameData._source.releases[release].type,
+            format: this.GameData._source.releases[release].format,
+            encodingscheme: this.GameData._source.releases[release].encodingscheme,
+            origin: this.GameData._source.releases[release].origin,
+          });
+        }
       }
+
+      entry.downloads.headers = [
+        { text: "Filename", value: "url" },
+        { text: "Type/format", value: "type" },
+        { text: "Protection scheme", value: "encodingscheme" },
+        { text: "Orignial", value: "origin" },
+      ];
 
       if (this.$vuetify.breakpoint.smAndUp) {
         entry.releases.headers = [
@@ -659,6 +714,8 @@ export default {
           entry.inspirationFor.push(modbyitem);
         }
       }
+
+      entry.tosec = this.GameData._source.tosec;
 
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
