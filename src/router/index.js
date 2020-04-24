@@ -11,6 +11,14 @@ const routes = [
     component: Home,
   },
   {
+    path: "/search/:query",
+    name: "EntrySearch",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ "@/views/SearchView.vue"),
+  },
+  {
     path: "/search",
     name: "EntrySearch",
     // route level code-splitting

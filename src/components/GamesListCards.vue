@@ -26,7 +26,7 @@
               </template>
               <v-list-item v-for="subItem in group.items" :key="subItem.key">
                 <v-list-item-action class="ma-0">
-                  <v-checkbox color="primary" v-model="facets[key].selected[subItem.key]" :value="subItem.key"></v-checkbox>
+                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key"></v-checkbox>
                 </v-list-item-action>
                 <v-list-item-content class="py-0 pl-4">
                   <v-list-item-title v-text="subItem.key"></v-list-item-title>
@@ -69,7 +69,6 @@
         :append-outer-icon="'mdi-filter-variant'"
         @click:append-outer="filterdrawer = !filterdrawer"
         @keyup.enter="submit"
-        @keypress.enter.native.prevent=""
       ></v-text-field>
     </v-toolbar>
 
@@ -78,7 +77,6 @@
       <v-chip
         v-for="(item, id) in activeFacetsForChips"
         :key="id"
-        c
         small
         outlined
         label
@@ -113,11 +111,44 @@ import GameCard from "@/components/GameCard";
 import axios from "axios";
 
 var dataURL = "https://api.zxinfo.dk/api/zxinfo/v2/search?";
+// QUeryBuilder Helper
+var buildQuery = function(data) {
+  // If the data is already a string, return it as-is
+  if (typeof data === "string") return data;
+
+  // Create a query array to hold the key/value pairs
+  var query = [];
+
+  // Loop through the data object
+  for (var key in data) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (data.hasOwnProperty(key)) {
+      // Encode each key and value, concatenate them into a string, and push them to the array
+
+      if (typeof data[key] === "object") {
+        let subitems = data[key];
+        for (var items in subitems) {
+          query.push(encodeURIComponent(key) + "=" + encodeURIComponent(subitems[items]));
+        }
+      } else {
+        query.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+      }
+    }
+  }
+
+  // Join each item in the array with a `&` and return the resulting string
+  return query.join("&");
+};
 
 export default {
   name: "EntrySearch",
+  watch: {
+    // reload page when linking to new entry
+    $route() {},
+  },
   data() {
     return {
+      searchterm: "",
       dialog: false,
       dialogEntryID: 0,
       facets: {
@@ -154,7 +185,6 @@ export default {
       filterdrawer: null,
       fab: false,
       loading: true,
-      searchterm: "",
       searchTimeOf: 0,
       searchNumberOfResults: 0,
       allResults: false,
@@ -171,6 +201,20 @@ export default {
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
+      const queryparam = this.searchterm;
+      var filterquery = {};
+      // add filters
+      for (var agg in this.facets) {
+        var selected = [];
+        for (var sel in this.facets[agg].selected) {
+          if (this.facets[agg].selected[sel]) {
+            selected.push(this.facets[agg].selected[sel]);
+          }
+        }
+        filterquery[this.facets[agg].paramname] = selected;
+      }
+      // this.$router.replace({ name: "EntrySearch", params: { queryparam } }, () => {});
+      this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
     },
     submit() {
       this.filterdrawer = false;
@@ -195,36 +239,7 @@ export default {
         }
         p[this.facets[agg].paramname] = selected;
       }
-      // QUeryBuilder Helper
-      var buildQuery = function(data) {
-        // If the data is already a string, return it as-is
-        if (typeof data === "string") return data;
 
-        // Create a query array to hold the key/value pairs
-        var query = [];
-
-        // Loop through the data object
-        for (var key in data) {
-          // eslint-disable-next-line no-prototype-builtins
-          if (data.hasOwnProperty(key)) {
-            // Encode each key and value, concatenate them into a string, and push them to the array
-
-            if (typeof data[key] === "object") {
-              let subitems = data[key];
-              for (var items in subitems) {
-                query.push(encodeURIComponent(key) + "=" + encodeURIComponent(subitems[items]));
-              }
-            } else {
-              query.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
-            }
-          }
-        }
-
-        // Join each item in the array with a `&` and return the resulting string
-        return query.join("&");
-      };
-
-      // console.log("Q: " + buildQuery(p));
       this.loading = true;
       this.allResults = true;
       axios
@@ -276,7 +291,12 @@ export default {
         });
     },
     uncheck(group, value) {
-      this.facets[group].selected[value] = null;
+      var idx = this.facets[group].selected.indexOf(value);
+      if (idx > -1) {
+        this.facets[group].selected.splice(idx, 1);
+      } else {
+        this.facets[group].selected.push(value);
+      }
       this.submit();
     },
     resetfilters() {
@@ -295,6 +315,15 @@ export default {
     },
   },
   mounted() {
+    // initialize parameters
+    this.searchterm = this.$route.params.query ? this.$route.params.query : "";
+
+    for (var agg in this.facets) {
+      this.facets[agg].selected = Array.isArray(this.$route.query[this.facets[agg].paramname])
+        ? this.$route.query[this.facets[agg].paramname]
+        : [this.$route.query[this.facets[agg].paramname]];
+    }
+
     this.loadMore();
   },
   computed: {
