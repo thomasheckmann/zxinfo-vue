@@ -305,7 +305,7 @@
                 <!-- * PROGRAMS AUTHORED WITH * -->
                 <v-expansion-panel :hidden="!entry.authoring.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Programs authored(FIX MULIPLE IN ZXINFO-ES)</v-expansion-panel-header
+                    >Programs authored</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
                     <v-data-table
@@ -560,32 +560,32 @@ export default {
       entry.authoredWith = [];
       for (var authoredwith in this.GameData._source.authored) {
         var authoredwithitem = this.GameData._source.authored[authoredwith];
-        authoredwithitem.id = "FIX IN ZXDB-ES(id)";
-        authoredwithitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
+        authoredwithitem.id = this.GameData._source.authored[authoredwith].id;
+        authoredwithitem.machinetype = this.GameData._source.authored[authoredwith].machinetype;
         entry.authoredWith.push(authoredwithitem);
       }
 
       entry.authoring = [];
       for (var authoring in this.GameData._source.authoring) {
         var authoringitem = this.GameData._source.authoring[authoring];
-        authoringitem.id = "FIX IN ZXDB-ES(id)";
-        authoringitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
+        authoringitem.id = this.GameData._source.authoring[authoring].id;
+        authoringitem.machinetype = this.GameData._source.authoring[authoring].machinetype;
         entry.authoring.push(authoringitem);
       }
 
       entry.inCompilations = [];
       for (var compilation in this.GameData._source.incompilations) {
         var incompitem = this.GameData._source.incompilations[compilation];
-        incompitem.id = "FIX IN ZXDB-ES(id)";
-        incompitem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
+        incompitem.id = this.GameData._source.incompilations[compilation].id;
+        incompitem.machinetype = this.GameData._source.incompilations[compilation].machinetype;
         entry.inCompilations.push(incompitem);
       }
 
       entry.compilationContent = [];
       for (var content in this.GameData._source.contents) {
         var contentItem = this.GameData._source.contents[content];
-        contentItem.id = "FIX IN ZXDB-ES(id)";
-        contentItem.machinetype = "FIX IN ZXINFO-ES(machinetype)";
+        contentItem.id = this.GameData._source.contents[content].id;
+        contentItem.machinetype = this.GameData._source.contents[content].machinetype;
         entry.compilationContent.push(contentItem);
       }
 
@@ -652,7 +652,7 @@ export default {
       entry.modifiedBy = [];
       for (var modby in this.GameData._source.modified_by) {
         var modbyitem = this.GameData._source.modified_by[modby];
-        modbyitem.machinetype = "FIX IN ZXDB-ES";
+        modbyitem.machinetype = this.GameData._source.modified_by[modby].machinetype;
         if (this.GameData._source.modified_by[modby].is_mod) {
           entry.modifiedBy.push(modbyitem);
         } else {

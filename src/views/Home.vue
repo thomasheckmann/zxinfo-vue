@@ -1,8 +1,11 @@
 <template>
   <v-container class="fill-height" fluid>
     <v-row align="center" justify="center">
-      <v-col cols="10" sm="8" md="4" lg="4">
-        <v-card>
+<v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >        <v-card>
           <v-card-text>
                     <div>
 						<p>Try search <router-link to="/search">here:</router-link></p>
