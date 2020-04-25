@@ -19,8 +19,8 @@
 
     <v-footer app padless class="caption .font-weight-thin">
       <span>&copy; 2020 ZXInfo - info@zxinfo.dk</span><v-spacer></v-spacer
-      ><span><a href="https://api.zxinfo.dk/doc/">the API behind ZXInfo</a></span
-      ><v-spacer></v-spacer><span>Source code on <a href="https://github.com/thomasheckmann/zxinfo-vue">github.</a></span>
+      ><span><a href="https://api.zxinfo.dk/doc/">Public API</a></span
+      ><v-spacer></v-spacer><span><a href="https://github.com/thomasheckmann/zxinfo-vue">Source code</a></span>
     </v-footer>
   </v-app>
 </template>

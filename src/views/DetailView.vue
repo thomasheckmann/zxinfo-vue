@@ -218,10 +218,10 @@
           <!-- A LOT OF EXPANSION PANELS -->
           <tr>
             <td colspan="2" class="pa-0">
-              <v-expansion-panels class="pa-0">
+              <v-expansion-panels class="pa-0" multiple>
                 <!-- * RELEASES * -->
-                <v-expansion-panel :hidden="!(entry.releases.length > 1) && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.releases.length > 1 ? 'font-weight-bold' : 'font-weight-light'"
+                <v-expansion-panel :hidden="!entry.releases.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Releases</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>

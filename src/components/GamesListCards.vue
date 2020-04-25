@@ -149,8 +149,6 @@ export default {
   data() {
     return {
       searchterm: "",
-      dialog: false,
-      dialogEntryID: 0,
       facets: {
         // key = name in agg output, paramname = parameter name for search
         machinetypes: { icon: "mdi-desktop-classic", title: "Machine type", items: [], selected: [], paramname: "machinetype" },
