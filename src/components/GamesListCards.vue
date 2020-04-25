@@ -60,12 +60,13 @@
       <v-text-field
         v-model="searchterm"
         label="What is your favorite game or author?"
+        :prepend-inner-icon="'mdi-magnify'"
+        @click:prepend-inner="submit"
+        solo
         single-line
         full-width
         hide-details
         clearable
-        :append-icon="'mdi-magnify'"
-        @click:append="submit"
         :append-outer-icon="'mdi-filter-variant'"
         @click:append-outer="filterdrawer = !filterdrawer"
         @keyup.enter="submit"
