@@ -18,9 +18,13 @@
     </v-content>
 
     <v-footer app padless class="caption .font-weight-thin">
-      <span>&copy; 2020 ZXInfo - info@zxinfo.dk</span><v-spacer></v-spacer
-      ><span><a href="https://api.zxinfo.dk/doc/">Public API</a></span
-      ><v-spacer></v-spacer><span><a href="https://github.com/thomasheckmann/zxinfo-vue">Source code</a></span>
+      <v-row justify="space-between" align="center" class="px-4">
+        <span>&copy; 2020 info@zxinfo.dk</span>
+        <span class="text-center"><a href="https://api.zxinfo.dk/doc/">Public API</a></span
+        ><span
+          ><a href="https://github.com/thomasheckmann/zxinfo-vue">GitHub<v-icon small>mdi-share</v-icon></a></span
+        >
+      </v-row>
     </v-footer>
   </v-app>
 </template>
@@ -32,3 +36,14 @@ export default {
   }),
 };
 </script>
+<style scoped>
+a:hover,
+a:link,
+a:visited,
+a.router-link-active,
+a.router-link-exact-active {
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+}
+</style>

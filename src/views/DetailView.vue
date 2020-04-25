@@ -65,6 +65,18 @@
               </v-list>
             </td>
           </tr>
+          <tr :style="!entry.roles.length && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.roles.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Roles</td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(role, i) in entry.roles" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle>{{ role.name }}: {{ role.role }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
           <tr :style="!entry.licensed && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.licensed ? 'font-weight-bold' : 'font-weight-light'" valign="top">Tie-in Licence</td>
             <td valign="top">
@@ -80,7 +92,6 @@
               </v-list>
             </td>
           </tr>
-
           <tr :style="!entry.modFrom.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Mod from
@@ -90,7 +101,9 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(mod, i) in entry.modFrom" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + mod.id">
-                      <v-list-item-subtitle>{{ mod.title }} - {{ mod.publisher }}</v-list-item-subtitle>
+                      <v-list-item-subtitle
+                        >{{ mod.title }} - {{ mod.publisher }}<v-icon small right>mdi-link</v-icon></v-list-item-subtitle
+                      >
                     </router-link>
                     <v-list-item-subtitle>{{ mod.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -107,7 +120,9 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(insp, i) in entry.inspiredBy" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + insp.id">
-                      <v-list-item-subtitle>{{ insp.title }} - {{ insp.publisher }}</v-list-item-subtitle>
+                      <v-list-item-subtitle
+                        >{{ insp.title }} - {{ insp.publisher }}<v-icon small right>mdi-link</v-icon></v-list-item-subtitle
+                      >
                     </router-link>
                     <v-list-item-subtitle>{{ insp.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -188,7 +203,10 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(authoredwith, i) in entry.authoredWith" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + authoredwith.id">
-                      <v-list-item-subtitle>{{ authoredwith.title }} - {{ authoredwith.publisher }}</v-list-item-subtitle>
+                      <v-list-item-subtitle
+                        >{{ authoredwith.title }} - {{ authoredwith.publisher
+                        }}<v-icon small right>mdi-link</v-icon></v-list-item-subtitle
+                      >
                     </router-link>
                     <v-list-item-subtitle>{{ authoredwith.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -242,8 +260,20 @@
                     >Available formats</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-chip v-for="(format, i) in entry.availableformat" :key="i" class="ma-1" color="green" small outlined label>
-                      {{ format.format }} <v-icon small right>{{ getIconForDownload(format.type) }}</v-icon></v-chip
+                    <v-container class="grey lighten-3">
+                      <v-row justify="start" align="center" class="pa-0">
+                        <v-chip
+                          v-for="(format, i) in entry.availableformat"
+                          :key="i"
+                          class="ma-1"
+                          color="green"
+                          small
+                          outlined
+                          label
+                        >
+                          {{ format.format }} <v-icon small right>{{ getIconForDownload(format.type) }}</v-icon></v-chip
+                        ></v-row
+                      ></v-container
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -253,7 +283,13 @@
                     >Protection schemes</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-chip v-for="(format, i) in entry.protectionscheme" :key="i" class="ma-1" small label> {{ format }}</v-chip>
+                    <v-container class="grey lighten-3">
+                      <v-row justify="start" align="center" class="pa-0">
+                        <v-chip v-for="(format, i) in entry.protectionscheme" :key="i" class="ma-1" small label>
+                          {{ format }}</v-chip
+                        >
+                      </v-row></v-container
+                    >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <!-- * INSPIRATION FOR * -->
@@ -296,7 +332,9 @@
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
                         <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})</router-link
+                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
+                            >mdi-link</v-icon
+                          ></router-link
                         >
                       </template></v-data-table
                     >
@@ -318,7 +356,9 @@
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }} - {{ item.publisher }}</router-link>
+                        <router-link :to="'/details/' + item.id"
+                          >{{ item.title }} - {{ item.publisher }}<v-icon small right>mdi-link</v-icon></router-link
+                        >
                       </template></v-data-table
                     >
                   </v-expansion-panel-content>
@@ -339,7 +379,9 @@
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }} - {{ item.publisher }}</router-link>
+                        <router-link :to="'/details/' + item.id"
+                          >{{ item.title }} - {{ item.publisher }}<v-icon small right>mdi-link</v-icon></router-link
+                        >
                       </template></v-data-table
                     >
                   </v-expansion-panel-content>
@@ -361,7 +403,9 @@
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
                         <router-link :to="'/details/' + item.id"
-                          >{{ side }} {{ item.title }} - {{ item.publisher }} ({{ item.variation }})</router-link
+                          >{{ side }} {{ item.title }} - {{ item.publisher }} ({{ item.variation }})<v-icon small right
+                            >mdi-link</v-icon
+                          ></router-link
                         >
                       </template></v-data-table
                     >
@@ -428,14 +472,19 @@
                     >Related links</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-list flat outline dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(link, i) in entry.relatedlinks" :key="i" two-line>
-                        <v-list-item-content class="py-1">
-                          <v-list-item-subtitle>{{ link.sitename }} </v-list-item-subtitle>
-                          <v-list-item-subtitle>{{ link.link }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
+                    <v-container class="grey lighten-3">
+                      <v-row justify="start" align="center" class="pa-0">
+                        <v-btn
+                          class="ma-1"
+                          v-for="(link, i) in entry.relatedlinks"
+                          :key="i"
+                          @click="openUrl(link.link)"
+                          :disabled="link.link == null"
+                          small
+                          >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
+                        >
+                      </v-row>
+                    </v-container>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <!-- * Related sites  * -->
@@ -444,14 +493,19 @@
                     >Related sites</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-list flat outline dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(link, i) in entry.relatedsites" :key="i" two-line>
-                        <v-list-item-content class="py-1">
-                          <v-list-item-subtitle>{{ link.sitename }} </v-list-item-subtitle>
-                          <v-list-item-subtitle>{{ link.link }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
+                    <v-container class="grey lighten-3">
+                      <v-row justify="start" align="center" class="pa-0">
+                        <v-btn
+                          class="ma-1"
+                          v-for="(link, i) in entry.relatedsites"
+                          :key="i"
+                          @click="openUrl(link.link)"
+                          :disabled="link.link == null"
+                          small
+                          >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
+                        >
+                      </v-row>
+                    </v-container>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
@@ -462,8 +516,8 @@
     </v-simple-table>
     <v-divider></v-divider>
 
-    <v-card-actions>
-      <v-btn text>BUTTON</v-btn>
+    <v-card-actions
+      ><v-btn class="primary" @click="$router.go(-1)"><v-icon small left>mdi-arrow-left</v-icon>BACK</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -580,6 +634,8 @@ export default {
           }
         }
       }
+
+      entry.roles = this.GameData._source.roles;
 
       entry.licensed = this.GameData._source.licensed;
 
@@ -820,6 +876,21 @@ export default {
 
 /* remove padding from expansion-panel-content */
 .v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
-  padding: 0px;
+  padding: 4px;
+}
+
+.v-expansion-panel-header {
+  min-height: 32px; /* panel header smaller */
+  padding: 8px 16px; /* 8px align with other property labels */
+}
+
+a:hover,
+a:link,
+a:visited,
+a.router-link-active,
+a.router-link-exact-active {
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
 }
 </style>
