@@ -181,18 +181,44 @@
           </tr>
           <tr :style="!entry.comments && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.comments ? 'font-weight-bold' : 'font-weight-light'" valign="top">Comments</td>
-            <td>{{ entry.comments }}</td>
+            <td class="wrap-text">{{ entry.comments }}</td>
+          </tr>
+          <tr :style="!entry.themedgroups.length && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.themedgroups.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Themes</td>
+            <td>
+              <v-row justify="start" align="center">
+                <v-chip
+                  v-for="(theme, i) in entry.themedgroups"
+                  :key="i"
+                  class="ma-1"
+                  small
+                  outlined
+                  label
+                  @click="openUrl(platform.url)"
+                  :disabled="theme.url == null"
+                >
+                  {{ theme }} <v-icon small right>mdi-link</v-icon>
+                </v-chip>
+              </v-row>
+            </td>
           </tr>
           <tr :style="!entry.features.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.features.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Features</td>
             <td>
-              <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(feature, i) in entry.features" :key="i">
-                  <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ feature }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
+              <v-row justify="start" align="center">
+                <v-chip
+                  v-for="(feature, i) in entry.features"
+                  :key="i"
+                  class="ma-1"
+                  small
+                  outlined
+                  label
+                  @click="openUrl(platform.url)"
+                  :disabled="feature.url == null"
+                >
+                  {{ feature }} <v-icon small right>mdi-link</v-icon>
+                </v-chip>
+              </v-row>
             </td>
           </tr>
           <tr :style="!entry.competitions.length && !isDevelopment ? 'display: none;' : ''">
@@ -201,10 +227,29 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(competition, i) in entry.competitions" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ competition }}</v-list-item-subtitle>
+                    <v-list-item-subtitle style="white-space: normal;">{{ competition }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
+            </td>
+          </tr>
+          <tr :style="!entry.unsortedgroups.length && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.unsortedgroups.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Groups</td>
+            <td>
+              <v-row justify="start" align="center">
+                <v-chip
+                  v-for="(group, i) in entry.unsortedgroups"
+                  :key="i"
+                  class="ma-1"
+                  small
+                  outlined
+                  label
+                  @click="openUrl(platform.url)"
+                  :disabled="group.url == null"
+                >
+                  {{ group }} <v-icon small right>mdi-link</v-icon>
+                </v-chip>
+              </v-row>
             </td>
           </tr>
           <tr :style="!entry.authoredWith.length && !isDevelopment ? 'display: none;' : ''">
@@ -439,7 +484,7 @@
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
                         <router-link :to="'/details/' + item.id"
-                          >{{ side }} {{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
+                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
                             >mdi-link</v-icon
                           ></router-link
                         >
@@ -730,6 +775,11 @@ export default {
 
       entry.comments = this.GameData._source.remarks;
 
+      entry.themedgroups = [];
+      for (var theme in this.GameData._source.themedgroup) {
+        entry.themedgroups.push(this.GameData._source.themedgroup[theme].name);
+      }
+
       entry.features = [];
       for (var feature in this.GameData._source.features) {
         entry.features.push(this.GameData._source.features[feature].name);
@@ -738,6 +788,11 @@ export default {
       entry.competitions = [];
       for (var competition in this.GameData._source.competition) {
         entry.competitions.push(this.GameData._source.competition[competition].name);
+      }
+
+      entry.unsortedgroups = [];
+      for (var group in this.GameData._source.unsortedgroup) {
+        entry.unsortedgroups.push(this.GameData._source.unsortedgroup[group].name);
       }
 
       entry.authoredWith = [];
@@ -820,6 +875,11 @@ export default {
             origin: this.GameData._source.releases[release].origin,
           });
         }
+      }
+      /* remove None from protection scheme */
+      var idx = entry.protectionscheme.indexOf("None");
+      if (idx > -1) {
+        entry.protectionscheme.splice(idx, 1);
       }
 
       entry.downloads.headers = [
@@ -931,5 +991,9 @@ a.router-link-exact-active {
   color: black;
   cursor: pointer;
   text-decoration: none;
+}
+
+.wrap-text {
+  -webkit-line-clamp: unset !important;
 }
 </style>

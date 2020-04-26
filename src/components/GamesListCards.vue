@@ -293,8 +293,6 @@ export default {
       var idx = this.facets[group].selected.indexOf(value);
       if (idx > -1) {
         this.facets[group].selected.splice(idx, 1);
-      } else {
-        this.facets[group].selected.push(value);
       }
       this.submit();
     },
