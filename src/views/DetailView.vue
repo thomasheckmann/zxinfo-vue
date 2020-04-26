@@ -4,8 +4,11 @@
       <v-list-item-content>
         <v-list-item-title class="headline">{{ entry.title }}</v-list-item-title>
         <v-list-item-subtitle
-          >{{ entry.originalReleaseYear }} {{ entry.originalPublisher }}
-          {{ entry.originalPublisherCountry }}</v-list-item-subtitle
+          >{{ entry.originalReleaseYear }}
+          <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
+            >{{ orgpub.name }} {{ orgpub.country }}
+            <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
+          ></v-list-item-subtitle
         >
       </v-list-item-content>
     </v-list-item>
@@ -46,12 +49,20 @@
             <td>{{ entry.alsoKnownAs }}</td>
           </tr>
           <tr :style="entry.originalReleaseYear == '-' && !isDevelopment ? 'display: none;' : ''">
-            <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Orignial Release Year</td>
+            <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
             <td valign="top">{{ entry.originalReleaseYear }}</td>
           </tr>
           <tr :style="!entry.originalPublisher && !isDevelopment ? 'display: none;' : ''">
-            <td :class="entry.originalPublisher ? 'font-weight-bold' : 'font-weight-light'">Orignial Publisher</td>
-            <td valign="top">{{ entry.originalPublisher }} {{ entry.originalPublisherCountry }}</td>
+            <td :class="entry.originalPublisher ? 'font-weight-bold' : 'font-weight-light'">Original Publisher</td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item class="pa-0 ma-0 auto" v-for="(publisher, i) in entry.originalPublisher" :key="i">
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle>{{ publisher.name }} {{ publisher.country }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
           </tr>
           <tr :style="!entry.authors.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.authors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authors</td>
@@ -255,7 +266,7 @@
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <!-- * AVAILABLE FORMATS * -->
-                <v-expansion-panel :hidden="!entry.availableformat.length > 1 && !isDevelopment">
+                <v-expansion-panel :hidden="!entry.availableformat.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Available formats</v-expansion-panel-header
                   >
@@ -278,7 +289,7 @@
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <!-- * PROTECTION SCHEMES * -->
-                <v-expansion-panel :hidden="!entry.protectionscheme.length > 1 && !isDevelopment">
+                <v-expansion-panel :hidden="!entry.protectionscheme.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Protection schemes</v-expansion-panel-header
                   >
@@ -403,7 +414,32 @@
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
                         <router-link :to="'/details/' + item.id"
-                          >{{ side }} {{ item.title }} - {{ item.publisher }} ({{ item.variation }})<v-icon small right
+                          >{{ item.title }} - {{ item.publisher }} ({{ item.variation }})<v-icon small right
+                            >mdi-link</v-icon
+                          ></router-link
+                        >
+                      </template></v-data-table
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * Series  * -->
+                <v-expansion-panel :hidden="!entry.series.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Series</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.item_short_headers"
+                      :items="entry.series"
+                      disable-sort
+                      hide-default-header
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                      ><template v-slot:item.title="{ item }">
+                        <router-link :to="'/details/' + item.id"
+                          >{{ side }} {{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
                             >mdi-link</v-icon
                           ></router-link
                         >
@@ -612,13 +648,14 @@ export default {
       entry.alsoKnownAs = this.GameData._source.alsoknownas;
       entry.originalReleaseYear = this.GameData._source.yearofrelease === undefined ? "-" : this.GameData._source.yearofrelease;
 
-      entry.originalPublisher = "";
-      entry.originalPublisherCountry = "";
-      if (this.GameData._source.publisher.length) {
-        entry.originalPublisher = this.GameData._source.publisher[0].name;
-        if (this.GameData._source.publisher[0].country !== undefined) {
-          entry.originalPublisherCountry = "(" + this.GameData._source.publisher[0].country + ")";
+      entry.originalPublisher = [];
+      for (var publisher in this.GameData._source.publisher) {
+        var originalPublisher = this.GameData._source.publisher[publisher].name;
+        var originalPublisherCountry = "";
+        if (this.GameData._source.publisher[publisher].country !== undefined) {
+          originalPublisherCountry = "(" + this.GameData._source.publisher[publisher].country + ")";
         }
+        entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
       }
 
       entry.authors = [];
@@ -735,6 +772,8 @@ export default {
         entry.compilationContent.push(contentItem);
       }
 
+      entry.series = this.GameData._source.series;
+
       entry.otherPlatforms = [];
       for (var platform in this.GameData._source.othersystems) {
         entry.otherPlatforms.push(this.GameData._source.othersystems[platform]);
@@ -787,7 +826,7 @@ export default {
         { text: "Filename", value: "url" },
         { text: "Type/format", value: "type" },
         { text: "Protection scheme", value: "encodingscheme" },
-        { text: "Orignial", value: "origin" },
+        { text: "Original", value: "origin" },
       ];
 
       if (this.$vuetify.breakpoint.smAndUp) {

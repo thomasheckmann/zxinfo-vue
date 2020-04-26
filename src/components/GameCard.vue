@@ -13,7 +13,10 @@
     ></v-img>
     <v-card-title class="d-inline-block text-truncate" style="max-width: 100%;" v-text="entry.title"></v-card-title>
     <v-card-subtitle class="pb-0 text-truncate" style="max-width: 100%;"
-      >{{ entry.yearofrelease }} {{ entry.publisher }} {{ entry.publisher_country }}</v-card-subtitle
+      >{{ entry.yearofrelease }}
+      <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
+        >{{ orgpub.name }} {{ orgpub.country }} <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
+      ></v-card-subtitle
     >
     <v-card-text class="text--primary">
       <div>{{ entry.machinetype }}</div>
@@ -78,17 +81,14 @@ export default {
         entry.machinetype = this.GameData._source.machinetype;
       }
 
-      // 0: publisher = main
-      if (this.GameData._source.publisher.length) {
-        entry.publisher = this.GameData._source.publisher[0].name;
-        if (this.GameData._source.publisher[0].country === undefined) {
-          entry.publisher_country = "";
-        } else {
-          entry.publisher_country = "(" + this.GameData._source.publisher[0].country + ")";
+      entry.originalPublisher = [];
+      for (var publisher in this.GameData._source.publisher) {
+        var originalPublisher = this.GameData._source.publisher[publisher].name;
+        var originalPublisherCountry = "";
+        if (this.GameData._source.publisher[publisher].country !== undefined) {
+          originalPublisherCountry = "(" + this.GameData._source.publisher[publisher].country + ")";
         }
-      } else {
-        entry.publisher = "";
-        entry.publisher_country = "";
+        entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
       }
 
       if (this.GameData._source.type === undefined) {
