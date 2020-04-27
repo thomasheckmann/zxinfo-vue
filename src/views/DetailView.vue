@@ -294,6 +294,27 @@
             <td colspan="2" class="pa-0">
               <v-expansion-panels class="pa-0" multiple>
                 <!-- * RELEASES * -->
+                <v-expansion-panel :hidden="!entry.youtubelinks.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.youtubelinks.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >Video(s)</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-container class="grey lighten-3">
+                      <v-row justify="start" align="center" class="pa-0">
+                        <v-btn
+                          class="ma-1"
+                          v-for="(link, i) in entry.youtubelinks"
+                          :key="i"
+                          @click="openUrl(link.link)"
+                          :disabled="link.link == null"
+                          small
+                          >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
+                        >
+                      </v-row>
+                    </v-container>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <!-- * RELEASES * -->
                 <v-expansion-panel :hidden="!entry.releases.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Releases</v-expansion-panel-header
@@ -831,6 +852,8 @@ export default {
       for (var platform in this.GameData._source.othersystems) {
         entry.otherPlatforms.push(this.GameData._source.othersystems[platform]);
       }
+
+      entry.youtubelinks = this.GameData._source.youtubelinks;
 
       // iterate releases to find rereleases, downloads, available format and encodingschemes
       entry.releases = [];
