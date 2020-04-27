@@ -150,6 +150,8 @@ export default {
   data() {
     return {
       searchterm: "",
+      group: "",
+      groupname: "",
       facets: {
         // key = name in agg output, paramname = parameter name for search
         machinetypes: { icon: "mdi-desktop-classic", title: "Machine type", items: [], selected: [], paramname: "machinetype" },
@@ -212,6 +214,9 @@ export default {
         }
         filterquery[this.facets[agg].paramname] = selected;
       }
+      filterquery["group"] = this.group;
+      filterquery["groupname"] = this.groupname;
+
       // this.$router.replace({ name: "EntrySearch", params: { queryparam } }, () => {});
       this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
     },
@@ -238,7 +243,14 @@ export default {
         }
         p[this.facets[agg].paramname] = selected;
       }
+      if (this.group) {
+        p["group"] = this.group;
+      }
+      if (this.groupname) {
+        p["groupname"] = this.groupname;
+      }
 
+      console.log(buildQuery(p));
       this.loading = true;
       this.allResults = true;
       axios
@@ -314,6 +326,8 @@ export default {
   mounted() {
     // initialize parameters
     this.searchterm = this.$route.params.query ? this.$route.params.query : "";
+    this.group = this.$route.query.group ? this.$route.query.group : "";
+    this.groupname = this.$route.query.groupname ? this.$route.query.groupname : "";
 
     for (var agg in this.facets) {
       this.facets[agg].selected = Array.isArray(this.$route.query[this.facets[agg].paramname])

@@ -181,8 +181,7 @@
                   small
                   outlined
                   label
-                  @click="openUrl(platform.url)"
-                  :disabled="feature.url == null"
+                  @click="$router.push({ path: '/search', query: { group: 'F', groupname: feature } })"
                 >
                   {{ feature }} <v-icon small right>mdi-link</v-icon>
                 </v-chip>
