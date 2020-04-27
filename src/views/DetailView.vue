@@ -6,6 +6,11 @@
           <v-card elevation="0" class="mx-auto" flat>
             <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
               <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)" width="100%">
+                <v-row class="fill-height" align="end" justify="center">
+                  <v-system-bar lights-out dark width="100%"
+                    ><span class="white--text">{{ item.title }}</span></v-system-bar
+                  >
+                </v-row>
               </v-carousel-item>
             </v-carousel>
           </v-card>
