@@ -906,12 +906,6 @@ export default {
           { text: "Protection scheme", value: "encodingscheme" },
           { text: "Original", value: "origin" },
         ];
-        entry.additionals_headers = [
-          { text: "Filename", value: "url" },
-          { text: "Type", value: "type" },
-          { text: "Format", value: "format" },
-          { text: "Link", value: "actions" },
-        ];
       } else {
         /* small mobile */
         entry.releases.headers = [
@@ -930,6 +924,16 @@ export default {
           { text: "Link", value: "actions" },
         ];
         entry.downloads.headers = [{ text: "Filename", value: "url" }];
+      }
+
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        entry.additionals_headers = [
+          { text: "Filename", value: "url" },
+          { text: "Type", value: "type" },
+          { text: "Format", value: "format" },
+          { text: "Link", value: "actions" },
+        ];
+      } else {
         entry.additionals_headers = [
           { text: "Filename", value: "url" },
           { text: "Link", value: "actions" },
