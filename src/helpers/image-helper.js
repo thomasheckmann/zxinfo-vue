@@ -25,7 +25,8 @@ var screenurl = function(gamedata) {
     } else if (gamedata._source.screens.length) {
       entry.screenurl = gamedata._source.screens[0].url;
     } else {
-      console.log("Unhandled compilation cover");
+      /* no inlay found, and no running screens */
+      entry.screenurl = "/images/compilation.png";
     }
   }
 
