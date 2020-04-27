@@ -1,4 +1,8 @@
-var screenurl = function(gamedata) {
+var getScreenUrl = function(path) {
+  return "https://zxinfo.dk/media" + path;
+};
+
+var getCoverImageForEntry = function(gamedata) {
   // handle screens, make one a "cover"
   var entry = {};
 
@@ -40,5 +44,6 @@ var screenurl = function(gamedata) {
 };
 
 module.exports = {
-  screenurl: screenurl,
+  getCoverImage: getCoverImageForEntry,
+  getScreenUrl: getScreenUrl,
 };

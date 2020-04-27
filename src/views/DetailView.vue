@@ -1,38 +1,46 @@
 <template>
   <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="isLoaded">
-    <v-list-item two-line>
-      <v-list-item-content>
-        <v-list-item-title class="headline">{{ entry.title }}</v-list-item-title>
-        <v-list-item-subtitle
-          >{{ entry.originalReleaseYear }}
-          <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
-            >{{ orgpub.name }} {{ orgpub.country }}
-            <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
-          ></v-list-item-subtitle
-        >
-      </v-list-item-content>
-    </v-list-item>
-
     <v-card-text class="pa-0">
       <v-row align="start">
-        <v-col cols="6" :xl="6" :lg="6" :md="6" :sm="6" :xs="6">
-          <v-img :src="entry.screenurl" :alt="entry.title" width="256"></v-img>
+        <v-col cols="12" class="pa-0">
+          <v-card elevation="1" max-width="500" class="mx-auto">
+            <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
+              <v-carousel-item v-for="(item, i) in entry.screens" :key="i">
+                <v-sheet color="white" height="100%">
+                  <v-img :src="getScreenUrl(item.url)" />
+                </v-sheet>
+              </v-carousel-item>
+            </v-carousel>
+          </v-card>
         </v-col>
-        <v-col cols="6" :xl="6" :lg="6" :md="6" :sm="6" :xs="6">
-          {{ entry.machinetype }}<br />{{ entry.genre }}<br />
-          <v-rating
-            v-model="entry.score.score"
-            background-color="grey lighten-1"
-            color="red lighten-2"
-            full-icon="mdi-heart"
-            half-icon="mdi-heart-half-full"
-            empty-icon="mdi-heart-outline"
-            half-increments
-            x-small
-            dense
-            readonly
-            length="10"
-          ></v-rating>
+        <v-col cols="12">
+          <v-list-item two-line>
+            <v-list-item-content class="pa-0">
+              <v-list-item-title class="headline">{{ entry.title }}</v-list-item-title>
+              <v-list-item-subtitle
+                >{{ entry.originalReleaseYear }}
+                <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
+                  >{{ orgpub.name }} {{ orgpub.country }}
+                  <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
+                ></v-list-item-subtitle
+              >
+              {{ entry.machinetype }} - {{ entry.genre }}<br />
+              <v-rating
+                class="text-center"
+                v-model="entry.score.score"
+                background-color="grey lighten-1"
+                color="red lighten-2"
+                full-icon="mdi-heart"
+                half-icon="mdi-heart-half-full"
+                empty-icon="mdi-heart-outline"
+                half-increments
+                x-small
+                dense
+                readonly
+                length="10"
+              ></v-rating>
+            </v-list-item-content>
+          </v-list-item>
         </v-col>
       </v-row>
     </v-card-text>
@@ -676,7 +684,8 @@ export default {
         })
         .finally(() => {});
     },
-    screenurl: imageHelper.screenurl,
+    getCoverImage: imageHelper.getCoverImage,
+    getScreenUrl: imageHelper.getScreenUrl,
   },
   computed: {
     isDevelopment() {
@@ -707,6 +716,7 @@ export default {
      */
     entry() {
       let entry = {};
+      entry.screens = this.GameData._source.screens;
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.fulltitle;
       entry.alsoKnownAs = this.GameData._source.alsoknownas;
@@ -1012,7 +1022,7 @@ export default {
       entry.score.score = this.GameData._source.score.score;
       entry.score.votes = this.GameData._source.score.votes;
 
-      entry.screenurl = this.screenurl(this.GameData);
+      entry.coverimage = this.getCoverImage(this.GameData);
       return entry;
     },
   },

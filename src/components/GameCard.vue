@@ -1,7 +1,7 @@
 <template>
   <v-card outlined>
     <v-img
-      :src="entry.screenurl"
+      :src="entry.coverimage"
       class="white--text align-end"
       lazy-src="https://zxinfo.dk/media/images/empty.png"
       aspect-ratio="1.33"
@@ -60,7 +60,7 @@ export default {
   name: "GameCard",
   props: ["GameData"],
   methods: {
-    screenurl: imageHelper.screenurl,
+    getCoverImage: imageHelper.getCoverImage,
   },
   computed: {
     // cleaned version of JSON
@@ -100,7 +100,7 @@ export default {
       entry.score = {};
       entry.score.score = this.GameData._source.score.score;
       entry.score.votes = this.GameData._source.score.votes;
-      entry.screenurl = this.screenurl(this.GameData);
+      entry.coverimage = this.getCoverImage(this.GameData);
 
       return entry;
     },
