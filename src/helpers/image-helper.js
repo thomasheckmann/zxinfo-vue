@@ -19,7 +19,8 @@ var screenurl = function(gamedata) {
       }
     }
     if (inlays.length > 0) {
-      entry.screenurl = "https://spectrumcomputing.co.uk/" + inlays[0].url;
+      inlays[0].url = inlays[0].url.replace("/pub/sinclair/", "/thumbs/");
+      entry.screenurl = "https://zxinfo.dk/media" + inlays[0].url;
     }
   } else if (gamedata._source.screens.length) {
     let screen = gamedata._source.screens[0];
