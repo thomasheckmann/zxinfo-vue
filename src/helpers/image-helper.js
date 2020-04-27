@@ -1,4 +1,5 @@
 var getScreenUrl = function(path) {
+  path = path.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
   return "https://zxinfo.dk/media" + path;
 };
 

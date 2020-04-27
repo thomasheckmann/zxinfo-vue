@@ -2,13 +2,10 @@
   <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="isLoaded">
     <v-card-text class="pa-0">
       <v-row align="start">
-        <v-col cols="12" class="pa-0">
-          <v-card elevation="1" max-width="500" class="mx-auto">
+        <v-col cols="12" class="pa-0" height="192">
+          <v-card elevation="0" class="mx-auto" flat>
             <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
-              <v-carousel-item v-for="(item, i) in entry.screens" :key="i">
-                <v-sheet color="white" height="100%">
-                  <v-img :src="getScreenUrl(item.url)" />
-                </v-sheet>
+              <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)" width="100%">
               </v-carousel-item>
             </v-carousel>
           </v-card>
