@@ -900,12 +900,6 @@ export default {
           { text: "Publisher", value: "publisher" },
           { text: "Link", value: "actions" },
         ];
-        entry.downloads.headers = [
-          { text: "Filename", value: "url" },
-          { text: "Type/format", value: "format" },
-          { text: "Protection scheme", value: "encodingscheme" },
-          { text: "Original", value: "origin" },
-        ];
       } else {
         /* small mobile */
         entry.releases.headers = [
@@ -923,7 +917,6 @@ export default {
           { text: "Publisher", value: "publisher" },
           { text: "Link", value: "actions" },
         ];
-        entry.downloads.headers = [{ text: "Filename", value: "url" }];
       }
 
       if (this.$vuetify.breakpoint.mdAndUp) {
@@ -933,11 +926,28 @@ export default {
           { text: "Format", value: "format" },
           { text: "Link", value: "actions" },
         ];
+        entry.downloads.headers = [
+          { text: "Filename", value: "url" },
+          { text: "Type/format", value: "format" },
+          { text: "Protection scheme", value: "encodingscheme" },
+          { text: "Original", value: "origin" },
+        ];
+      } else if (this.$vuetify.breakpoint.smOnly) {
+        entry.additionals_headers = [
+          { text: "Filename", value: "url" },
+          { text: "Link", value: "actions" },
+        ];
+        entry.downloads.headers = [
+          { text: "Filename", value: "url" },
+          { text: "Type/format", value: "format" },
+          { text: "Original", value: "origin" },
+        ];
       } else {
         entry.additionals_headers = [
           { text: "Filename", value: "url" },
           { text: "Link", value: "actions" },
         ];
+        entry.downloads.headers = [{ text: "Filename", value: "url" }];
       }
 
       entry.additionals = [];
