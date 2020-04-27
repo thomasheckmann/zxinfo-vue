@@ -5,6 +5,22 @@ var screenurl = function(gamedata) {
   entry.screenurl = "https://zxinfo.dk/media/images/empty.png";
   if (gamedata._source.type === "Compilation") {
     entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
+
+    /** Try to find Inlay - in additionals */
+    var i = 0;
+    var inlays = [];
+    for (; gamedata._source.additionals !== undefined && i < gamedata._source.additionals.length; i++) {
+      var item = gamedata._source.additionals[i];
+      if (item.type.indexOf("inlay") != -1 && item.format.startsWith("Picture")) {
+        /** Ignore 'Back' */
+        if (item.url.indexOf("Back") == -1) {
+          inlays.push(item);
+        }
+      }
+    }
+    if (inlays.length > 0) {
+      entry.screenurl = "https://spectrumcomputing.co.uk/" + inlays[0].url;
+    }
   } else if (gamedata._source.screens.length) {
     let screen = gamedata._source.screens[0];
     if (screen.url.startsWith("/pub/sinclair/books-pics")) {
