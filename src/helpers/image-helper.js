@@ -6,8 +6,6 @@ var screenurl = function(gamedata) {
   if (gamedata._source.type === "Compilation") {
     entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
 
-    console.log("screenurl: compilation");
-
     /** Try to find Inlay - in additionals */
     var i = 0;
     var inlays = [];

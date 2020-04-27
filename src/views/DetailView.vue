@@ -94,7 +94,7 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(license, i) in entry.licensed" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle
+                    <v-list-item-subtitle style="white-space: normal;"
                       >{{ license.name }}({{ license.country }}) - {{ license.type }}:
                       {{ license.originalname }}</v-list-item-subtitle
                     >
