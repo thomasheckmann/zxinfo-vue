@@ -1,10 +1,10 @@
 <template>
   <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="isLoaded">
-    <!-- top section -->
     <DetailViewTopSmall v-if="$vuetify.breakpoint.xsOnly" v-bind:entry="entry"></DetailViewTopSmall>
     <DetailViewTop v-if="$vuetify.breakpoint.smAndUp" v-bind:entry="entry"></DetailViewTop>
 
     <v-divider></v-divider>
+
     <v-simple-table dense>
       <template v-slot:default>
         <tbody>
@@ -257,336 +257,311 @@
               </v-row>
             </td>
           </tr>
-          <!-- A LOT OF EXPANSION PANELS -->
-          <tr>
-            <td colspan="2" class="pa-0">
-              <v-expansion-panels class="pa-0" multiple>
-                <!-- * RELEASES * -->
-                <v-expansion-panel :hidden="!entry.youtubelinks.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.youtubelinks.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Video(s)</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-container class="grey lighten-3">
-                      <v-row justify="start" align="center" class="pa-0">
-                        <v-btn
-                          class="ma-1"
-                          v-for="(link, i) in entry.youtubelinks"
-                          :key="i"
-                          @click="openUrl(link.link)"
-                          :disabled="link.link == null"
-                          small
-                          >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
-                        >
-                      </v-row>
-                    </v-container>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * RELEASES * -->
-                <v-expansion-panel :hidden="!entry.releases.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Releases</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pl-0"
-                      :headers="entry.releases.headers"
-                      :items="entry.releases"
-                      disable-sort
-                      hide-default-footer
-                      dense
-                      :mobile-breakpoint="0"
-                    ></v-data-table>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * AVAILABLE FORMATS * -->
-                <v-expansion-panel :hidden="!entry.availableformat.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Available formats</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-container class="grey lighten-3">
-                      <v-row justify="start" align="center" class="pa-0">
-                        <v-chip
-                          v-for="(format, i) in entry.availableformat"
-                          :key="i"
-                          class="ma-1"
-                          color="green"
-                          small
-                          outlined
-                          label
-                        >
-                          {{ format.format }} <v-icon small right>{{ getIconForDownload(format.type) }}</v-icon></v-chip
-                        ></v-row
-                      ></v-container
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * PROTECTION SCHEMES * -->
-                <v-expansion-panel :hidden="!entry.protectionscheme.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Protection schemes</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-container class="grey lighten-3">
-                      <v-row justify="start" align="center" class="pa-0">
-                        <v-chip v-for="(format, i) in entry.protectionscheme" :key="i" class="ma-1" small label>
-                          {{ format }}</v-chip
-                        >
-                      </v-row></v-container
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * INSPIRATION FOR * -->
-                <v-expansion-panel :hidden="!entry.inspirationFor.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Inspiration for</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.item_short_headers"
-                      :items="entry.inspirationFor"
-                      disable-sort
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-                      ><template v-slot:item.actions="{ item }">
-                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-                      ></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- *MODIFIED BY * -->
-                <v-expansion-panel :hidden="!entry.modifiedBy.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Modified by</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.item_short_headers"
-                      :items="entry.modifiedBy"
-                      disable-sort
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-                      ><template v-slot:item.actions="{ item }">
-                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-                      ></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * PROGRAMS AUTHORED WITH * -->
-                <v-expansion-panel :hidden="!entry.authoring.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Programs authored</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.item_short_headers"
-                      :items="entry.authoring"
-                      disable-sort
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-                      ><template v-slot:item.actions="{ item }">
-                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-                      ></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * IN COMPILATIONS  * -->
-                <v-expansion-panel :hidden="!entry.inCompilations.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >In compilations</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.item_short_headers"
-                      :items="entry.inCompilations"
-                      disable-sort
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-                      ><template v-slot:item.actions="{ item }">
-                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-                      ></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * COMPILATION CONTENT  * -->
-                <v-expansion-panel :hidden="!entry.compilationContent.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.compilationContent.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Compilation content</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.compilationContent_headers"
-                      :items="entry.compilationContent"
-                      disable-sort
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-                      ><template v-slot:item.actions="{ item }">
-                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-                      ></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * Series  * -->
-                <v-expansion-panel :hidden="!entry.series.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Series</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.item_short_headers"
-                      :items="entry.series"
-                      disable-sort
-                      hide-default-header
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
-                            >mdi-link</v-icon
-                          ></router-link
-                        >
-                      </template></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * TOSEC * -->
-                <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >TOSEC Info</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-list flat dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
-                        <v-list-item-content class="py-1 word-wrap">
-                          {{ tosec.url }}
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * Download info * -->
-                <v-expansion-panel :hidden="!entry.downloads.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Download info</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.downloads.headers"
-                      :items="entry.downloads"
-                      disable-sort
-                      hide-default-footer
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                      ><template v-slot:item.origin="{ item }">
-                        <v-simple-checkbox
-                          disabled
-                          v-bind:value="item.origin == 'Original release (O)'"
-                        ></v-simple-checkbox> </template
-                    ></v-data-table>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * Additional downloads  * -->
-                <v-expansion-panel :hidden="!entry.additionals.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Additional Downlod</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      class="pa-0"
-                      :headers="entry.additionals_headers"
-                      :items="entry.additionals"
-                      disable-sort
-                      hide-default-footer
-                      dense
-                      flat
-                      :mobile-breakpoint="0"
-                    >
-                      ><template v-slot:item.actions="{ item }">
-                        <router-link :to="'/details/' + item.url">
-                          <v-icon small right>mdi-download</v-icon></router-link
-                        ></template
-                      ></v-data-table
-                    >
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * Related links  * -->
-                <v-expansion-panel :hidden="!entry.relatedlinks.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Related links</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-container class="grey lighten-3">
-                      <v-row justify="start" align="center" class="pa-0">
-                        <v-btn
-                          class="ma-1"
-                          v-for="(link, i) in entry.relatedlinks"
-                          :key="i"
-                          @click="openUrl(link.link)"
-                          :disabled="link.link == null"
-                          small
-                          >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
-                        >
-                      </v-row>
-                    </v-container>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <!-- * Related sites  * -->
-                <v-expansion-panel :hidden="!entry.relatedsites.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.relatedsites.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >Related sites</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-container class="grey lighten-3">
-                      <v-row justify="start" align="center" class="pa-0">
-                        <v-btn
-                          class="ma-1"
-                          v-for="(link, i) in entry.relatedsites"
-                          :key="i"
-                          @click="openUrl(link.link)"
-                          :disabled="link.link == null"
-                          small
-                          >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
-                        >
-                      </v-row>
-                    </v-container>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
-    <v-divider></v-divider>
-
-    <v-card-actions
-      ><v-btn class="primary" @click="$router.go(-1)"><v-icon small left>mdi-arrow-left</v-icon>BACK</v-btn>
-    </v-card-actions>
+        </tbody></template
+      ></v-simple-table
+    >
+    <v-expansion-panels class="pa-0" multiple>
+      <!-- * RELEASES * -->
+      <v-expansion-panel :hidden="!entry.youtubelinks.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.youtubelinks.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Video(s)</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-container class="grey lighten-3">
+            <v-row justify="start" align="center" class="pa-0">
+              <v-btn
+                class="ma-1"
+                v-for="(link, i) in entry.youtubelinks"
+                :key="i"
+                @click="openUrl(link.link)"
+                :disabled="link.link == null"
+                small
+                >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
+              >
+            </v-row>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * RELEASES * -->
+      <v-expansion-panel :hidden="!entry.releases.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Releases</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pl-0"
+            :headers="entry.releases.headers"
+            :items="entry.releases"
+            disable-sort
+            hide-default-footer
+            dense
+            :mobile-breakpoint="0"
+          ></v-data-table>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * AVAILABLE FORMATS * -->
+      <v-expansion-panel :hidden="!entry.availableformat.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Available formats</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-container class="grey lighten-3">
+            <v-row justify="start" align="center" class="pa-0">
+              <v-chip v-for="(format, i) in entry.availableformat" :key="i" class="ma-1" color="green" small outlined label>
+                {{ format.format }} <v-icon small right>{{ getIconForDownload(format.type) }}</v-icon></v-chip
+              ></v-row
+            ></v-container
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * PROTECTION SCHEMES * -->
+      <v-expansion-panel :hidden="!entry.protectionscheme.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Protection schemes</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-container class="grey lighten-3">
+            <v-row justify="start" align="center" class="pa-0">
+              <v-chip v-for="(format, i) in entry.protectionscheme" :key="i" class="ma-1" small label> {{ format }}</v-chip>
+            </v-row></v-container
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * INSPIRATION FOR * -->
+      <v-expansion-panel :hidden="!entry.inspirationFor.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Inspiration for</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.item_short_headers"
+            :items="entry.inspirationFor"
+            disable-sort
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.title="{ item }">
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+            ><template v-slot:item.actions="{ item }">
+              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+            ></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- *MODIFIED BY * -->
+      <v-expansion-panel :hidden="!entry.modifiedBy.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Modified by</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.item_short_headers"
+            :items="entry.modifiedBy"
+            disable-sort
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.title="{ item }">
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+            ><template v-slot:item.actions="{ item }">
+              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+            ></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * PROGRAMS AUTHORED WITH * -->
+      <v-expansion-panel :hidden="!entry.authoring.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Programs authored</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.item_short_headers"
+            :items="entry.authoring"
+            disable-sort
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.title="{ item }">
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+            ><template v-slot:item.actions="{ item }">
+              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+            ></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * IN COMPILATIONS  * -->
+      <v-expansion-panel :hidden="!entry.inCompilations.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
+          >In compilations</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.item_short_headers"
+            :items="entry.inCompilations"
+            disable-sort
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.title="{ item }">
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+            ><template v-slot:item.actions="{ item }">
+              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+            ></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * COMPILATION CONTENT  * -->
+      <v-expansion-panel :hidden="!entry.compilationContent.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.compilationContent.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Compilation content</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.compilationContent_headers"
+            :items="entry.compilationContent"
+            disable-sort
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.title="{ item }">
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+            ><template v-slot:item.actions="{ item }">
+              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+            ></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * Series  * -->
+      <v-expansion-panel :hidden="!entry.series.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Series</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.item_short_headers"
+            :items="entry.series"
+            disable-sort
+            hide-default-header
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.title="{ item }">
+              <router-link :to="'/details/' + item.id"
+                >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
+                  >mdi-link</v-icon
+                ></router-link
+              >
+            </template></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * TOSEC * -->
+      <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
+          >TOSEC Info</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-list flat dense class="pa-0">
+            <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
+              <v-list-item-subtitle class="py-1 word-wrap" style="white-space: normal;">
+                {{ tosec.url.replace("Sinclair ZX Spectrum/", "") }}
+              </v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * Download info * -->
+      <v-expansion-panel :hidden="!entry.downloads.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Download info</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.downloads.headers"
+            :items="entry.downloads"
+            disable-sort
+            hide-default-footer
+            dense
+            flat
+            :mobile-breakpoint="0"
+            ><template v-slot:item.origin="{ item }">
+              <v-simple-checkbox disabled v-bind:value="item.origin == 'Original release (O)'"></v-simple-checkbox> </template
+          ></v-data-table>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * Additional downloads  * -->
+      <v-expansion-panel :hidden="!entry.additionals.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Additional Downlod</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-data-table
+            class="pa-0"
+            :headers="entry.additionals_headers"
+            :items="entry.additionals"
+            disable-sort
+            hide-default-footer
+            dense
+            flat
+            :mobile-breakpoint="0"
+          >
+            ><template v-slot:item.actions="{ item }">
+              <router-link :to="'/details/' + item.url"> <v-icon small right>mdi-download</v-icon></router-link></template
+            ></v-data-table
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * Related links  * -->
+      <v-expansion-panel :hidden="!entry.relatedlinks.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Related links</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-container class="grey lighten-3">
+            <v-row justify="start" align="center" class="pa-0">
+              <v-btn
+                class="ma-1"
+                v-for="(link, i) in entry.relatedlinks"
+                :key="i"
+                @click="openUrl(link.link)"
+                :disabled="link.link == null"
+                small
+                >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
+              >
+            </v-row>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- * Related sites  * -->
+      <v-expansion-panel :hidden="!entry.relatedsites.length && !isDevelopment">
+        <v-expansion-panel-header :class="entry.relatedsites.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Related sites</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-container class="grey lighten-3">
+            <v-row justify="start" align="center" class="pa-0">
+              <v-btn
+                class="ma-1"
+                v-for="(link, i) in entry.relatedsites"
+                :key="i"
+                @click="openUrl(link.link)"
+                :disabled="link.link == null"
+                small
+                >{{ link.sitename }}<v-icon small right>mdi-link</v-icon></v-btn
+              >
+            </v-row>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-card>
 </template>
 <script>

@@ -1,16 +1,18 @@
 <template>
-  <v-card-text class="pa-0">
+  <v-sheet tile>
     <v-row align="start">
       <v-col cols="6">
-        <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
-          <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)" width="100%">
-            <v-row class="fill-height" align="end" justify="center">
-              <v-system-bar lights-out dark width="100%"
-                ><span class="white--text">{{ item.title }}</span></v-system-bar
-              >
-            </v-row>
-          </v-carousel-item>
-        </v-carousel>
+        <v-sheet tile>
+          <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
+            <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)">
+              <v-row class="fill-height" align="end" justify="center">
+                <v-system-bar v-if="item.title" lights-out dark width="100%"
+                  ><span class="white--text">{{ item.title }}</span></v-system-bar
+                >
+              </v-row>
+            </v-carousel-item>
+          </v-carousel>
+        </v-sheet>
       </v-col>
       <v-col cols="6">
         <v-list-item two-line>
@@ -41,7 +43,7 @@
         </v-list-item>
       </v-col>
     </v-row>
-  </v-card-text>
+  </v-sheet>
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
