@@ -359,15 +359,14 @@
                       :headers="entry.item_short_headers"
                       :items="entry.inspirationFor"
                       disable-sort
-                      hide-default-header
                       dense
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})</router-link
-                        >
-                      </template></v-data-table
+                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+                      ><template v-slot:item.actions="{ item }">
+                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+                      ></v-data-table
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -382,17 +381,14 @@
                       :headers="entry.item_short_headers"
                       :items="entry.modifiedBy"
                       disable-sort
-                      hide-default-header
                       dense
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
-                            >mdi-link</v-icon
-                          ></router-link
-                        >
-                      </template></v-data-table
+                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+                      ><template v-slot:item.actions="{ item }">
+                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+                      ></v-data-table
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -407,15 +403,14 @@
                       :headers="entry.item_short_headers"
                       :items="entry.authoring"
                       disable-sort
-                      hide-default-header
                       dense
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }}<v-icon small right>mdi-link</v-icon></router-link
-                        >
-                      </template></v-data-table
+                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+                      ><template v-slot:item.actions="{ item }">
+                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+                      ></v-data-table
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -430,15 +425,14 @@
                       :headers="entry.item_short_headers"
                       :items="entry.inCompilations"
                       disable-sort
-                      hide-default-header
                       dense
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }}<v-icon small right>mdi-link</v-icon></router-link
-                        >
-                      </template></v-data-table
+                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+                      ><template v-slot:item.actions="{ item }">
+                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+                      ></v-data-table
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -450,20 +444,17 @@
                   <v-expansion-panel-content>
                     <v-data-table
                       class="pa-0"
-                      :headers="entry.item_short_headers"
+                      :headers="entry.compilationContent_headers"
                       :items="entry.compilationContent"
                       disable-sort
-                      hide-default-header
                       dense
                       flat
                       :mobile-breakpoint="0"
                       ><template v-slot:item.title="{ item }">
-                        <router-link :to="'/details/' + item.id"
-                          >{{ item.title }} - {{ item.publisher }} ({{ item.variation }})<v-icon small right
-                            >mdi-link</v-icon
-                          ></router-link
-                        >
-                      </template></v-data-table
+                        <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
+                      ><template v-slot:item.actions="{ item }">
+                        <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
+                      ></v-data-table
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -492,6 +483,21 @@
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+                <!-- * TOSEC * -->
+                <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
+                  <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
+                    >TOSEC Info</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <v-list flat dense class="pa-0">
+                      <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
+                        <v-list-item-content class="py-1 word-wrap">
+                          {{ tosec.url }}
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
                 <!-- * Download info * -->
                 <v-expansion-panel :hidden="!entry.downloads.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
@@ -503,7 +509,6 @@
                       :headers="entry.downloads.headers"
                       :items="entry.downloads"
                       disable-sort
-                      hide-default-header
                       hide-default-footer
                       dense
                       flat
@@ -516,35 +521,28 @@
                     ></v-data-table>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-                <!-- * TOSEC * -->
-                <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
-                  <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
-                    >TOSEC Info</v-expansion-panel-header
-                  >
-                  <v-expansion-panel-content>
-                    <v-list flat dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
-                        <v-list-item-content class="py-1">
-                          {{ tosec.url }}
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
                 <!-- * Additional downloads  * -->
                 <v-expansion-panel :hidden="!entry.additionals.length && !isDevelopment">
                   <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
                     >Additional Downlod</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
-                    <v-list flat outline dense class="pa-0">
-                      <v-list-item class="pa-0 ma-0 auto" v-for="(additional, i) in entry.additionals" :key="i" two-line>
-                        <v-list-item-content class="py-1">
-                          <v-list-item-subtitle>{{ additional.url }} </v-list-item-subtitle>
-                          <v-list-item-subtitle>{{ additional.type }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
+                    <v-data-table
+                      class="pa-0"
+                      :headers="entry.additionals_headers"
+                      :items="entry.additionals"
+                      disable-sort
+                      hide-default-footer
+                      dense
+                      flat
+                      :mobile-breakpoint="0"
+                    >
+                      ><template v-slot:item.actions="{ item }">
+                        <router-link :to="'/details/' + item.url">
+                          <v-icon small right>mdi-download</v-icon></router-link
+                        ></template
+                      ></v-data-table
+                    >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <!-- * Related links  * -->
@@ -882,31 +880,61 @@ export default {
         entry.protectionscheme.splice(idx, 1);
       }
 
-      entry.downloads.headers = [
-        { text: "Filename", value: "url" },
-        { text: "Type/format", value: "type" },
-        { text: "Protection scheme", value: "encodingscheme" },
-        { text: "Original", value: "origin" },
-      ];
-
       if (this.$vuetify.breakpoint.smAndUp) {
         entry.releases.headers = [
           { text: "#", value: "release" },
           { text: "Publisher", value: "publisher" },
           { text: "Year", value: "yearofrelease" },
+          { text: "Alt. title", value: "as_title" },
           { text: "Price", value: "releaseprice" },
-          { text: "Title", value: "as_title" },
+        ];
+        entry.item_short_headers = [
+          { text: "Title", value: "title" },
+          { text: "Publisher", value: "publisher" },
+          { text: "Machinetype", value: "machinetype" },
+          { text: "Link", value: "actions" },
+        ];
+        entry.compilationContent_headers = [
+          { text: "Side", value: "side" },
+          { text: "Title", value: "title" },
+          { text: "Publisher", value: "publisher" },
+          { text: "Link", value: "actions" },
+        ];
+        entry.downloads.headers = [
+          { text: "Filename", value: "url" },
+          { text: "Type/format", value: "format" },
+          { text: "Protection scheme", value: "encodingscheme" },
+          { text: "Original", value: "origin" },
+        ];
+        entry.additionals_headers = [
+          { text: "Filename", value: "url" },
+          { text: "Type", value: "type" },
+          { text: "Format", value: "format" },
+          { text: "Link", value: "actions" },
         ];
       } else {
+        /* small mobile */
         entry.releases.headers = [
           { text: "#", value: "release" },
           { text: "Publisher", value: "publisher" },
           { text: "Year", value: "yearofrelease" },
-          { text: "Title", value: "as_title" },
+        ];
+        entry.item_short_headers = [
+          { text: "Title", value: "title" },
+          { text: "Publisher", value: "publisher" },
+          { text: "Link", value: "actions" },
+        ];
+        entry.compilationContent_headers = [
+          { text: "Title", value: "title" },
+          { text: "Publisher", value: "publisher" },
+          { text: "Link", value: "actions" },
+        ];
+        entry.downloads.headers = [{ text: "Filename", value: "url" }];
+        entry.additionals_headers = [
+          { text: "Filename", value: "url" },
+          { text: "Link", value: "actions" },
         ];
       }
-
-      entry.item_short_headers = [{ text: "Title", value: "title" }];
 
       entry.additionals = [];
       for (var aidx in this.GameData._source.additionals) {
