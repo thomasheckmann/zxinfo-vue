@@ -2,9 +2,11 @@ var screenurl = function(gamedata) {
   // handle screens, make one a "cover"
   var entry = {};
 
-  entry.screenurl = "https://zxinfo.dk/media/images/empty.png";
+  entry.screenurl = "/images/empty.png";
   if (gamedata._source.type === "Compilation") {
     entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
+
+    console.log("screenurl: compilation");
 
     /** Try to find Inlay - in additionals */
     var i = 0;
@@ -19,26 +21,22 @@ var screenurl = function(gamedata) {
       }
     }
     if (inlays.length > 0) {
-      inlays[0].url = inlays[0].url.replace("/pub/sinclair/", "/thumbs/");
-      entry.screenurl = "https://zxinfo.dk/media" + inlays[0].url;
-    }
-  } else if (gamedata._source.screens.length) {
-    let screen = gamedata._source.screens[0];
-    if (screen.url.startsWith("/pub/sinclair/books-pics")) {
-      entry.screenurl = "https://zxinfo.dk/media" + screen.url.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
-    } else if (screen.url.startsWith("/zxscreen")) {
-      entry.screenurl = "https://zxinfo.dk/media" + screen.url;
-    } else if (screen.url.startsWith("/pub")) {
-      entry.screenurl = "https://spectrumcomputing.co.uk/" + screen.url;
-    } else if (screen.url.startsWith("/zxdb/sinclair/pics/hw/")) {
-      entry.screenurl = "https://zxinfo.dk/media" + screen.url.replace("/zxdb/sinclair/pics/hw/", "/thumbs/hardware-pics/");
-    } else if (screen.url.startsWith("/zxdb/sinclair/entries/")) {
-      entry.screenurl =
-        "https://spectrumcomputing.co.uk/" + screen.url.replace("/zxdb/sinclair/pics/hw/", "/thumbs/hardware-pics/");
+      entry.screenurl = inlays[0].url.replace("/pub/sinclair/", "/thumbs/");
+    } else if (gamedata._source.screens.length) {
+      entry.screenurl = gamedata._source.screens[0].url;
     } else {
-      console.log("UKNOWN ACTION(" + gamedata._id + "): " + screen.url);
+      console.log("Unhandled compilation cover");
     }
   }
+
+  if (gamedata._source.screens.length && gamedata._source.type !== "Compilation") {
+    entry.screenurl = gamedata._source.screens[0].url;
+    entry.screenurl = entry.screenurl.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
+    entry.screenurl = "https://zxinfo.dk/media" + entry.screenurl;
+  } else {
+    entry.screenurl = "https://zxinfo.dk/media" + entry.screenurl;
+  }
+
   return entry.screenurl;
 };
 
