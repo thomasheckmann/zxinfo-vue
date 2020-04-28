@@ -57,20 +57,7 @@
 
     <!-- search bar -->
     <v-toolbar flat>
-      <v-text-field
-        v-model="queryparameters.searchterm.value"
-        label="What is your favorite game or author?"
-        :prepend-inner-icon="'mdi-magnify'"
-        @click:prepend-inner="submit"
-        solo
-        single-line
-        full-width
-        hide-details
-        clearable
-        :append-outer-icon="'mdi-filter-variant'"
-        @click:append-outer="filterdrawer = !filterdrawer"
-        @keyup.enter="submit"
-      ></v-text-field>
+      <SearchInput v-model="searchText" />
     </v-toolbar>
 
     <!-- chip section for filters -->
@@ -110,6 +97,7 @@
 <script>
 import GameCard from "@/components/GameCard";
 import axios from "axios";
+import SearchInput from "@/components/SearchInput";
 
 var dataURL = "https://api.zxinfo.dk/api/zxinfo/v2/search?";
 // QUeryBuilder Helper
@@ -146,11 +134,14 @@ export default {
   watch: {
     // reload page when linking to new entry
     $route() {},
+    searchText() {
+      this.submit();
+    },
   },
-  data() {
+  data: function() {
     return {
+      searchText: "",
       queryparameters: {
-        searchterm: { name: "query", value: "" },
         group: { name: "group", value: "" },
         groupname: { name: "groupname", value: "" },
       },
@@ -204,7 +195,7 @@ export default {
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
-      const queryparam = this.queryparameters.searchterm.value;
+      const queryparam = this.searchText;
       var filterquery = {};
       // add filters
       for (var agg in this.facets) {
@@ -218,10 +209,10 @@ export default {
       }
 
       for (var qp in this.queryparameters) {
-        filterquery[this.queryparameters[qp].name] = this.queryparameters[qp].value;
+        if (this.queryparameters[qp].value) {
+          filterquery[this.queryparameters[qp].name] = this.queryparameters[qp].value;
+        }
       }
-
-      // this.$router.replace({ name: "EntrySearch", params: { queryparam } }, () => {});
       this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
     },
     submit() {
@@ -230,8 +221,9 @@ export default {
       this.loadMore();
     },
     loadMore: function() {
+      if (this.isLoading) return;
       var p = {
-        query: this.queryparameters.searchterm.value,
+        query: this.searchText,
         mode: "full",
         size: this.getPageSize,
         offset: this.pageindex,
@@ -329,8 +321,7 @@ export default {
   mounted() {
     // initialize parameters
 
-    this.queryparameters.searchterm.value = this.$route.params.query ? this.$route.params.query : "";
-
+    this.searchText = this.$route.params.query ? this.$route.params.query : "";
     for (var qp in this.queryparameters) {
       var paramname = this.queryparameters[qp].name;
       var queryvalue = this.$route.query[paramname];
@@ -339,17 +330,12 @@ export default {
       }
     }
 
-    /*
-    this.group = this.$route.query.group ? this.$route.query.group : "";
-    this.groupname = this.$route.query.groupname ? this.$route.query.groupname : "";
-*/
     for (var agg in this.facets) {
       this.facets[agg].selected = Array.isArray(this.$route.query[this.facets[agg].paramname])
         ? this.$route.query[this.facets[agg].paramname]
         : [this.$route.query[this.facets[agg].paramname]];
     }
-
-    this.loadMore();
+    if (!this.searchText) this.submit();
   },
   computed: {
     // calculate page size, so each "page" are filled out based on breakpoint
@@ -394,6 +380,7 @@ export default {
   },
   components: {
     GameCard,
+    SearchInput,
   },
 };
 </script>
