@@ -25,7 +25,9 @@
                 <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
               ></v-list-item-subtitle
             >
-            {{ entry.machinetype }}<br />{{ entry.genre }}<br />
+            <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{ entry.machinetype }}</router-link
+            ><br /><router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.genre }}</router-link
+            ><br />
             <v-rating
               v-model="entry.score.score"
               background-color="grey lighten-1"
@@ -57,3 +59,14 @@ export default {
   components: {},
 };
 </script>
+<style scoped>
+a:hover,
+a:link,
+a:visited,
+a.router-link-active,
+a.router-link-exact-active {
+  color: black;
+  cursor: pointer;
+  text-decoration: underline;
+}
+</style>

@@ -58,7 +58,7 @@
     <!-- search bar -->
     <v-toolbar flat>
       <v-text-field
-        v-model="searchterm"
+        v-model="queryparameters.searchterm.value"
         label="What is your favorite game or author?"
         :prepend-inner-icon="'mdi-magnify'"
         @click:prepend-inner="submit"
@@ -149,9 +149,11 @@ export default {
   },
   data() {
     return {
-      searchterm: "",
-      group: "",
-      groupname: "",
+      queryparameters: {
+        searchterm: { name: "query", value: "" },
+        group: { name: "group", value: "" },
+        groupname: { name: "groupname", value: "" },
+      },
       facets: {
         // key = name in agg output, paramname = parameter name for search
         machinetypes: { icon: "mdi-desktop-classic", title: "Machine type", items: [], selected: [], paramname: "machinetype" },
@@ -202,7 +204,7 @@ export default {
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
-      const queryparam = this.searchterm;
+      const queryparam = this.queryparameters.searchterm.value;
       var filterquery = {};
       // add filters
       for (var agg in this.facets) {
@@ -214,8 +216,10 @@ export default {
         }
         filterquery[this.facets[agg].paramname] = selected;
       }
-      filterquery["group"] = this.group;
-      filterquery["groupname"] = this.groupname;
+
+      for (var qp in this.queryparameters) {
+        filterquery[this.queryparameters[qp].name] = this.queryparameters[qp].value;
+      }
 
       // this.$router.replace({ name: "EntrySearch", params: { queryparam } }, () => {});
       this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
@@ -227,7 +231,7 @@ export default {
     },
     loadMore: function() {
       var p = {
-        query: this.searchterm,
+        query: this.queryparameters.searchterm.value,
         mode: "full",
         size: this.getPageSize,
         offset: this.pageindex,
@@ -243,13 +247,12 @@ export default {
         }
         p[this.facets[agg].paramname] = selected;
       }
-      if (this.group) {
-        p["group"] = this.group;
-      }
-      if (this.groupname) {
-        p["groupname"] = this.groupname;
-      }
 
+      for (var qp in this.queryparameters) {
+        if (this.queryparameters[qp].value) {
+          p[this.queryparameters[qp].name] = this.queryparameters[qp].value;
+        }
+      }
       console.log(buildQuery(p));
       this.loading = true;
       this.allResults = true;
@@ -325,10 +328,21 @@ export default {
   },
   mounted() {
     // initialize parameters
-    this.searchterm = this.$route.params.query ? this.$route.params.query : "";
+
+    this.queryparameters.searchterm.value = this.$route.params.query ? this.$route.params.query : "";
+
+    for (var qp in this.queryparameters) {
+      var paramname = this.queryparameters[qp].name;
+      var queryvalue = this.$route.query[paramname];
+      if (paramname !== "query" && queryvalue) {
+        this.queryparameters[paramname].value = queryvalue;
+      }
+    }
+
+    /*
     this.group = this.$route.query.group ? this.$route.query.group : "";
     this.groupname = this.$route.query.groupname ? this.$route.query.groupname : "";
-
+*/
     for (var agg in this.facets) {
       this.facets[agg].selected = Array.isArray(this.$route.query[this.facets[agg].paramname])
         ? this.$route.query[this.facets[agg].paramname]

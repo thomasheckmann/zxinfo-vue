@@ -18,7 +18,11 @@
           </tr>
           <tr :style="entry.originalReleaseYear == '-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
-            <td valign="top">{{ entry.originalReleaseYear }}</td>
+            <td valign="top">
+              <router-link :to="{ path: '/search', query: { year: entry.originalReleaseYear } }">{{
+                entry.originalReleaseYear
+              }}</router-link>
+            </td>
           </tr>
           <tr :style="!entry.originalPublisher && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalPublisher ? 'font-weight-bold' : 'font-weight-light'">Original Publisher</td>
@@ -30,6 +34,14 @@
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
+            </td>
+          </tr>
+          <tr :style="entry.originalpublication == '-' && !isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.originalpublication != '-' ? 'font-weight-bold' : 'font-weight-light'">Original publication</td>
+            <td valign="top">
+              <router-link :to="{ path: '/search', query: { originalpublication: entry.originalpublication } }">{{
+                entry.originalpublication
+              }}</router-link>
             </td>
           </tr>
           <tr :style="!entry.authors.length && !isDevelopment ? 'display: none;' : ''">
@@ -115,11 +127,17 @@
           </tr>
           <tr :style="entry.machinetype == '-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.machinetype != '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
-            <td>{{ entry.machinetype }}</td>
+            <td>
+              <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{
+                entry.machinetype
+              }}</router-link>
+            </td>
           </tr>
           <tr :style="entry.genre == '-/-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.genre != '-/-' ? 'font-weight-bold' : 'font-weight-light'">Genre</td>
-            <td>{{ entry.genre }}</td>
+            <td>
+              <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.genre }}</router-link>
+            </td>
           </tr>
           <tr :style="!entry.maximumPlayers && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.maximumPlayers ? 'font-weight-bold' : 'font-weight-light'">Maximum Players</td>
@@ -127,7 +145,11 @@
           </tr>
           <tr :style="!entry.multiTurnType && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.multiTurnType ? 'font-weight-bold' : 'font-weight-light'">Multi-Turn Type</td>
-            <td valign="top">{{ entry.multiTurnType }}</td>
+            <td valign="top">
+              <router-link :to="{ path: '/search', query: { multiplayermode: entry.multiTurnType } }">{{
+                entry.multiTurnType
+              }}</router-link>
+            </td>
           </tr>
           <tr :style="!entry.controlOptions.length && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.controlOptions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
@@ -137,7 +159,11 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(control, i) in entry.controlOptions" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ control }}</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      ><router-link :to="{ path: '/search', query: { control: control } }">{{
+                        control
+                      }}</router-link></v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -162,8 +188,7 @@
                   small
                   outlined
                   label
-                  @click="openUrl(platform.url)"
-                  :disabled="theme.url == null"
+                  @click="$router.push({ path: '/search', query: { group: 'T', groupname: theme } })"
                 >
                   {{ theme }} <v-icon small right>mdi-link</v-icon>
                 </v-chip>
@@ -194,7 +219,11 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(competition, i) in entry.competitions" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle style="white-space: normal;">{{ competition }}</v-list-item-subtitle>
+                    <v-list-item-subtitle style="white-space: normal;"
+                      ><router-link :to="{ path: '/search', query: { group: 'C', groupname: competition } }">{{
+                        competition
+                      }}</router-link></v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -211,8 +240,7 @@
                   small
                   outlined
                   label
-                  @click="openUrl(platform.url)"
-                  :disabled="group.url == null"
+                  @click="$router.push({ path: '/search', query: { group: 'U', groupname: group } })"
                 >
                   {{ group }} <v-icon small right>mdi-link</v-icon>
                 </v-chip>
@@ -226,10 +254,7 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(authoredwith, i) in entry.authoredWith" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + authoredwith.id">
-                      <v-list-item-subtitle
-                        >{{ authoredwith.title }} - {{ authoredwith.publisher
-                        }}<v-icon small right>mdi-link</v-icon></v-list-item-subtitle
-                      >
+                      <v-list-item-subtitle>{{ authoredwith.title }} - {{ authoredwith.publisher }}</v-list-item-subtitle>
                     </router-link>
                     <v-list-item-subtitle>{{ authoredwith.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -717,6 +742,7 @@ export default {
         entry.machinetype = this.GameData._source.machinetype;
       }
 
+      entry.genretype = this.GameData._source.type;
       entry.genre = "-/-";
       if (this.GameData._source.type !== undefined) {
         entry.genre = this.GameData._source.type + "/" + this.GameData._source.subtype;
@@ -729,6 +755,8 @@ export default {
       for (var control in this.GameData._source.controls) {
         entry.controlOptions.push(this.GameData._source.controls[control].control);
       }
+
+      entry.originalpublication = this.GameData._source.originalpublication;
 
       if (this.GameData._source.originalprice) {
         entry.originalPriceAmount = this.GameData._source.originalprice[0].amount;
@@ -1001,7 +1029,7 @@ a.router-link-active,
 a.router-link-exact-active {
   color: black;
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .wrap-text {
