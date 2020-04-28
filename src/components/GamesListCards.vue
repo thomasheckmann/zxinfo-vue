@@ -253,7 +253,7 @@ export default {
           p[this.queryparameters[qp].name] = this.queryparameters[qp].value;
         }
       }
-      console.log(buildQuery(p));
+      // console.log(buildQuery(p));
       this.loading = true;
       this.allResults = true;
       axios
