@@ -111,9 +111,7 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(insp, i) in entry.inspiredBy" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + insp.id">
-                      <v-list-item-subtitle
-                        >{{ insp.title }} - {{ insp.publisher }}<v-icon small right>mdi-link</v-icon></v-list-item-subtitle
-                      >
+                      <v-list-item-subtitle>{{ insp.title }} - {{ insp.publisher }}</v-list-item-subtitle>
                     </router-link>
                     <v-list-item-subtitle>{{ insp.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -366,10 +364,8 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-            ><template v-slot:item.actions="{ item }">
-              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-            ></v-data-table
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
+            </template></v-data-table
           >
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -388,10 +384,8 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-            ><template v-slot:item.actions="{ item }">
-              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-            ></v-data-table
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
+            </template></v-data-table
           >
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -410,10 +404,8 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-            ><template v-slot:item.actions="{ item }">
-              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-            ></v-data-table
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
+            </template></v-data-table
           >
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -432,10 +424,8 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-            ><template v-slot:item.actions="{ item }">
-              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-            ></v-data-table
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
+            </template></v-data-table
           >
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -454,10 +444,8 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link> </template
-            ><template v-slot:item.actions="{ item }">
-              <router-link :to="'/details/' + item.id"> <v-icon small right>mdi-link</v-icon></router-link></template
-            ></v-data-table
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
+            </template></v-data-table
           >
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -477,11 +465,7 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id"
-                >{{ item.title }} - {{ item.publisher }} ({{ item.machinetype }})<v-icon small right
-                  >mdi-link</v-icon
-                ></router-link
-              >
+              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
             </template></v-data-table
           >
         </v-expansion-panel-content>
@@ -889,13 +873,11 @@ export default {
           { text: "Title", value: "title" },
           { text: "Publisher", value: "publisher" },
           { text: "Machinetype", value: "machinetype" },
-          { text: "Link", value: "actions" },
         ];
         entry.compilationContent_headers = [
           { text: "Side", value: "side" },
           { text: "Title", value: "title" },
           { text: "Publisher", value: "publisher" },
-          { text: "Link", value: "actions" },
         ];
       } else {
         /* small mobile */
@@ -907,12 +889,10 @@ export default {
         entry.item_short_headers = [
           { text: "Title", value: "title" },
           { text: "Publisher", value: "publisher" },
-          { text: "Link", value: "actions" },
         ];
         entry.compilationContent_headers = [
           { text: "Title", value: "title" },
           { text: "Publisher", value: "publisher" },
-          { text: "Link", value: "actions" },
         ];
       }
 
