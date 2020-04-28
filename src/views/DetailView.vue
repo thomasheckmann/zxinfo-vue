@@ -574,12 +574,32 @@
 </template>
 <script>
 import axios from "axios";
+
+import Vue from "vue";
+import VueMeta from "vue-meta";
+
 import imageHelper from "@/helpers/image-helper";
 import DetailViewTopSmall from "@/components/DetailViewTopSmall";
 import DetailViewTop from "@/components/DetailViewTop";
 
+Vue.use(VueMeta, {
+  refreshOnceOnNavigation: true,
+});
+
 export default {
   name: "DetailView",
+  metaInfo() {
+    if (this.isLoaded) {
+      var tt = this.entry.title;
+      return {
+        title: tt,
+        meta: [
+          { name: "og:title", content: tt },
+          { name: "og:description", content: tt },
+        ],
+      };
+    }
+  },
   data() {
     return {
       isLoaded: false,

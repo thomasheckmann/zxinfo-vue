@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
+import VueMeta from "vue-meta";
 
 import App from "./main.vue";
 
@@ -11,7 +12,7 @@ import axios from "axios";
 
 Vue.config.productionTip = false;
 
-Vue.use(Vuetify, VueAxios, axios);
+Vue.use(Vuetify, VueAxios, axios, VueMeta);
 
 new Vue({
   vuetify,

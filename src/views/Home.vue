@@ -15,6 +15,7 @@
                 :search-input.sync="searchterm"
                 clearable
                 dense
+                rounded
                 full-width
                 hide-no-data
                 hide-details
@@ -78,7 +79,6 @@ export default {
         .then((res) => res.clone().json())
         .then((res) => {
           this.items = res;
-          console.log(this.items.length);
         })
         .catch((err) => {
           console.log(err);
