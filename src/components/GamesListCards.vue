@@ -79,9 +79,7 @@
     <v-row :align="'start'" :justify="'start'" dense>
       <v-col v-for="(card, index) in cards" :key="index" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
         <v-responsive :aspect-ratio="1 / 1">
-          <router-link :to="'/details/' + card._id">
-            <GameCard v-bind:GameData="card" :id="index / getPageSize == pageindex - 1 ? pageindex : ''" />
-          </router-link>
+          <GameCard v-bind:GameData="card" :id="index / getPageSize == pageindex - 1 ? pageindex : ''" />
         </v-responsive>
       </v-col>
     </v-row>
@@ -138,6 +136,10 @@ export default {
       this.submit();
     },
   },
+  beforeRouteUpdate(to) {
+    console.log("beforeRouteUpdate: " + to);
+  },
+
   data: function() {
     return {
       searchText: "",
@@ -320,7 +322,6 @@ export default {
   },
   mounted() {
     // initialize parameters
-
     this.searchText = this.$route.params.query ? this.$route.params.query : "";
     for (var qp in this.queryparameters) {
       var paramname = this.queryparameters[qp].name;
