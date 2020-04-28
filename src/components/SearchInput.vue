@@ -14,7 +14,7 @@
     hide-no-data
     item-text="text"
     item-value="text"
-    label="What is your favorite game or author?"
+    :label="this.value"
     solo
   >
     <template v-slot:item="{ item }"
