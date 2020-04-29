@@ -89,12 +89,12 @@
         <v-icon left small>mouse</v-icon> {{ queryparameters.contenttype.value }}</v-chip
       >
     </v-row>
-    <v-system-bar v-if="!loading"
+    <v-toolbar v-if="!loading" color="grey" flat dense
       >{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)<v-spacer /><v-icon
         @click="listtype = 'grid'"
         :color="listtype == 'grid' ? 'white' : ''"
         >apps</v-icon
-      ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon></v-system-bar
+      ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon></v-toolbar
     >
     <!-- SEARCH RESULT -->
     <SearchResultGrid
