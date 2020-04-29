@@ -41,7 +41,7 @@
           <v-row align="center" justify="center">
             <v-col class="text-center" cols="4">
               <div class="my-2">
-                <v-btn @click="submit" color="primary">FILTER</v-btn>
+                <v-btn @click="replaceURL()" color="primary">FILTER</v-btn>
               </div>
             </v-col>
             <v-col class="text-center" cols="6">
@@ -366,7 +366,12 @@ export default {
       for (var agg in this.facets) {
         this.facets[agg].selected = [];
       }
-      this.submit();
+      for (var qp in this.queryparameters) {
+        this.queryparameters[qp].value = "";
+      }
+
+      this.searchText = "";
+      this.replaceURL();
     },
     onScroll(e) {
       if (typeof window === "undefined") return;
