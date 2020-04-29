@@ -72,10 +72,12 @@
       <div v-if="$vuetify.breakpoint.md && isDevelopment">MD</div>
       <div v-if="$vuetify.breakpoint.lg && isDevelopment">LG</div>
       <div v-if="$vuetify.breakpoint.xl && isDevelopment">XL</div>
+      <v-spacer />
+      <v-icon>{{ getContenttypeIcon }}</v-icon>
     </v-app-bar>
 
     <v-content>
-      <router-view class="view"></router-view>
+      <router-view @updateContenttype="updateContenttype" class="view"></router-view>
     </v-content>
 
     <v-footer app padless class="caption .font-weight-thin">
@@ -94,12 +96,30 @@ export default {
   name: "App",
   data() {
     return {
+      contenttype: "",
       drawer: false,
     };
+  },
+  methods: {
+    updateContenttype(status) {
+      this.contenttype = status;
+    },
   },
   computed: {
     isDevelopment() {
       return process.env.NODE_ENV == "development";
+    },
+    getContenttypeIcon() {
+      switch (this.contenttype) {
+        case "SOFTWARE":
+          return "games";
+        case "HARDWARE":
+          return "mdi-mouse";
+        case "BOOK":
+          return "book";
+        default:
+          return "";
+      }
     },
   },
 };

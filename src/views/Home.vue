@@ -36,5 +36,9 @@ export default {
       this.search();
     },
   },
+  mounted() {
+    // fire event to parent
+    this.$emit("updateContenttype", "");
+  },
 };
 </script>
