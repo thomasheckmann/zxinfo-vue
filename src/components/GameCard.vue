@@ -65,6 +65,11 @@ export default {
   props: ["GameData"],
   methods: {
     getCoverImage: imageHelper.getCoverImage,
+    search() {
+      if (this.searchterm) {
+        this.$emit("input", this.searchterm);
+      }
+    },
   },
   computed: {
     // cleaned version of JSON

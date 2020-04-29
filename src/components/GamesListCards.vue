@@ -41,7 +41,7 @@
           <v-row align="center" justify="center">
             <v-col class="text-center" cols="4">
               <div class="my-2">
-                <v-btn @click="replaceURL()" color="primary">FILTER</v-btn>
+                <v-btn @click="searchFilters()" color="primary">FILTER</v-btn>
               </div>
             </v-col>
             <v-col class="text-center" cols="6">
@@ -69,7 +69,7 @@
         outlined
         label
         close
-        @click:close="uncheck(item.group, item.value)"
+        @click:close="uncheckFilter(item.group, item.value)"
       >
         <v-icon left small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip
       >
@@ -146,12 +146,12 @@ export default {
   watch: {
     // reload page when linking to new entry
     $route() {
-      if (this.isDevelopment) console.log("watch route()");
-      this.initializeParameters();
-      this.submit();
+      if (this.isDevelopment) console.log("WATCH route()");
+      this.loadMore();
     },
     searchText() {
-      if (this.isDevelopment) console.log("searchText()");
+      if (this.isDevelopment) console.log("WATCH searchText(): " + this.searchText);
+      this.resetSearchResult();
       this.replaceURL();
     },
   },
@@ -210,9 +210,9 @@ export default {
       this.filterdrawer = !this.filterdrawer;
     },
 
-    initializeParameters() {
-      if (this.isDevelopment) console.log("initializeParameters()");
-      // initialize parameters from request
+    getParametersFromRequest() {
+      // resetSearchResultialize parameters from request
+      if (this.isDevelopment) console.log("getParametersFromRequest()");
 
       this.searchText = this.$route.params.query ? this.$route.params.query : "";
       for (var qp in this.queryparameters) {
@@ -249,22 +249,17 @@ export default {
           filterquery[this.queryparameters[qp].name] = this.queryparameters[qp].value;
         }
       }
+
       this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
     },
-    init() {
-      if (this.isDevelopment) console.log("init()");
+    resetSearchResult() {
+      if (this.isDevelopment) console.log("resetSearchResult()");
       this.loading = false;
       this.searchTimeOf = 0;
       this.searchNumberOfResults = 0;
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
-    },
-    submit() {
-      if (this.isDevelopment) console.log("submit()");
-      this.filterdrawer = false;
-      this.init();
-      this.loadMore();
     },
     loadMore: function() {
       if (this.isDevelopment) console.log("loadMore()");
@@ -345,16 +340,22 @@ export default {
           this.loading = false;
         });
     },
-    uncheck(group, value) {
+    uncheckFilter(group, value) {
+      if (this.isDevelopment) console.log("uncheck(): " + group + " = " + value);
       var idx = this.facets[group].selected.indexOf(value);
       if (idx > -1) {
         this.facets[group].selected.splice(idx, 1);
       }
+      this.resetSearchResult();
       this.replaceURL();
     },
     uncheckGroup() {
+      if (this.isDevelopment) {
+        console.log("uncheckGroup");
+      }
       this.queryparameters.group = {};
       this.queryparameters.groupname = {};
+      this.resetSearchResult();
       this.replaceURL();
     },
     uncheckContenttype() {
@@ -370,7 +371,17 @@ export default {
         this.queryparameters[qp].value = "";
       }
 
+      this.filterdrawer = false;
       this.searchText = "";
+      this.resetSearchResult();
+      this.replaceURL();
+    },
+    searchFilters() {
+      if (this.isDevelopment) {
+        console.log("searchFilters()");
+      }
+      this.filterdrawer = false;
+      this.resetSearchResult();
       this.replaceURL();
     },
     onScroll(e) {
@@ -384,7 +395,8 @@ export default {
   },
   mounted() {
     if (this.isDevelopment) console.log("mounted()");
-    this.initializeParameters();
+    this.getParametersFromRequest();
+    this.resetSearchResult();
     this.replaceURL();
   },
   computed: {
