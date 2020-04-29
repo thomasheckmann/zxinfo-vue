@@ -7,7 +7,7 @@
             <div>
               <SearchInput v-model="searchText" />
               <p></p>
-              <p class="text-center .caption .font-weight-thin	">ZXDB update 25.03.2020</p>
+              <p class="text-center .caption .font-weight-thin	">ZXDB update 29.04.2020</p>
             </div>
           </v-card-text>
         </v-card>
