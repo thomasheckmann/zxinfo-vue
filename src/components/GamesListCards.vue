@@ -61,7 +61,7 @@
     </v-toolbar>
 
     <!-- chip section for filters -->
-    <v-row justify="start" align="center">
+    <v-row justify="start" align="center" class="px-2 py-1">
       <v-chip
         v-for="(item, id) in activeFacetsForChips"
         :key="id"
@@ -69,6 +69,7 @@
         outlined
         label
         close
+        class="ma-1"
         @click:close="uncheckFilter(item.group, item.value)"
       >
         <v-icon left small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip

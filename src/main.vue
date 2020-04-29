@@ -17,17 +17,37 @@
           </template>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title><router-link to="/search?contenttype=SOFTWARE">Only software</router-link></v-list-item-title>
+              <v-list-item-title><router-link to="/search?contenttype=SOFTWARE">Software</router-link></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title><router-link to="/search?contenttype=HARDWARE">Only hardware</router-link></v-list-item-title>
+              <v-list-item-title><router-link to="/search?contenttype=HARDWARE">Hardware</router-link></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title><router-link to="/search?contenttype=BOOK">Only books</router-link></v-list-item-title>
+              <v-list-item-title><router-link to="/search?contenttype=BOOK">Books</router-link></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title
+                ><router-link
+                  to="/search/?machinetype=ZX-Spectrum%20128%20%2B2&machinetype=ZX-Spectrum%20128%20%2B2A%2F%2B3&machinetype=ZX-Spectrum%20128%20%2B2B&machinetype=ZX-Spectrum%20128%20%2B3&machinetype=ZX-Spectrum%20128K&machinetype=ZX-Spectrum%20128K%20%28load%20in%20USR0%20mode%29&machinetype=ZX-Spectrum%2016K&machinetype=ZX-Spectrum%2016K%2F48K&machinetype=ZX-Spectrum%2048K&machinetype=ZX-Spectrum%2048K%2F128K"
+                  >ZX Spectrum</router-link
+                ></v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title
+                ><router-link
+                  to="/search/?machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
+                  >ZX81</router-link
+                ></v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -36,7 +56,7 @@
             <v-icon>contact_mail</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
+            <v-list-item-title>Credits</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
