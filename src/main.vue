@@ -1,16 +1,57 @@
 <template>
   <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" app>
+      <v-list dense>
+        <v-subheader>Browse by</v-subheader>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>home</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title><router-link to="/search/">All</router-link></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-group prepend-icon="account_circle" value="true">
+          <template v-slot:activator>
+            <v-list-item-title>Entry type</v-list-item-title>
+          </template>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><router-link to="/search?contenttype=SOFTWARE">Only software</router-link></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><router-link to="/search?contenttype=HARDWARE">Only hardware</router-link></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><router-link to="/search?contenttype=BOOK">Only books</router-link></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Contact</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-app-bar app clipped-left dark color="black">
-      <v-app-bar-nav-icon />
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
         <router-link to="/"> <v-img src="@/assets/ZXInfo_25.png"></v-img> </router-link
       ></v-toolbar-title>
       <v-spacer></v-spacer>
-      <div v-if="$vuetify.breakpoint.xs">XS</div>
-      <div v-if="$vuetify.breakpoint.sm">SM</div>
-      <div v-if="$vuetify.breakpoint.md">MD</div>
-      <div v-if="$vuetify.breakpoint.lg">LG</div>
-      <div v-if="$vuetify.breakpoint.xl">XL</div>
+      <div v-if="$vuetify.breakpoint.xs && isDevelopment">XS</div>
+      <div v-if="$vuetify.breakpoint.sm && isDevelopment">SM</div>
+      <div v-if="$vuetify.breakpoint.md && isDevelopment">MD</div>
+      <div v-if="$vuetify.breakpoint.lg && isDevelopment">LG</div>
+      <div v-if="$vuetify.breakpoint.xl && isDevelopment">XL</div>
     </v-app-bar>
 
     <v-content>
@@ -31,9 +72,16 @@
 <script>
 export default {
   name: "App",
-  data: () => ({
-    //
-  }),
+  data() {
+    return {
+      drawer: false,
+    };
+  },
+  computed: {
+    isDevelopment() {
+      return process.env.NODE_ENV == "development";
+    },
+  },
 };
 </script>
 <style scoped>

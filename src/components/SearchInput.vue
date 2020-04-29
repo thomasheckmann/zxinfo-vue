@@ -16,6 +16,8 @@
     item-value="text"
     :label="this.value"
     solo
+    :append-outer-icon="filter ? 'mdi-filter-variant' : ''"
+    @click:append-outer="$emit('filter', (filterdrawer = !filterdrawer))"
   >
     <template v-slot:item="{ item }"
       ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
@@ -27,13 +29,14 @@
 <script>
 export default {
   name: "SearchInput",
-  props: ["value"],
+  props: ["value", "filter"],
   data() {
     return {
       searchterm: "",
       isLoading: false,
       items: [],
       model: "",
+      filterdrawer: null,
     };
   },
   methods: {

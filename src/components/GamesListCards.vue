@@ -57,7 +57,7 @@
 
     <!-- search bar -->
     <v-toolbar flat>
-      <SearchInput v-model="searchText" />
+      <SearchInput v-model="searchText" v-bind:filter="true" v-on:filter="toggleNavigation()" />
     </v-toolbar>
 
     <!-- chip section for filters -->
@@ -72,6 +72,20 @@
         @click:close="uncheck(item.group, item.value)"
       >
         <v-icon left small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip
+      >
+      <v-chip v-if="queryparameters.groupname.value" small outlined label close @click:close="uncheckGroup()" color="green">
+        <v-icon left small>mouse</v-icon> {{ queryparameters.groupname.value }}</v-chip
+      >
+      <v-chip
+        v-if="queryparameters.contenttype.value"
+        small
+        outlined
+        label
+        close
+        @click:close="uncheckContenttype()"
+        color="green"
+      >
+        <v-icon left small>mouse</v-icon> {{ queryparameters.contenttype.value }}</v-chip
       >
     </v-row>
 
@@ -131,21 +145,23 @@ export default {
   name: "EntrySearch",
   watch: {
     // reload page when linking to new entry
-    $route() {},
-    searchText() {
+    $route() {
+      if (this.isDevelopment) console.log("watch route()");
+      this.initializeParameters();
       this.submit();
     },
+    searchText() {
+      if (this.isDevelopment) console.log("searchText()");
+      this.replaceURL();
+    },
   },
-  beforeRouteUpdate(to) {
-    console.log("beforeRouteUpdate: " + to);
-  },
-
   data: function() {
     return {
       searchText: "",
       queryparameters: {
         group: { name: "group", value: "" },
         groupname: { name: "groupname", value: "" },
+        contenttype: { name: "contenttype", value: "" },
       },
       facets: {
         // key = name in agg output, paramname = parameter name for search
@@ -190,16 +206,34 @@ export default {
     };
   },
   methods: {
-    init() {
-      this.loading = false;
-      this.searchTimeOf = 0;
-      this.searchNumberOfResults = 0;
-      this.allResults = false;
-      this.pageindex = 0;
-      this.cards = [];
+    toggleNavigation() {
+      this.filterdrawer = !this.filterdrawer;
+    },
+
+    initializeParameters() {
+      if (this.isDevelopment) console.log("initializeParameters()");
+      // initialize parameters from request
+
+      this.searchText = this.$route.params.query ? this.$route.params.query : "";
+      for (var qp in this.queryparameters) {
+        var paramname = this.queryparameters[qp].name;
+        var queryvalue = this.$route.query[paramname];
+        if (paramname !== "query" && queryvalue) {
+          this.queryparameters[paramname].value = queryvalue;
+        }
+      }
+
+      for (var agg in this.facets) {
+        this.facets[agg].selected = Array.isArray(this.$route.query[this.facets[agg].paramname])
+          ? this.$route.query[this.facets[agg].paramname]
+          : [this.$route.query[this.facets[agg].paramname]];
+      }
+    },
+    replaceURL() {
+      if (this.isDevelopment) console.log("replaceURL()");
       const queryparam = this.searchText;
       var filterquery = {};
-      // add filters
+      // add filters and parameters for current selection
       for (var agg in this.facets) {
         var selected = [];
         for (var sel in this.facets[agg].selected) {
@@ -217,12 +251,24 @@ export default {
       }
       this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
     },
+    init() {
+      if (this.isDevelopment) console.log("init()");
+      this.loading = false;
+      this.searchTimeOf = 0;
+      this.searchNumberOfResults = 0;
+      this.allResults = false;
+      this.pageindex = 0;
+      this.cards = [];
+    },
     submit() {
+      if (this.isDevelopment) console.log("submit()");
       this.filterdrawer = false;
       this.init();
       this.loadMore();
     },
     loadMore: function() {
+      if (this.isDevelopment) console.log("loadMore()");
+
       if (this.isLoading) return;
       var p = {
         query: this.searchText,
@@ -247,7 +293,8 @@ export default {
           p[this.queryparameters[qp].name] = this.queryparameters[qp].value;
         }
       }
-      // console.log(buildQuery(p));
+
+      if (this.isDevelopment) console.log(buildQuery(p));
       this.loading = true;
       this.allResults = true;
       axios
@@ -303,9 +350,19 @@ export default {
       if (idx > -1) {
         this.facets[group].selected.splice(idx, 1);
       }
-      this.submit();
+      this.replaceURL();
+    },
+    uncheckGroup() {
+      this.queryparameters.group = {};
+      this.queryparameters.groupname = {};
+      this.replaceURL();
+    },
+    uncheckContenttype() {
+      this.queryparameters.contenttype = {};
+      this.replaceURL();
     },
     resetfilters() {
+      if (this.isDevelopment) console.log("resetfilters()");
       for (var agg in this.facets) {
         this.facets[agg].selected = [];
       }
@@ -321,24 +378,14 @@ export default {
     },
   },
   mounted() {
-    // initialize parameters
-    this.searchText = this.$route.params.query ? this.$route.params.query : "";
-    for (var qp in this.queryparameters) {
-      var paramname = this.queryparameters[qp].name;
-      var queryvalue = this.$route.query[paramname];
-      if (paramname !== "query" && queryvalue) {
-        this.queryparameters[paramname].value = queryvalue;
-      }
-    }
-
-    for (var agg in this.facets) {
-      this.facets[agg].selected = Array.isArray(this.$route.query[this.facets[agg].paramname])
-        ? this.$route.query[this.facets[agg].paramname]
-        : [this.$route.query[this.facets[agg].paramname]];
-    }
-    if (!this.searchText) this.submit();
+    if (this.isDevelopment) console.log("mounted()");
+    this.initializeParameters();
+    this.replaceURL();
   },
   computed: {
+    isDevelopment() {
+      return process.env.NODE_ENV == "development";
+    },
     // calculate page size, so each "page" are filled out based on breakpoint
     // TODO: recalculate on resize window.
     getPageSize() {
