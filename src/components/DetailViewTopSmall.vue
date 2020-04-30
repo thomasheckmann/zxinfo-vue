@@ -44,6 +44,7 @@
 import imageHelper from "@/helpers/image-helper";
 
 export default {
+  name: "DetailViewTopSmall",
   props: ["entry"],
   methods: {
     getScreenUrl: imageHelper.getScreenUrl,

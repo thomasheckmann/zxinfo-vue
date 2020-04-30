@@ -213,6 +213,17 @@ export default {
     // reload page when linking to new entry
     $route() {
       if (this.isDevelopment) console.log("WATCH route()");
+      for (var agg in this.facets) {
+        this.facets[agg].selected = [];
+      }
+      for (var qp in this.queryparameters) {
+        this.queryparameters[qp].value = "";
+      }
+
+      this.filterdrawer = false;
+      this.searchText = "";
+      this.resetSearchResult();
+      this.getParametersFromRequest();
       this.loadMore();
     },
     searchText() {

@@ -289,8 +289,8 @@
           >Video(s)</v-expansion-panel-header
         >
         <v-expansion-panel-content>
-          <v-container class="grey lighten-3">
-            <v-row justify="start" align="center" class="pa-0">
+          <v-container class="py-0">
+            <v-row justify="start" align="center">
               <v-btn
                 class="ma-1"
                 v-for="(link, i) in entry.youtubelinks"
@@ -327,8 +327,8 @@
           >Available formats</v-expansion-panel-header
         >
         <v-expansion-panel-content>
-          <v-container class="grey lighten-3">
-            <v-row justify="start" align="center" class="pa-0">
+          <v-container class="py-0">
+            <v-row justify="start" align="center">
               <v-chip v-for="(format, i) in entry.availableformat" :key="i" class="ma-1" color="green" small outlined label>
                 {{ format.format }} <v-icon small right>{{ getIconForDownload(format.type) }}</v-icon></v-chip
               ></v-row
@@ -342,8 +342,8 @@
           >Protection schemes</v-expansion-panel-header
         >
         <v-expansion-panel-content>
-          <v-container class="grey lighten-3">
-            <v-row justify="start" align="center" class="pa-0">
+          <v-container class="py-0">
+            <v-row justify="start" align="center">
               <v-chip v-for="(format, i) in entry.protectionscheme" :key="i" class="ma-1" small label> {{ format }}</v-chip>
             </v-row></v-container
           >
@@ -533,8 +533,8 @@
           >Related links</v-expansion-panel-header
         >
         <v-expansion-panel-content>
-          <v-container class="grey lighten-3">
-            <v-row justify="start" align="center" class="pa-0">
+          <v-container class="py-0">
+            <v-row justify="start" align="center">
               <v-btn
                 class="ma-1"
                 v-for="(link, i) in entry.relatedlinks"
@@ -554,8 +554,8 @@
           >Related sites</v-expansion-panel-header
         >
         <v-expansion-panel-content>
-          <v-container class="grey lighten-3">
-            <v-row justify="start" align="center" class="pa-0">
+          <v-container class="py-0">
+            <v-row justify="start" align="center">
               <v-btn
                 class="ma-1"
                 v-for="(link, i) in entry.relatedsites"
