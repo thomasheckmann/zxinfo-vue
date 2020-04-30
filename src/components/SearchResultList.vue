@@ -4,7 +4,7 @@
       <v-list-item class="pa-0" v-for="(card, index) in cards" :key="index">
         <v-list-item-content @click="$router.push({ path: '/details/' + entry(card).id })">
           <v-row justify="start" align="start" no-gutters>
-            <v-col cols="1">
+            <v-col cols="2">
               <v-img
                 :src="entry(card).coverimage"
                 class="white--text align-end"
@@ -25,9 +25,7 @@
                     >{{ orgpub.name }} {{ orgpub.country }}
                     <span v-if="i != Object.keys(entry(card).originalPublisher).length - 1">/ </span></span
                   ></v-list-item-subtitle
-                ><v-list-item-subtitle
-                  >{{ entry(card).machinetype }}<br />{{ entry(card).genretype }}</v-list-item-subtitle
-                ></v-card
+                ><v-list-item-subtitle>{{ entry(card).machinetype }} - {{ entry(card).type }}</v-list-item-subtitle></v-card
               ></v-col
             >
           </v-row>
