@@ -223,6 +223,7 @@ export default {
       this.filterdrawer = false;
       this.searchText = "";
       this.resetSearchResult();
+
       this.getParametersFromRequest();
       this.loadMore();
     },
