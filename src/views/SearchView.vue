@@ -212,6 +212,7 @@ export default {
   watch: {
     // reload page when linking to new entry
     $route() {
+      /*
       if (this.isDevelopment) console.log("WATCH route()");
       for (var agg in this.facets) {
         this.facets[agg].selected = [];
@@ -224,7 +225,7 @@ export default {
       this.searchText = "";
       this.resetSearchResult();
 
-      this.getParametersFromRequest();
+      this.getParametersFromRequest();*/
       this.loadMore();
     },
     searchText() {
@@ -486,7 +487,7 @@ export default {
   mounted() {
     if (this.isDevelopment) console.log("mounted()");
     this.getParametersFromRequest();
-    this.resetSearchResult();
+    // this.resetSearchResult();
     this.replaceURL();
   },
   components: {

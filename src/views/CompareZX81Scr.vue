@@ -12,7 +12,7 @@
           >&nbsp;({{ index }} / {{ items.length }})</v-system-bar
         ></v-col
       >
-      <v-col v-for="(screen, i) in item._source.screens" :key="i" cols="3"
+      <v-col v-for="(screen, i) in getMaxNscreens(item._source.screens, 4)" :key="i" cols="3"
         ><v-card class="mx-auto" max-width="400" tile>
           <v-img class="white--text align-end" aspect-ratio="1.33" :src="getScreenUrl(screen.url)"></v-img></v-card
         ><v-card-subtitle>{{ screen.filename }}</v-card-subtitle></v-col
@@ -33,27 +33,35 @@ export default {
       loading: false,
     };
   },
+  computed: {},
   methods: {
     getScreenUrl: imageHelper.getScreenUrl,
+    getMaxNscreens: function(screens, n) {
+      let res = [];
+      for (var i = 0; i < screens.length && i < n; i++) {
+        res.push(screens[i]);
+      }
+      return res;
+    },
   },
   mounted() {
     axios
       .get(
-        "https://api.zxinfo.dk/api/zxinfo/v2/search?mode=tiny&contenttype=SOFTWARE&size=2000&offset=0&machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
+        "https://api.zxinfo.dk/api/zxinfo/v2/search?sort=title_asc&mode=tiny&contenttype=SOFTWARE&size=2000&offset=0&machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
       )
       .then((response) => {
         var cards = response.data;
         // append to cards
         if (cards.hits.hits) {
           for (var ii = 0; ii < cards.hits.hits.length; ii++) {
-            if (cards.hits.hits[ii]._source.screens.length > 1) {
+            if (cards.hits.hits[ii]._source.screens.length > 0) {
               this.items.push(cards.hits.hits[ii]);
             }
           }
         }
         this.loading = false;
         if (this.isDevelopment) console.log("...DONE!");
-        this.items.sort((a, b) => (a._id > b._id ? 1 : -1));
+        //this.items.sort((a, b) => (a._id > b._id ? 1 : -1));
       })
       .catch((error) => {
         this.loading = false;
