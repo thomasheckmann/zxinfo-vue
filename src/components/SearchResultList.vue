@@ -2,20 +2,21 @@
   <v-container justify-start class="scroll-y pa-0">
     <v-list dense>
       <v-list-item class="pa-0" v-for="(card, index) in cards" :key="index">
-        <v-list-item-content @click="$router.push({ path: '/details/' + entry(card).id })">
+        <v-list-item-content>
           <v-row justify="start" align="start" no-gutters>
             <v-col cols="2">
-              <v-img
-                :src="entry(card).coverimage"
-                class="white--text align-end"
-                lazy-src="https://zxinfo.dk/media/images/empty.png"
-                aspect-ratio="1.33"
-              >
-                <template v-slot:placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                  </v-row> </template
-              ></v-img>
+              <router-link :to="{ path: '/details/' + entry(card).id }">
+                <v-img
+                  :src="entry(card).coverimage"
+                  class="white--text align-end"
+                  lazy-src="https://zxinfo.dk/media/images/empty.png"
+                  aspect-ratio="1.33"
+                >
+                  <template v-slot:placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+                    </v-row> </template></v-img
+              ></router-link>
             </v-col>
             <v-col
               ><v-card class="pa-0 mx-1" tile flat
