@@ -354,7 +354,8 @@ export default {
     },
     loadMore: function() {
       if (this.isDevelopment) console.log("loadMore()");
-
+      this.resetSearchResult();
+      this.getParametersFromRequest();
       if (this.isLoading) return;
       var p = {
         query: this.searchText,

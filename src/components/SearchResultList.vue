@@ -22,10 +22,18 @@
                 ><v-list-item-title>{{ entry(card).title }}</v-list-item-title>
                 <v-list-item-subtitle
                   ><span v-for="(orgpub, i) in entry(card).originalPublisher" :key="i"
-                    >{{ orgpub.name }} {{ orgpub.country }}
+                    ><router-link :to="{ path: '/publisher/' + orgpub.name }">{{ orgpub.name }} {{ orgpub.country }}</router-link>
                     <span v-if="i != Object.keys(entry(card).originalPublisher).length - 1">/ </span></span
                   ></v-list-item-subtitle
-                ><v-list-item-subtitle>{{ entry(card).machinetype }} - {{ entry(card).type }}</v-list-item-subtitle></v-card
+                ><v-list-item-subtitle
+                  ><router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{
+                    entry(card).machinetype
+                  }}</router-link>
+                  -
+                  <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{
+                    entry(card).type
+                  }}</router-link></v-list-item-subtitle
+                ></v-card
               ></v-col
             >
           </v-row>
