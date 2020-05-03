@@ -27,11 +27,11 @@
                     <span v-if="i != Object.keys(entry(card).originalPublisher).length - 1">/ </span></span
                   ></v-list-item-subtitle
                 ><v-list-item-subtitle
-                  ><router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{
+                  ><router-link :to="{ path: '/search', query: { machinetype: entry(card).machinetype } }">{{
                     entry(card).machinetype
                   }}</router-link>
                   -
-                  <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{
+                  <router-link :to="{ path: '/search', query: { type: entry(card).genretype } }">{{
                     entry(card).type
                   }}</router-link></v-list-item-subtitle
                 ></v-card
