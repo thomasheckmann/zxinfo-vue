@@ -48,7 +48,7 @@ export default {
   name: "SearchResultGrid",
   data() {
     return {
-      page: this.pageindex + 1,
+      page: this.pageindex,
     };
   },
   watch: {
