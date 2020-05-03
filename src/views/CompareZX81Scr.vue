@@ -27,6 +27,11 @@ import imageHelper from "@/helpers/image-helper";
 
 export default {
   name: "Test",
+  metaInfo() {
+    return {
+      title: "ZXInfo - The open source ZXDB frontend",
+    };
+  },
   data() {
     return {
       items: [],

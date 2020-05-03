@@ -5,7 +5,7 @@
         <v-subheader>Browse by</v-subheader>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title><router-link to="/search/">All</router-link></v-list-item-title>
+            <v-list-item-title><a href="/search/">All</a></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-group value="true">
@@ -14,32 +14,25 @@
           </template>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title
-                ><router-link to="/search?contenttype=SOFTWARE" :key="$route.fullPath">Software</router-link></v-list-item-title
-              >
+              <v-list-item-title><a href="/search?contenttype=SOFTWARE">Software</a></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><a href="/search?contenttype=HARDWARE">Hardware</a></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><a href="/search?contenttype=BOOK">Books</a></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title
-                ><router-link to="/search?contenttype=HARDWARE" :key="$route.fullPath">Hardware</router-link></v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title
-                ><router-link to="/search?contenttype=BOOK" :key="$route.fullPath">Books</router-link></v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title
-                ><router-link
-                  to="/search/?machinetype=ZX-Spectrum%20128%20%2B2&machinetype=ZX-Spectrum%20128%20%2B2A%2F%2B3&machinetype=ZX-Spectrum%20128%20%2B2B&machinetype=ZX-Spectrum%20128%20%2B3&machinetype=ZX-Spectrum%20128K&machinetype=ZX-Spectrum%20128K%20%28load%20in%20USR0%20mode%29&machinetype=ZX-Spectrum%2016K&machinetype=ZX-Spectrum%2016K%2F48K&machinetype=ZX-Spectrum%2048K&machinetype=ZX-Spectrum%2048K%2F128K"
-                  :key="$route.fullPath"
-                  >ZX Spectrum</router-link
+                ><a
+                  href="/search/?machinetype=ZX-Spectrum%20128%20%2B2&machinetype=ZX-Spectrum%20128%20%2B2A%2F%2B3&machinetype=ZX-Spectrum%20128%20%2B2B&machinetype=ZX-Spectrum%20128%20%2B3&machinetype=ZX-Spectrum%20128K&machinetype=ZX-Spectrum%20128K%20%28load%20in%20USR0%20mode%29&machinetype=ZX-Spectrum%2016K&machinetype=ZX-Spectrum%2016K%2F48K&machinetype=ZX-Spectrum%2048K&machinetype=ZX-Spectrum%2048K%2F128K"
+                  >ZX Spectrum</a
                 ></v-list-item-title
               >
             </v-list-item-content>
@@ -47,10 +40,9 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title
-                ><router-link
-                  to="/search/?machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
-                  :key="$route.fullPath"
-                  >ZX81</router-link
+                ><a
+                  href="/search/?machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
+                  >ZX81</a
                 ></v-list-item-title
               >
             </v-list-item-content>
@@ -96,6 +88,11 @@
 <script>
 export default {
   name: "App",
+  metaInfo() {
+    return {
+      title: "ZXInfo - The open source ZXDB frontend",
+    };
+  },
   data() {
     return {
       contenttype: "",

@@ -20,6 +20,11 @@ import SearchInput from "@/components/SearchInput";
 
 export default {
   name: "Home",
+  metaInfo() {
+    return {
+      title: "ZXInfo - The open source ZXDB frontend",
+    };
+  },
   data() {
     return {
       searchText: "",

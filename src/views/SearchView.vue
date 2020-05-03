@@ -89,13 +89,13 @@
         <v-icon left small>mouse</v-icon> {{ queryparameters.contenttype.value }}</v-chip
       >
     </v-row>
-    <v-toolbar v-if="!loading" color="grey" flat dense
-      >{{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)<v-spacer /><v-icon
-        @click="listtype = 'grid'"
-        :color="listtype == 'grid' ? 'white' : ''"
-        >apps</v-icon
-      ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon></v-toolbar
-    >
+    <v-toolbar color="grey" flat dense>
+      <span v-if="!loading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
+      <span v-else>searching: {{ this.$route.params.query }}</span>
+      <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
+      ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
+      ><v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear
+    ></v-toolbar>
     <!-- SEARCH RESULT -->
     <SearchResultGrid
       v-if="listtype == 'grid'"
@@ -158,6 +158,11 @@ var buildQuery = function(data) {
 
 export default {
   name: "SearchView",
+  metaInfo() {
+    return {
+      title: "ZXInfo - The open source ZXDB frontend",
+    };
+  },
   data: function() {
     return {
       searchText: "",
