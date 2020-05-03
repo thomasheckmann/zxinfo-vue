@@ -217,26 +217,17 @@ export default {
   watch: {
     // reload page when linking to new entry
     $route() {
-      /*
-      if (this.isDevelopment) console.log("WATCH route()");
-      for (var agg in this.facets) {
-        this.facets[agg].selected = [];
+      if (this.isDevelopment) {
+        console.log("WATCH route");
       }
-      for (var qp in this.queryparameters) {
-        this.queryparameters[qp].value = "";
-      }
-
-      this.filterdrawer = false;
-      this.searchText = "";
       this.resetSearchResult();
-
-      this.getParametersFromRequest();*/
       this.loadMore();
     },
     searchText() {
-      if (this.isDevelopment) console.log("WATCH searchText(): " + this.searchText);
-      this.resetSearchResult();
-      this.replaceURL();
+      if (this.isDevelopment) console.log("WATCH searchText(): " + this.searchText + "(" + this.$route.params.query + ")");
+      if (this.searchText != this.$route.params.query) {
+        this.replaceURL();
+      }
     },
   },
   methods: {
@@ -276,7 +267,7 @@ export default {
       if (this.isDevelopment) console.log("replaceURL()");
       const queryparam = this.searchText;
       var filterquery = {};
-      // add filters and parameters for current selection
+      // Update URL query object with filter values for current selection
       for (var agg in this.facets) {
         var selected = [];
         for (var sel in this.facets[agg].selected) {
@@ -287,12 +278,14 @@ export default {
         filterquery[this.facets[agg].paramname] = selected;
       }
 
+      // Update URL query object with filter values for current queryparameters
       for (var qp in this.queryparameters) {
         if (this.queryparameters[qp].value) {
           filterquery[this.queryparameters[qp].name] = this.queryparameters[qp].value;
         }
       }
 
+      console.log(filterquery);
       // fire event to parent
       if (this.queryparameters.contenttype) {
         this.$emit("updateContenttype", this.queryparameters.contenttype.value);
@@ -308,7 +301,6 @@ export default {
         console.log("searchFilters()");
       }
       this.filterdrawer = false;
-      this.resetSearchResult();
       this.replaceURL();
     },
     resetfilters() {
@@ -322,7 +314,7 @@ export default {
 
       this.filterdrawer = false;
       this.searchText = "";
-      this.resetSearchResult();
+      this.$route.params.query = "";
       this.replaceURL();
     },
     uncheckFilter(group, value) {
@@ -331,7 +323,7 @@ export default {
       if (idx > -1) {
         this.facets[group].selected.splice(idx, 1);
       }
-      this.resetSearchResult();
+      this.$route.query[group] = "";
       this.replaceURL();
     },
     uncheckGroup() {
@@ -354,9 +346,11 @@ export default {
     },
     loadMore: function() {
       if (this.isDevelopment) console.log("loadMore()");
-      this.resetSearchResult();
+      this.loading = true;
+      this.allResults = true;
+
       this.getParametersFromRequest();
-      if (this.isLoading) return;
+
       var p = {
         query: this.searchText,
         mode: "full",
@@ -382,8 +376,6 @@ export default {
       }
 
       if (this.isDevelopment) console.log(buildQuery(p));
-      this.loading = true;
-      this.allResults = true;
       if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
       axios
         .get(dataURL + buildQuery(p))
@@ -492,9 +484,8 @@ export default {
   },
   mounted() {
     if (this.isDevelopment) console.log("mounted()");
-    this.getParametersFromRequest();
-    // this.resetSearchResult();
-    this.replaceURL();
+    this.$emit("updateContenttype", "");
+    this.loadMore();
   },
   components: {
     SearchInput,
