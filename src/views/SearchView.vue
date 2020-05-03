@@ -264,6 +264,7 @@ export default {
       this.cards = [];
     },
     replaceURL() {
+      // build URL for current selection
       if (this.isDevelopment) console.log("replaceURL()");
       const queryparam = this.searchText;
       var filterquery = {};

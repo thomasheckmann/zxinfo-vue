@@ -56,7 +56,11 @@
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle
                       ><router-link :to="{ path: '/publisher/' + author.name }"
-                        >{{ author.name }} {{ author.country }} {{ author.group }}</router-link
+                        >{{ author.name }} {{ author.country }}</router-link
+                      >
+
+                      <router-link v-if="author.group" :to="{ path: '/publisher/' + author.group }">
+                        {{ author.group }}</router-link
                       ></v-list-item-subtitle
                     >
                   </v-list-item-content>
