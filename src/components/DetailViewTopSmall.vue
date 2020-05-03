@@ -15,7 +15,7 @@
         <v-list-item-subtitle
           >{{ entry.originalReleaseYear }}
           <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
-            >{{ orgpub.name }} {{ orgpub.country }}
+            ><router-link :to="{ path: '/publisher/' + orgpub.name }">{{ orgpub.name }} {{ orgpub.country }}</router-link>
             <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
           ></v-list-item-subtitle
         >

@@ -30,7 +30,11 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(publisher, i) in entry.originalPublisher" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ publisher.name }} {{ publisher.country }}</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      ><router-link :to="{ path: '/publisher/' + publisher.name }"
+                        >{{ publisher.name }} {{ publisher.country }}</router-link
+                      ></v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -50,7 +54,11 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ author.name }} {{ author.country }} {{ author.group }}</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      ><router-link :to="{ path: '/publisher/' + author.name }"
+                        >{{ author.name }} {{ author.country }} {{ author.group }}</router-link
+                      ></v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -444,7 +452,8 @@
             flat
             :mobile-breakpoint="0"
             ><template v-slot:item.title="{ item }">
-              <router-link :to="'/details/' + item.id">{{ item.title }}</router-link>
+              <router-link v-if="item.id" :to="'/details/' + item.id">{{ item.title }}</router-link>
+              <span v-else>{{ item.title }}</span>
             </template></v-data-table
           >
         </v-expansion-panel-content>

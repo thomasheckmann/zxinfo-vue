@@ -11,7 +11,7 @@ var getCoverImageForEntry = function(gamedata) {
   if (gamedata._source.type === "Compilation") {
     entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
 
-    /** Try to find Inlay - in additionals */
+    /** Try to find Inlay for compilation - in additionals */
     var i = 0;
     var inlays = [];
     for (; gamedata._source.additionals !== undefined && i < gamedata._source.additionals.length; i++) {

@@ -119,6 +119,8 @@ export default {
           return "mdi-mouse";
         case "BOOK":
           return "book";
+        case "PUBLISHER":
+          return "mdi-bank";
         default:
           return "";
       }
