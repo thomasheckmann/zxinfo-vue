@@ -1,17 +1,9 @@
 <template>
   <v-card outlined>
     <router-link :to="'/details/' + entry.id">
-      <v-img
-        :src="entry.coverimage"
-        class="white--text align-end"
-        lazy-src="https://zxinfo.dk/media/images/empty.png"
-        aspect-ratio="1.33"
-      >
-        <template v-slot:placeholder>
-          <v-row class="fill-height ma-0" align="center" justify="center">
-            <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-          </v-row> </template></v-img
-    ></router-link>
+      <!-- image -->
+      <ImageContainer v-bind:entry="entry"></ImageContainer>
+    </router-link>
     <v-card-title class="d-inline-block text-truncate" style="max-width: 100%;" v-text="entry.title"></v-card-title>
     <v-card-subtitle class="pb-0 text-truncate" style="max-width: 100%;"
       ><router-link :to="{ path: '/search', query: { year: entry.yearofrelease } }">{{ entry.yearofrelease }}</router-link
@@ -60,6 +52,7 @@
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
+import ImageContainer from "@/components/Image";
 
 export default {
   name: "GameCard",
@@ -72,6 +65,7 @@ export default {
       }
     },
   },
+  components: { ImageContainer },
   computed: {
     // cleaned version of JSON
     entry() {

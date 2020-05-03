@@ -6,7 +6,9 @@
     </v-btn>
 
     <v-toolbar color="grey" flat dense>
-      <span v-if="!loading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
+      <span v-if="!loading">
+        {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms): <kbd>{{ this.$route.params.name }}</kbd></span
+      >
       <span v-else>searching: {{ this.$route.params.name }}</span>
       <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon

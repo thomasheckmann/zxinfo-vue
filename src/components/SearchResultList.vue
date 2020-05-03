@@ -6,17 +6,8 @@
           <v-row justify="start" align="start" no-gutters>
             <v-col cols="2">
               <router-link :to="{ path: '/details/' + entry(card).id }">
-                <v-img
-                  :src="entry(card).coverimage"
-                  class="white--text align-end"
-                  lazy-src="https://zxinfo.dk/media/images/empty.png"
-                  aspect-ratio="1.33"
-                >
-                  <template v-slot:placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                    </v-row> </template></v-img
-              ></router-link>
+                <ImageContainer v-bind:entry="entry(card)"></ImageContainer>
+              </router-link>
             </v-col>
             <v-col
               ><v-card class="pa-0 mx-1" tile flat
@@ -52,6 +43,7 @@
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
+import ImageContainer from "@/components/Image";
 
 export default {
   name: "SearchResultGrid",
@@ -73,7 +65,6 @@ export default {
   },
   methods: {
     getCoverImage: imageHelper.getCoverImage,
-    getScreenUrl: imageHelper.getScreenUrl,
     // cleaned version of JSON
     entry: function(GameData) {
       let entry = {};
@@ -118,6 +109,6 @@ export default {
       return entry;
     },
   },
-  components: {},
+  components: { ImageContainer },
 };
 </script>
