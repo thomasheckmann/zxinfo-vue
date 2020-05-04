@@ -19,6 +19,10 @@
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td style="white-space: normal;">{{ entry.alsoKnownAs }}</td>
           </tr>
+          <tr :style="!isDevelopment && !entry.availability ? 'display: none;' : ''">
+            <td :class="entry.availability ? 'font-weight-bold' : 'font-weight-light'">Availability</td>
+            <td style="white-space: normal;">{{ entry.availability }}</td>
+          </tr>
           <tr :style="entry.originalReleaseYear == '-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
             <td valign="top">

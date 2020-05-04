@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  zxinfo-es:
+    image: "blacktop/elasticsearch:6.1"
+    volumes:
+      - ./elasticsearch_v6:/usr/share/elasticsearch/data
+      - ./elasticsearch_v6:/usr/share/elasticsearch/config
+    ports:
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9300:9300"
+    expose:
+      - "9200"
+      - "9300"
+    networks:
+      - zxinfo_net
+  
+  zxinfo-neo4j:
+    image: "neo4j:3.2"
+    volumes:
+      - ./neo4jdata:/data
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    expose:
+      - "7474"
+      - "7687"
+    environment:
+      NEO4J_AUTH: none
+    networks:
+      - zxinfo_net
+
+  zxinfo-services:
+    depends_on:
+      - zxinfo-es
+    build:
+      context: ../zxinfo-services
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8300:3000"
+    expose:
+      - "8300"
+    links:
+        - "zxinfo-es"
+    environment:
+      NODE_ENV: production
+    networks:
+      - zxinfo_net
+
+  zxinfo-vue:
+    depends_on:
+      - zxinfo-services
+      - zxinfo-es
+      - zxinfo-neo4j
+    build:
+      context: ../zxinfo-vue
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8200:3000"
+    expose:
+      - "8200"
+    environment:
+      NODE_ENV: production
+    networks:
+      - zxinfo_net
+
+networks:
+  zxinfo_net:
+    driver: bridge
