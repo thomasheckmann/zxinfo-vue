@@ -11,7 +11,8 @@
           <tr>
             <td class="font-weight-bold" width="33%">Title</td>
             <td>
-              <v-badge v-if="entry.availability == 'MIA'" color="pink" dot overlap> {{ entry.title }} </v-badge>
+              <v-badge v-if="entry.availability == 'MIA'" color="pink" dot overlap> {{ entry.title }} </v-badge
+              ><span v-else>{{ entry.title }}</span>
             </td>
           </tr>
           <tr :style="!isDevelopment && !entry.alsoKnownAs ? 'display: none;' : ''">
