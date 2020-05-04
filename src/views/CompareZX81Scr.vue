@@ -1,5 +1,6 @@
 <template>
   <v-container v-if="!loading" class="py-2">
+    <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear>
     <v-row
       v-for="(item, index) in items"
       :key="index"
@@ -7,9 +8,11 @@
       align="start"
       :class="index % 2 !== 0 ? 'grey lighten-3' : 'grey lighten-5'"
       ><v-col cols="12"
-        ><v-system-bar color="black white--text"
-          >{{ item._id }} - <span class="font-weight-black">{{ item._source.fulltitle }}</span
-          >&nbsp;({{ index }} / {{ items.length }})</v-system-bar
+        ><v-system-bar color="black white--text">
+          <span class="font-weight-black d-inline-block text-truncate" style="white-space: normal;"
+            >{{ item._id }} -{{ item._source.fulltitle }}</span
+          >
+          <v-spacer></v-spacer><span class="overline">{{ index }}/{{ items.length }}</span></v-system-bar
         ></v-col
       >
       <v-col v-for="(screen, i) in getMaxNscreens(item._source.screens, 4)" :key="i" cols="3"

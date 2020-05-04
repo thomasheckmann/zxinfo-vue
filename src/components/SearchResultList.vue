@@ -17,7 +17,7 @@
                     ><router-link :to="{ path: '/publisher/' + orgpub.name }">{{ orgpub.name }} {{ orgpub.country }}</router-link>
                     <span v-if="i != Object.keys(entry(card).originalPublisher).length - 1">/ </span></span
                   ></v-list-item-subtitle
-                ><v-list-item-subtitle
+                ><v-list-item-subtitle style="white-space: normal;"
                   ><router-link :to="{ path: '/search', query: { machinetype: entry(card).machinetype } }">{{
                     entry(card).machinetype
                   }}</router-link>

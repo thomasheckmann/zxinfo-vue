@@ -14,7 +14,7 @@
           </tr>
           <tr :style="!isDevelopment && !entry.alsoKnownAs ? 'display: none;' : ''">
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
-            <td>{{ entry.alsoKnownAs }}</td>
+            <td style="white-space: normal;">{{ entry.alsoKnownAs }}</td>
           </tr>
           <tr :style="entry.originalReleaseYear == '-' && !isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
@@ -54,11 +54,10 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle
+                    <v-list-item-subtitle style="white-space: normal;"
                       ><router-link :to="{ path: '/publisher/' + author.name }"
                         >{{ author.name }} {{ author.country }}</router-link
                       >
-
                       <router-link v-if="author.group" :to="{ path: '/publisher/' + author.group }">
                         {{ author.group }}</router-link
                       ></v-list-item-subtitle
@@ -264,7 +263,9 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(authoredwith, i) in entry.authoredWith" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + authoredwith.id">
-                      <v-list-item-subtitle>{{ authoredwith.title }} - {{ authoredwith.publisher }}</v-list-item-subtitle>
+                      <v-list-item-subtitle style="white-space: normal;"
+                        >{{ authoredwith.title }} - {{ authoredwith.publisher }}</v-list-item-subtitle
+                      >
                     </router-link>
                     <v-list-item-subtitle>{{ authoredwith.machinetype }}</v-list-item-subtitle>
                   </v-list-item-content>

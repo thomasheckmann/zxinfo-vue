@@ -6,14 +6,17 @@
     </v-btn>
 
     <v-toolbar color="grey" flat dense>
-      <span v-if="!loading">
-        {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms): <kbd>{{ this.$route.params.name }}</kbd></span
-      >
+      <span v-if="!loading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
       <span v-else>searching: {{ this.$route.params.name }}</span>
       <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
       ><v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear
     ></v-toolbar>
+    <v-system-bar dark window
+      ><span
+        ><kbd style="white-space: normal;" class="wrap-text">{{ this.$route.params.name }}</kbd></span
+      ></v-system-bar
+    >
     <!-- SEARCH RESULT -->
     <SearchResultGrid
       v-if="listtype == 'grid'"

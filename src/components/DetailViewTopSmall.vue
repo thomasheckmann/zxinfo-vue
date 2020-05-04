@@ -59,3 +59,14 @@ export default {
   },
 };
 </script>
+<style scoped>
+a:hover,
+a:link,
+a:visited,
+a.router-link-active,
+a.router-link-exact-active {
+  color: black;
+  cursor: pointer;
+  text-decoration: underline;
+}
+</style>
