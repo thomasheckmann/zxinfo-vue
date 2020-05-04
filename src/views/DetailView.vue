@@ -10,7 +10,9 @@
         <tbody>
           <tr>
             <td class="font-weight-bold" width="33%">Title</td>
-            <td>{{ entry.title }}</td>
+            <td>
+              <v-badge v-if="entry.availability == 'MIA'" color="pink" dot overlap> {{ entry.title }} </v-badge>
+            </td>
           </tr>
           <tr :style="!isDevelopment && !entry.alsoKnownAs ? 'display: none;' : ''">
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
@@ -30,7 +32,7 @@
               <v-list flat dense class="pa-0">
                 <v-list-item class="pa-0 ma-0 auto" v-for="(publisher, i) in entry.originalPublisher" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle
+                    <v-list-item-subtitle style="white-space: normal;"
                       ><router-link :to="{ path: '/publisher/' + publisher.name }"
                         >{{ publisher.name }} {{ publisher.country }}</router-link
                       ></v-list-item-subtitle
@@ -701,6 +703,7 @@ export default {
       entry.screens = this.GameData._source.screens;
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.fulltitle;
+      entry.availability = this.GameData._source.availability;
       entry.alsoKnownAs = this.GameData._source.alsoknownas;
       entry.originalReleaseYear = this.GameData._source.yearofrelease === undefined ? "-" : this.GameData._source.yearofrelease;
 
