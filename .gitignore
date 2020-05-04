@@ -19,3 +19,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+/elasticsearch/elasticsearch/
+/elasticsearch_v6/nodes/
+/neo4jdata/
