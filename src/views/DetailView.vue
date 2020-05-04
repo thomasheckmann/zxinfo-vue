@@ -797,18 +797,20 @@ export default {
 
       entry.comments = this.GameData._source.remarks;
       // replace {Professional Adventure Writer - User Overlays|Kelsoft|0010899}
-      let inlinelink = entry.comments.match(/(\{.+\}).*/) || [];
-      if (inlinelink !== "undefined" && inlinelink.length > 0) {
-        console.log("Inline match: " + inlinelink[1]);
-        let embedded = inlinelink[1];
-        let result = embedded.match(/\{(.+)\|(.*)\|([0-9]+)\}/) || [];
-        console.log("REGEXP 1: " + result[0]);
-        console.log("REGEXP 2: " + result[1]);
-        console.log("REGEXP 3: " + result[2]);
-        console.log("REGEXP 4: " + result[3]);
-        if (result[0]) {
-          //entry.comments = entry.comments.replace(result[0], "<router-link :to=\"'/details/test'\">X</router-link>");
-          entry.comments = entry.comments.replace(result[0], "<a href='/details/" + result[3] + "'>" + result[1] + "</a>");
+      if (entry.comments) {
+        let inlinelink = entry.comments.match(/(\{.+\}).*/) || [];
+        if (inlinelink !== undefined && inlinelink.length > 0) {
+          console.log("Inline match: " + inlinelink[1]);
+          let embedded = inlinelink[1];
+          let result = embedded.match(/\{(.+)\|(.*)\|([0-9]+)\}/) || [];
+          console.log("REGEXP 1: " + result[0]);
+          console.log("REGEXP 2: " + result[1]);
+          console.log("REGEXP 3: " + result[2]);
+          console.log("REGEXP 4: " + result[3]);
+          if (result[0]) {
+            //entry.comments = entry.comments.replace(result[0], "<router-link :to=\"'/details/test'\">X</router-link>");
+            entry.comments = entry.comments.replace(result[0], "<a href='/details/" + result[3] + "'>" + result[1] + "</a>");
+          }
         }
       }
 
