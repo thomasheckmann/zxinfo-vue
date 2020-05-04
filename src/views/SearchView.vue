@@ -96,11 +96,12 @@
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
       ><v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear
     ></v-toolbar>
-    <v-system-bar dark window
+    <v-system-bar dark window v-if="this.$route.params.query"
       ><span
         ><kbd style="white-space: normal;" class="wrap-text">{{ this.$route.params.query }}</kbd></span
       ></v-system-bar
     >
+    <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar>
     <!-- SEARCH RESULT -->
     <SearchResultGrid
       v-if="listtype == 'grid'"
@@ -170,6 +171,7 @@ export default {
   },
   data: function() {
     return {
+      errormessage: "",
       searchText: "",
       queryparameters: {
         group: { name: "group", value: "" },
@@ -354,6 +356,7 @@ export default {
       if (this.isDevelopment) console.log("loadMore()");
       this.loading = true;
       this.allResults = true;
+      this.errormessage = "";
 
       this.getParametersFromRequest();
 
@@ -384,7 +387,7 @@ export default {
       if (this.isDevelopment) console.log(buildQuery(p));
       if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
       axios
-        .get(dataURL + buildQuery(p))
+        .get(dataURL + buildQuery(p), { timeout: 5000 })
         .then((response) => {
           var cards = response.data;
 
@@ -426,7 +429,7 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.allResults = true;
-          console.log(error);
+          this.errormessage = error.code + ": " + error.message;
         })
         .finally(() => {
           this.loading = false;

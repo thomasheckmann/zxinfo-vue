@@ -12,11 +12,13 @@
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
       ><v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear
     ></v-toolbar>
-    <v-system-bar dark window
+    <v-system-bar dark window v-if="this.$route.params.name"
       ><span
         ><kbd style="white-space: normal;" class="wrap-text">{{ this.$route.params.name }}</kbd></span
       ></v-system-bar
     >
+    <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar>
+
     <!-- SEARCH RESULT -->
     <SearchResultGrid
       v-if="listtype == 'grid'"
@@ -83,6 +85,7 @@ export default {
   },
   data() {
     return {
+      errormessage: "",
       listtype: "grid",
       fab: false,
       loading: true,
@@ -115,6 +118,7 @@ export default {
       // Get games for requested publisher
       this.loading = true;
       this.allResults = true;
+      this.errormessage = "";
       var p = {
         mode: "full",
         size: this.getPageSize,
@@ -125,7 +129,7 @@ export default {
       // https://api.zxinfo.dk/api/zxinfo/publishers/%2FCode%2520Masters%2520Ltd/games?size=10&offset=0&mode=full&sort=date_desc
 
       axios
-        .get(dataURL + this.$route.params.name + "/games?" + buildQuery(p))
+        .get(dataURL + this.$route.params.name + "/games?" + buildQuery(p), { timeout: 5000 })
         .then((response) => {
           var cards = response.data;
 
@@ -151,7 +155,7 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.allResults = true;
-          console.log(error);
+          this.errormessage = error.code + ": " + error.message;
         })
         .finally(() => {
           this.loading = false;
