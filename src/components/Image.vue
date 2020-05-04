@@ -17,3 +17,4 @@ export default {
   props: ["entry"],
 };
 </script>
+<style scoped></style>
