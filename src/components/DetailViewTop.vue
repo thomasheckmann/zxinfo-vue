@@ -17,7 +17,9 @@
       <v-col cols="6">
         <v-list-item two-line>
           <v-list-item-content>
-            <v-list-item-title class="headline">{{ entry.title }}</v-list-item-title>
+            <v-list-item-title class="headline"
+              ><v-badge color="pink" dot> {{ entry.title }} </v-badge></v-list-item-title
+            >
             <v-list-item-subtitle
               >{{ entry.originalReleaseYear }}
               <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
