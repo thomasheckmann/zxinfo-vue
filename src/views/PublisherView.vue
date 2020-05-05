@@ -125,9 +125,7 @@ export default {
         offset: this.pageindex,
       };
       if (this.isDevelopment) console.log(p);
-
-      // https://api.zxinfo.dk/api/zxinfo/publishers/%2FCode%2520Masters%2520Ltd/games?size=10&offset=0&mode=full&sort=date_desc
-
+      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
       axios
         .get(dataURL + this.$route.params.name + "/games?" + buildQuery(p), { timeout: 5000 })
         .then((response) => {

@@ -293,7 +293,7 @@ export default {
         }
       }
 
-      console.log(filterquery);
+      if (this.isDevelopment) console.log(filterquery);
       // fire event to parent
       if (this.queryparameters.contenttype) {
         this.$emit("updateContenttype", this.queryparameters.contenttype.value);

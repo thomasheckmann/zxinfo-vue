@@ -1,60 +1,9 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list dense>
-        <v-subheader>Browse by</v-subheader>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title><a href="/search/">All</a></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-group value="true">
-          <template v-slot:activator>
-            <v-list-item-title>Entry type</v-list-item-title>
-          </template>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title><a href="/search?contenttype=SOFTWARE">Software</a></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title><a href="/search?contenttype=HARDWARE">Hardware</a></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title><a href="/search?contenttype=BOOK">Books</a></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title
-                ><a
-                  href="/search/?machinetype=ZX-Spectrum%20128%20%2B2&machinetype=ZX-Spectrum%20128%20%2B2A%2F%2B3&machinetype=ZX-Spectrum%20128%20%2B2B&machinetype=ZX-Spectrum%20128%20%2B3&machinetype=ZX-Spectrum%20128K&machinetype=ZX-Spectrum%20128K%20%28load%20in%20USR0%20mode%29&machinetype=ZX-Spectrum%2016K&machinetype=ZX-Spectrum%2016K%2F48K&machinetype=ZX-Spectrum%2048K&machinetype=ZX-Spectrum%2048K%2F128K"
-                  >ZX Spectrum</a
-                ></v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title
-                ><a
-                  href="/search/?machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
-                  >ZX81</a
-                ></v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-group>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Credits</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <keep-alive>
+      <navigationmenu v-model="drawer"></navigationmenu>
+    </keep-alive>
+    <!-- top app bar -->
     <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
@@ -66,7 +15,7 @@
       <div v-if="$vuetify.breakpoint.md && isDevelopment">MD</div>
       <div v-if="$vuetify.breakpoint.lg && isDevelopment">LG</div>
       <div v-if="$vuetify.breakpoint.xl && isDevelopment">XL</div>
-      <v-spacer />
+      <v-spacer />{{ drawer }}
       <v-icon>{{ getContenttypeIcon }}</v-icon>
     </v-app-bar>
 
@@ -86,6 +35,7 @@
   </v-app>
 </template>
 <script>
+import navigationmenu from "@/components/NavigationMenu";
 export default {
   name: "App",
   metaInfo() {
@@ -97,6 +47,8 @@ export default {
     return {
       contenttype: "",
       drawer: false,
+      loading: false,
+      errormessage: "",
     };
   },
   methods: {
@@ -104,6 +56,7 @@ export default {
       this.contenttype = status;
     },
   },
+  components: { navigationmenu },
   computed: {
     isDevelopment() {
       return process.env.NODE_ENV == "development";
