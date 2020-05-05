@@ -15,7 +15,7 @@
       <div v-if="$vuetify.breakpoint.md && isDevelopment">MD</div>
       <div v-if="$vuetify.breakpoint.lg && isDevelopment">LG</div>
       <div v-if="$vuetify.breakpoint.xl && isDevelopment">XL</div>
-      <v-spacer />{{ drawer }}
+      <v-spacer />
       <v-icon>{{ getContenttypeIcon }}</v-icon>
     </v-app-bar>
 
