@@ -9,6 +9,8 @@
     :search-input.sync="searchterm"
     clearable
     dense
+    :error="errormessage !== ''"
+    :error-messages="errormessage"
     rounded
     full-width
     hide-no-data
@@ -27,6 +29,8 @@
   </v-autocomplete>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: "SearchInput",
   props: ["value", "filter"],
@@ -37,6 +41,7 @@ export default {
       items: [],
       model: "",
       filterdrawer: null,
+      errormessage: "",
     };
   },
   methods: {
@@ -63,15 +68,20 @@ export default {
       if (!val) return;
       this.isLoading = true;
       this.items = [];
+      this.errormessage = "";
 
       // Lazily load input items
-      fetch("https://api.zxinfo.dk/api/suggest/" + val)
-        .then((res) => res.clone().json())
-        .then((res) => {
-          this.items = res;
+      axios
+        .get("https://api.zxinfo.dk/api/suggest/" + val, { timeout: 1500 })
+        .then((response) => {
+          this.items = response.data;
+          console.log(response.data);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+          this.allRitemsesults = [];
+          this.errormessage = error.code + ": " + error.message;
         })
         .finally(() => (this.isLoading = false));
     },
