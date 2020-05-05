@@ -809,14 +809,7 @@ export default {
           }
           let embedded = curMatch[1];
           let result = embedded.match(/\{(.+)\|(.*)\|([0-9]+)\}/) || [];
-          if (this.isDevelopment) {
-            console.log("REGEXP 1: " + result[0]);
-            console.log("REGEXP 2: " + result[1]);
-            console.log("REGEXP 3: " + result[2]);
-            console.log("REGEXP 4: " + result[3]);
-          }
           if (result[0]) {
-            //entry.comments = entry.comments.replace(result[0], "<router-link :to=\"'/details/test'\">X</router-link>");
             entry.comments = entry.comments.replace(
               result[0],
               "<a href='/details/" + result[3] + "'>" + result[1] + "</a> (" + result[2] + ")"
