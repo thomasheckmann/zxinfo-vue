@@ -65,7 +65,7 @@
         <v-list-item v-for="(mt, i) in metadata.machinetypes.values" :key="i">
           <v-list-item-content>
             <v-list-item-title
-              ><a class="plain" :href="'/search?' + metadata.machinetypes.parameter + '=' + mt.value">{{
+              ><a class="plain" :href="'/search?' + metadata.machinetypes.parameter + '=' + encodeURIComponent(mt.value)">{{
                 mt.value
               }}</a></v-list-item-title
             >
@@ -82,7 +82,7 @@
         <v-list-item v-for="(gt, i) in metadata.genretypes.values" :key="i">
           <v-list-item-content>
             <v-list-item-title
-              ><a class="plain" :href="'/search?type=' + gt.value">{{ gt.value }}</a></v-list-item-title
+              ><a class="plain" :href="'/search?type=' + encodeURIComponent(gt.value)">{{ gt.value }}</a></v-list-item-title
             >
           </v-list-item-content>
           <span class="text-right caption">{{ gt.doc_count }}</span>
@@ -97,9 +97,16 @@
         <v-list-item v-for="(ft, i) in metadata.features.values" :key="i">
           <v-list-item-content>
             <v-list-item-title
-              ><a class="plain" :href="'/search?group=' + metadata.features.group + '&groupname=' + ft.groupname">{{
-                ft.groupname
-              }}</a></v-list-item-title
+              ><a
+                class="plain"
+                :href="
+                  '/search?group=' +
+                    encodeURIComponent(metadata.features.group) +
+                    '&groupname=' +
+                    encodeURIComponent(ft.groupname)
+                "
+                >{{ ft.groupname }}</a
+              ></v-list-item-title
             >
           </v-list-item-content>
           <span class="text-right caption">{{ ft.doc_count }}</span>
