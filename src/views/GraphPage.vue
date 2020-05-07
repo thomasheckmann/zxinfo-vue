@@ -11,9 +11,9 @@
         </v-col>
       </v-row>
       <v-row justify="space-around">
-        <v-checkbox v-model="optAllEntries" class="mx-2" label="Include all types (not only games)"></v-checkbox>
-        <v-checkbox v-model="optIncludeRereleased" class="mx-2" label="Include relation re-released"></v-checkbox>
-        <v-checkbox v-model="optIncludeAllSteps" class="mx-2" label="Consider more than 6 steps"></v-checkbox></v-row
+        <v-checkbox v-model="includeall" class="mx-2" label="Include all types (not only games)"></v-checkbox>
+        <v-checkbox v-model="includerereleases" class="mx-2" label="Include relation re-released"></v-checkbox>
+        <v-checkbox v-model="includeallsteps" class="mx-2" label="Consider more than 6 steps"></v-checkbox></v-row
       ><v-row justify="space-around"><v-btn small color="primary" @click="loadMore()">GO!</v-btn></v-row>
     </v-container>
     <!-- DISPLAY PATH -->
@@ -32,7 +32,7 @@
               <v-card-subtitle>{{ step.name }}</v-card-subtitle>
             </v-card>
           </v-timeline-item>
-          <v-timeline-item :left="i % 4 == 0" v-if="step.type == 'Game'" color="yellow" fill-dot="">
+          <v-timeline-item :left="i % 4 == 0" v-if="['Game', 'Utility'].includes(step.type)" color="yellow" fill-dot="">
             <v-card class="elevation-2">
               <v-card-subtitle>{{ step.title }}</v-card-subtitle>
             </v-card>
@@ -58,9 +58,9 @@ export default {
       // FORM
       name1: "William J. Wray",
       name2: "Matthew Smith",
-      optAllEntries: false,
-      optIncludeRereleased: false,
-      optIncludeAllSteps: false,
+      includeall: false,
+      includerereleases: false,
+      includeallsteps: false,
       errormessage: "",
       loading: true,
       steps: [],
@@ -89,13 +89,13 @@ export default {
       if (this.isDevelopment) console.log("load more");
 
       var include = "?";
-      if (this.optAllEntries) {
+      if (this.includeall) {
         include += "&includeall=1";
       }
-      if (this.optIncludeRereleased) {
+      if (this.includerereleases) {
         include += "&includerereleases=1";
       }
-      if (this.optIncludeAllSteps) {
+      if (this.includeallsteps) {
         include += "&includeallsteps=1";
       }
 
@@ -125,6 +125,9 @@ export default {
   mounted() {
     if (this.$route.params.name1) this.name1 = this.$route.params.name1;
     if (this.$route.params.name2) this.name2 = this.$route.params.name2;
+    if (this.$route.query.includeall == "1") this.includeall = true;
+    if (this.$route.query.includerereleases == "1") this.includerereleases = true;
+    if (this.$route.query.includeallsteps == "1") this.includeallsteps = true;
   },
 };
 </script>
