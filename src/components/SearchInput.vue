@@ -72,7 +72,7 @@ export default {
 
       // Lazily load input items
       axios
-        .get("https://api.zxinfo.dk/api/suggest/" + val, { timeout: 1500 })
+        .get("https://api.zxinfo.dk/api/zxinfo/suggest/" + val, { timeout: 1500 })
         .then((response) => {
           this.items = response.data;
           console.log(response.data);

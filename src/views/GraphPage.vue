@@ -17,7 +17,7 @@
       ><v-row justify="space-around"><v-btn small color="primary" @click="loadMore()">GO!</v-btn></v-row>
     </v-container>
     <!-- DISPLAY PATH -->
-    <v-container style="max-width: 800px;">
+    <v-container v-if="steps.length > 0" style="max-width: 800px;">
       <v-timeline>
         <div v-for="(step, i) in steps" :key="i">
           <v-timeline-item v-if="step.relationtype" class="white--text mb-6" small>
@@ -64,7 +64,6 @@ export default {
       errormessage: "",
       loading: true,
       steps: [],
-      cards: [],
     };
   },
   //components: { GameCard },
@@ -100,7 +99,7 @@ export default {
       }
 
       axios
-        .get("https://api.zxinfo.dk/api/graph/path/" + this.name1 + "/" + this.name2 + include, {
+        .get("https://api.zxinfo.dk/api/zxinfo/graph/path/" + this.name1 + "/" + this.name2 + include, {
           timeout: 5000,
         })
         .then((response) => {
