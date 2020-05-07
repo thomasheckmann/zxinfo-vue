@@ -1,24 +1,24 @@
 <template>
   <v-container justify-start class="scroll-y ma-0 px-0 py-4" fluid>
-    <v-container class="py-4" fluid style="max-width: 80%;">
+    <v-container class="py-4" fluid style="max-width: 80%;" justify="start">
       <v-row>Enter the names of any two ZX Spectrum programmers to see how they are connected! </v-row>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="6" class="px-0">
           <v-text-field v-model="name1" label="Favorite ZX Spectrum programmer you like" required></v-text-field>
         </v-col>
         <v-col cols="6">
           <v-text-field v-model="name2" label="Another ZX Spectrum programmer you like" required></v-text-field>
         </v-col>
       </v-row>
-      <v-row justify="space-around">
-        <v-checkbox v-model="includeall" class="mx-2" label="Include all types (not only games)"></v-checkbox>
-        <v-checkbox v-model="includerereleases" class="mx-2" label="Include relation re-released"></v-checkbox>
-        <v-checkbox v-model="includeallsteps" class="mx-2" label="Consider more than 6 steps"></v-checkbox></v-row
-      ><v-row justify="space-around"><v-btn small color="primary" @click="loadMore()">GO!</v-btn></v-row>
+      <v-row class="my-0">
+        <v-checkbox v-model="includeall" class="my-0 mx-2" label="Include all types (not only games)"></v-checkbox>
+        <v-checkbox v-model="includerereleases" class="my-0 mx-2" label="Include relation re-released"></v-checkbox>
+        <v-checkbox v-model="includeallsteps" class="my-0 mx-2" label="Consider more than 6 steps"></v-checkbox></v-row
+      ><v-row justify="space-around"><v-btn color="primary" @click="loadMore()">GO!</v-btn></v-row>
     </v-container>
     <!-- DISPLAY PATH -->
     <v-container v-if="steps.length > 0" style="max-width: 800px;">
-      <v-timeline>
+      <v-timeline :dense="this.$vuetify.breakpoint.xsOnly">
         <div v-for="(step, i) in steps" :key="i">
           <v-timeline-item v-if="step.relationtype" class="white--text mb-6" small>
             <template v-slot:icon>
