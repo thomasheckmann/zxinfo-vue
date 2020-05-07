@@ -45,6 +45,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "@/views/PublisherView.vue"),
   },
   {
+    path: "/graph/",
+    name: "GraphPage",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/GraphPage.vue"),
+  },
+  {
+    path: "/graph/:name1/:name2",
+    name: "GraphPage",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/GraphPage.vue"),
+  },
+  {
     path: "/zx81",
     name: "ZX81",
     component: () => import(/* webpackChunkName: "about" */ "@/views/CompareZX81Scr.vue"),
