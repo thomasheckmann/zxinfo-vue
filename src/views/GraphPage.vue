@@ -128,6 +128,7 @@ export default {
     if (this.$route.query.includeall == "1") this.includeall = true;
     if (this.$route.query.includerereleases == "1") this.includerereleases = true;
     if (this.$route.query.includeallsteps == "1") this.includeallsteps = true;
+    if (this.$route.params.name1 && this.$route.params.name2) this.loadMore();
   },
 };
 </script>
