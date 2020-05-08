@@ -1,7 +1,7 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <v-container justify-start class="fill-height ma-0 pa-0" fluid>
     <v-row align="start">
-      <v-col xs="12">
+      <v-col xs="12" :class="$vuetify.breakpoint.xsOnly ? 'ma-0 py-0' : 'ma-0 py-0 px-8'">
         <v-sheet tile>
           <v-carousel :continuous="true" :show-arrows="true" height="100%" hide-delimiters>
             <v-carousel-item v-for="(item, i) in animatedscreens" :key="i" :src="item.src">
