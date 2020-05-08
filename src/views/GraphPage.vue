@@ -46,6 +46,9 @@
         ><v-btn :disabled="!(searchName1 && searchName2)" color="primary" @click="loadMore()">GO!</v-btn></v-row
       >
     </v-container>
+    <div align="center" class="red--text font-weight-black" v-if="errormessage">
+      {{ errormessage }}
+    </div>
     <div align="center" class="red--text font-weight-black" v-if="!loading && steps && steps.length == 0">
       Ooops! you got me, didn't find a relation.
     </div>
@@ -115,6 +118,7 @@ export default {
 
   methods: {
     lookUpNames: function(name) {
+      this.errormessage = "";
       return axios.get("https://api.zxinfo.dk/api/zxinfo/suggest/author/" + name, {
         timeout: 5000,
       });
@@ -137,6 +141,8 @@ export default {
     loadMore: function() {
       this.steps = [];
       this.loading = true;
+      this.errormessage = "";
+
       if (this.isDevelopment) console.log("load more");
       if (!this.name1 || !this.name2) return;
       if (!(this.searchName1 && this.searchName2)) return;
@@ -189,11 +195,18 @@ export default {
       // least 200 milliseconds. This can be changed to
       // suit your needs.
       //debounce(this.makeSearch, 200)(value, this);
-      this.lookUpNames(value).then((response) => {
-        this.nameOptions1 = response.data;
-        this.loading = false;
-        if (this.isDevelopment) console.log("...DONE!");
-      });
+      this.lookUpNames(value)
+        .then((response) => {
+          this.nameOptions1 = response.data;
+          this.loading = false;
+          if (this.isDevelopment) console.log("...DONE!");
+        })
+        .catch((error) => {
+          console.log(error);
+          this.loading = false;
+          this.nameOptions1 = [];
+          this.errormessage = error.code + ": " + error.message;
+        });
     },
     searchName2(value) {
       if (!value) {
@@ -203,11 +216,18 @@ export default {
       // least 200 milliseconds. This can be changed to
       // suit your needs.
       //debounce(this.makeSearch, 200)(value, this);
-      this.lookUpNames(value).then((response) => {
-        this.nameOptions2 = response.data;
-        this.loading = false;
-        if (this.isDevelopment) console.log("...DONE!");
-      });
+      this.lookUpNames(value)
+        .then((response) => {
+          this.nameOptions2 = response.data;
+          this.loading = false;
+          if (this.isDevelopment) console.log("...DONE!");
+        })
+        .catch((error) => {
+          console.log(error);
+          this.loading = false;
+          this.nameOptions2 = [];
+          this.errormessage = error.code + ": " + error.message;
+        });
     },
   },
   mounted() {
