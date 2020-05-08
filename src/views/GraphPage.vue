@@ -4,10 +4,38 @@
       <v-row>Enter the names of any two ZX Spectrum programmers to see how they are connected! </v-row>
       <v-row>
         <v-col cols="6" class="px-0">
-          <v-text-field v-model="name1" label="Favorite ZX Spectrum programmer you like" required></v-text-field>
+          <v-autocomplete
+            v-model="name1"
+            :items="nameOptions1"
+            :loading="loadingNames2"
+            :search-input.sync="searchName1"
+            hide-no-data
+            item-text="text"
+            item-value="text"
+            label="Favorite ZX Spectrum programmer you like"
+            prepend-icon="person"
+            append-icon=""
+            placeholder="Start typing to Search"
+            clearable
+            return-object
+          ></v-autocomplete>
         </v-col>
         <v-col cols="6">
-          <v-text-field v-model="name2" label="Another ZX Spectrum programmer you like" required></v-text-field>
+          <v-autocomplete
+            v-model="name2"
+            :items="nameOptions2"
+            :loading="loadingNames2"
+            :search-input.sync="searchName2"
+            hide-no-data
+            item-text="text"
+            item-value="text"
+            label="Another ZX Spectrum programmer you like"
+            prepend-icon="person"
+            append-icon=""
+            placeholder="Start typing to Search"
+            clearable
+            return-object
+          ></v-autocomplete>
         </v-col>
       </v-row>
       <v-row class="my-0">
@@ -49,6 +77,7 @@
 </template>
 <script>
 import axios from "axios";
+
 //import GameCard from "@/components/GameCard";
 
 export default {
@@ -56,8 +85,14 @@ export default {
   data() {
     return {
       // FORM
-      name1: "William J. Wray",
-      name2: "Matthew Smith",
+      name1: { text: "William J. Wray", type: "AUTHOR" },
+      searchName1: "",
+      name2: { text: "Matthew Smith", type: "AUTHOR" },
+      searchName2: "",
+      nameOptions1: [{ text: "William J. Wray", type: "AUTHOR" }],
+      nameOptions2: [{ text: "Matthew Smith", type: "AUTHOR" }],
+      loadingNames1: false,
+      loadingNames2: false,
       includeall: false,
       includerereleases: false,
       includeallsteps: false,
@@ -69,6 +104,36 @@ export default {
   //components: { GameCard },
 
   methods: {
+    lookUpNames: function(name) {
+      return axios.get("https://api.zxinfo.dk/api/zxinfo/suggest/author/" + name, {
+        timeout: 5000,
+      });
+    },
+    makeSearchName: function(name) {
+      if (this.loadingNames) return;
+
+      if (!name) {
+        this.nameOptions = [];
+      }
+      this.loadingNames = true;
+      axios
+        .get("https://api.zxinfo.dk/api/zxinfo/suggest/author/" + name, {
+          timeout: 5000,
+        })
+        .then((response) => {
+          this.nameOptions1 = response.data;
+          this.loadingNames = false;
+          if (this.isDevelopment) console.log("...DONE!");
+        })
+        .catch((error) => {
+          this.loadingNames = false;
+          this.errormessage = error.code + ": " + error.message;
+        })
+        .finally(() => {
+          this.loadingNames = false;
+        });
+    },
+
     details: function(id) {
       console.log(id);
       return axios
@@ -86,6 +151,10 @@ export default {
     },
     loadMore: function() {
       if (this.isDevelopment) console.log("load more");
+      var p1 = JSON.parse(JSON.stringify(this.name1));
+      var p2 = JSON.parse(JSON.stringify(this.name2));
+
+      if (this.isDevelopment) console.log(p1.text + " = > " + p2.text);
 
       var include = "?";
       if (this.includeall) {
@@ -99,7 +168,7 @@ export default {
       }
 
       axios
-        .get("https://api.zxinfo.dk/api/zxinfo/graph/path/" + this.name1 + "/" + this.name2 + include, {
+        .get("https://api.zxinfo.dk/api/zxinfo/graph/path/" + p1.text + "/" + p2.text + include, {
           timeout: 5000,
         })
         .then((response) => {
@@ -119,6 +188,36 @@ export default {
   computed: {
     isDevelopment() {
       return process.env.NODE_ENV == "development";
+    },
+  },
+  watch: {
+    searchName1(value) {
+      if (!value) {
+        return;
+      }
+      // Debounce the input and wait for a pause of at
+      // least 200 milliseconds. This can be changed to
+      // suit your needs.
+      //debounce(this.makeSearch, 200)(value, this);
+      this.lookUpNames(value).then((response) => {
+        this.nameOptions1 = response.data;
+        this.loading = false;
+        if (this.isDevelopment) console.log("...DONE!");
+      });
+    },
+    searchName2(value) {
+      if (!value) {
+        return;
+      }
+      // Debounce the input and wait for a pause of at
+      // least 200 milliseconds. This can be changed to
+      // suit your needs.
+      //debounce(this.makeSearch, 200)(value, this);
+      this.lookUpNames(value).then((response) => {
+        this.nameOptions2 = response.data;
+        this.loading = false;
+        if (this.isDevelopment) console.log("...DONE!");
+      });
     },
   },
   mounted() {
