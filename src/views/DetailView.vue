@@ -529,7 +529,7 @@
       <!-- * Additional downloads  * -->
       <v-expansion-panel :hidden="!entry.additionals.length && !isDevelopment">
         <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
-          >Additional Downlod</v-expansion-panel-header
+          >Additional Download</v-expansion-panel-header
         >
         <v-expansion-panel-content>
           <v-data-table
