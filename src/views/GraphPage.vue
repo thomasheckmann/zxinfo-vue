@@ -90,6 +90,7 @@
 </template>
 <script>
 import axios from "axios";
+// import debounce from "debounce";
 
 //import GameCard from "@/components/GameCard";
 
@@ -119,31 +120,18 @@ export default {
   methods: {
     lookUpNames: function(name) {
       this.errormessage = "";
+      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
+
       return axios.get("https://api.zxinfo.dk/api/zxinfo/suggest/author/" + name, {
         timeout: 5000,
       });
     },
-    details: function(id) {
-      console.log(id);
-      return axios
-        .get("https://api.zxinfo.dk/api/zxinfo/games/" + id, {
-          timeout: 5000,
-        })
-        .then((response) => {
-          if (this.isDevelopment) console.log("...DONE!");
-          let entry = response.data;
-          return entry;
-        })
-        .catch((error) => {
-          this.errormessage = error.code + ": " + error.message;
-        });
-    },
     loadMore: function() {
+      if (this.isDevelopment) console.log("loadMore()");
       this.steps = [];
       this.loading = true;
       this.errormessage = "";
 
-      if (this.isDevelopment) console.log("load more");
       if (!this.name1 || !this.name2) return;
       if (!(this.searchName1 && this.searchName2)) return;
 
@@ -163,6 +151,7 @@ export default {
         include += "&includeallsteps=1";
       }
 
+      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
       axios
         .get("https://api.zxinfo.dk/api/zxinfo/graph/path/" + p1.text + "/" + p2.text + include, {
           timeout: 5000,
