@@ -45,6 +45,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "@/views/PublisherView.vue"),
   },
   {
+    path: "/animated/",
+    name: "AnimatedLoadingPage",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/AnimatedLoadingPage.vue"),
+  },
+  {
     path: "/graph/",
     name: "GraphPage",
     component: () => import(/* webpackChunkName: "about" */ "@/views/GraphPage.vue"),

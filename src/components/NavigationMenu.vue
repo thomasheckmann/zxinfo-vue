@@ -116,6 +116,18 @@
       <v-divider></v-divider>
       <v-list-item>
         <v-list-item-content>
+          <v-list-item-title><router-link to="/animated">Animated Loading Screens</router-link></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title><router-link to="/graph">Six degrees</router-link></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item>
+        <v-list-item-content>
           <v-list-item-title>Credits</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -181,7 +193,11 @@ export default {
 </script>
 <style>
 a.plain:link,
-a.plain:visited {
+a.plain:visited,
+a.router-link,
+a.router-link-visited,
+a.router-link-active,
+a.router-link-exact-active {
   color: black;
   cursor: pointer;
   text-decoration: none;
