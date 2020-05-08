@@ -1,5 +1,5 @@
 <template>
-  <v-container justify-start class="scroll-y ma-0 px-0 py-4" fluid>
+  <v-card flat class="mx-auto" max-width="100%">
     <!-- FAB button for scroll to top -->
     <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary" @click="toTop">
       <v-icon>keyboard_arrow_up</v-icon>
@@ -121,7 +121,7 @@
       v-on:loadPage="loadPage"
     />
     <!-- SEARCH RESULT -->
-  </v-container>
+  </v-card>
 </template>
 <script>
 import SearchInput from "@/components/SearchInput";
