@@ -42,10 +42,15 @@
         <v-checkbox v-model="includeall" class="my-0 mx-2" label="Include all types (not only games)"></v-checkbox>
         <v-checkbox v-model="includerereleases" class="my-0 mx-2" label="Include relation re-released"></v-checkbox>
         <v-checkbox v-model="includeallsteps" class="my-0 mx-2" label="Consider more than 6 steps"></v-checkbox></v-row
-      ><v-row justify="space-around"><v-btn color="primary" @click="loadMore()">GO!</v-btn></v-row>
+      ><v-row justify="space-around"
+        ><v-btn :disabled="!(searchName1 && searchName2)" color="primary" @click="loadMore()">GO!</v-btn></v-row
+      >
     </v-container>
+    <div align="center" class="red--text font-weight-black" v-if="!loading && steps && steps.length == 0">
+      Ooops! you got me, didn't find a relation.
+    </div>
     <!-- DISPLAY PATH -->
-    <v-container v-if="steps.length > 0" style="max-width: 800px;">
+    <v-container v-if="steps && steps.length > 0" style="max-width: 800px;">
       <v-timeline :dense="this.$vuetify.breakpoint.xsOnly">
         <div v-for="(step, i) in steps" :key="i">
           <v-timeline-item v-if="step.relationtype" class="white--text mb-6" small>
@@ -60,7 +65,12 @@
               <v-card-subtitle>{{ step.name }}</v-card-subtitle>
             </v-card>
           </v-timeline-item>
-          <v-timeline-item :left="i % 4 == 0" v-if="['Game', 'Utility'].includes(step.type)" color="yellow" fill-dot="">
+          <v-timeline-item
+            :left="i % 4 == 0"
+            v-if="['Game', 'Compilation', 'Utility'].includes(step.type)"
+            color="yellow"
+            fill-dot=""
+          >
             <v-card class="elevation-2">
               <v-card-subtitle>{{ step.title }}</v-card-subtitle>
             </v-card>
@@ -98,7 +108,7 @@ export default {
       includeallsteps: false,
       errormessage: "",
       loading: true,
-      steps: [],
+      steps: null,
     };
   },
   //components: { GameCard },
@@ -109,31 +119,6 @@ export default {
         timeout: 5000,
       });
     },
-    makeSearchName: function(name) {
-      if (this.loadingNames) return;
-
-      if (!name) {
-        this.nameOptions = [];
-      }
-      this.loadingNames = true;
-      axios
-        .get("https://api.zxinfo.dk/api/zxinfo/suggest/author/" + name, {
-          timeout: 5000,
-        })
-        .then((response) => {
-          this.nameOptions1 = response.data;
-          this.loadingNames = false;
-          if (this.isDevelopment) console.log("...DONE!");
-        })
-        .catch((error) => {
-          this.loadingNames = false;
-          this.errormessage = error.code + ": " + error.message;
-        })
-        .finally(() => {
-          this.loadingNames = false;
-        });
-    },
-
     details: function(id) {
       console.log(id);
       return axios
@@ -150,7 +135,12 @@ export default {
         });
     },
     loadMore: function() {
+      this.steps = [];
+      this.loading = true;
       if (this.isDevelopment) console.log("load more");
+      if (!this.name1 || !this.name2) return;
+      if (!(this.searchName1 && this.searchName2)) return;
+
       var p1 = JSON.parse(JSON.stringify(this.name1));
       var p2 = JSON.parse(JSON.stringify(this.name2));
 
@@ -221,8 +211,8 @@ export default {
     },
   },
   mounted() {
-    if (this.$route.params.name1) this.name1 = this.$route.params.name1;
-    if (this.$route.params.name2) this.name2 = this.$route.params.name2;
+    if (this.$route.params.name1) this.nameOptions1[0].text = this.name1.text = this.searchName1 = this.$route.params.name1;
+    if (this.$route.params.name2) this.nameOptions2[0].text = this.name2.text = this.searchName2 = this.$route.params.name2;
     if (this.$route.query.includeall == "1") this.includeall = true;
     if (this.$route.query.includerereleases == "1") this.includerereleases = true;
     if (this.$route.query.includeallsteps == "1") this.includeallsteps = true;
