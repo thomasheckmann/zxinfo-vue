@@ -1,12 +1,12 @@
 <template>
   <v-container class="fill-height" fluid>
     <v-row align="start">
-      <v-col cols="6">
+      <v-col xs="12">
         <v-sheet tile>
-          <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
+          <v-carousel :continuous="true" :show-arrows="true" height="100%" hide-delimiters>
             <v-carousel-item v-for="(item, i) in animatedscreens" :key="i" :src="item.src">
               <v-row class="fill-height" align="end" justify="center">
-                <v-system-bar v-if="item.caption" lights-out dark width="100%"
+                <v-system-bar lights-out dark width="100%"
                   ><span class="white--text">{{ item.caption }}</span></v-system-bar
                 >
               </v-row>
@@ -14,8 +14,8 @@
           </v-carousel>
         </v-sheet>
       </v-col>
-      <v-col cols="6"
-        ><v-card flat><v-card-title>Animated loading screens</v-card-title><v-card-text><p>We celebrate the era of blocky 8-bit artwork, with a look back at the ZX Spectrum’s most amazing loading screens… that was animated or even contained a small mini-game.
+      <v-col xs="12"
+        ><v-card flat class="my-4"><v-card-title>Animated loading screens</v-card-title><v-card-text><p>We celebrate the era of blocky 8-bit artwork, with a look back at the ZX Spectrum’s most amazing loading screens… that was animated or even contained a small mini-game.
 
 		Some of the most used effects:
 		<ul>
@@ -26,7 +26,7 @@
 		<li>Story telling</li>
 		</ul>
 
-		</p></v-card-text></v-card></v-col
+		</p><p>Navigate using the carousel.</p></v-card-text><v-card-actions></v-card-actions></v-card></v-col
       >
     </v-row></v-container
   >
