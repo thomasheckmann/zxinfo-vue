@@ -1,7 +1,7 @@
 <template>
-  <v-container justify-start class="fill-height ma-0 pa-0" fluid>
+  <v-container justify-start class="ma-0 pa-0" fluid>
     <v-row align="start">
-      <v-col xs="12" :class="$vuetify.breakpoint.xsOnly ? 'ma-0 py-0' : 'ma-0 py-0 px-8'">
+      <v-col xs="12" :class="$vuetify.breakpoint.xsOnly ? 'ma-0 py-0' : 'ma-0 py-8 px-8'">
         <v-sheet tile>
           <v-carousel :continuous="true" :show-arrows="true" height="100%" hide-delimiters>
             <v-carousel-item v-for="(item, i) in animatedscreens" :key="i" :src="item.src">
@@ -15,7 +15,7 @@
         </v-sheet>
       </v-col>
       <v-col xs="12"
-        ><v-card flat class="my-4"><v-card-title>Animated loading screens</v-card-title><v-card-text><p>We celebrate the era of blocky 8-bit artwork, with a look back at the ZX Spectrum’s most amazing loading screens… that was animated or even contained a small mini-game.
+        ><v-card flat class="my-4"><v-card-title class="py-0">Animated loading screens</v-card-title><v-card-text><p>We celebrate the era of blocky 8-bit artwork, with a look back at the ZX Spectrum’s most amazing loading screens… that was animated or even contained a small mini-game.
 
 		Some of the most used effects:
 		<ul>

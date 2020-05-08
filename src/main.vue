@@ -26,7 +26,7 @@
     <v-footer app padless class="caption .font-weight-thin">
       <v-row justify="space-between" align="center" class="px-4">
         <span>&copy; 2020 info@zxinfo.dk</span>
-        <span class="text-center"><a href="https://api.zxinfo.dk/doc/">Public API</a></span
+        <span class="text-center"><a href="https://api.zxinfo.dk/">Public API</a></span
         ><span
           ><a href="https://github.com/thomasheckmann/zxinfo-vue">GitHub<v-icon small>mdi-share</v-icon></a></span
         >
