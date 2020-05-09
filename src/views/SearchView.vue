@@ -589,8 +589,11 @@ export default {
   },
   mounted() {
     if (this.isDevelopment) console.log("mounted()");
-    if (this.$route.params.query)
+    if (this.$route.params.query) {
       this.completeOptions[0].text = this.completeSelected.text = this.searchTerm = this.$route.params.query;
+    } else {
+      this.completeOptions = [];
+    }
     this.$emit("updateContenttype", "");
     this.loadMore();
   },
