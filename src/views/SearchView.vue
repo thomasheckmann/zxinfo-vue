@@ -292,6 +292,10 @@ export default {
       console.log("showinfo()");
       console.log("showinfo() - completeSelected: " + this.completeSelected);
       console.log("showinfo() - searchTerm: " + this.searchTerm);
+      var searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      console.log("showinfo() - searchText: " + searchText);
+      this.searchTerm = searchText;
+      this.submitSearch();
     },
     submitSearch() {
       console.log("submitSearch()");
@@ -432,12 +436,24 @@ export default {
 
       this.getParametersFromRequest();
 
-      var searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
-
-      if (!searchText) {
+      var cs = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      if (this.isDevelopment) {
+        console.log("- completeSelected: " + cs + ", " + typeof cs);
+        console.log("- searchTerm: " + this.searchTerm);
+      }
+      let searchText = "";
+      if (typeof cs !== "undefined" && !this.searchTerm) {
+        if (this.isDevelopment) console.log("=> Using completeSelected (what is selected)");
+        searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      } else if (this.searchTerm && typeof cs === "undefined") {
+        // entering URL /search/<text>
+        if (this.isDevelopment) console.log("=> Using searchTerm (what is typed in)");
         searchText = this.searchTerm;
-      } else if (searchText !== this.searchTerm) {
+      } else if (this.searchTerm === cs) {
+        if (this.isDevelopment) console.log("=> The same, use one");
         searchText = this.searchTerm;
+      } else {
+        if (this.isDevelopment) console.log("=> CONFUSED)");
       }
 
       var p = {
