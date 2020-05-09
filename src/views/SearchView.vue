@@ -57,7 +57,36 @@
 
     <!-- search bar -->
     <v-toolbar flat>
-      <SearchInput v-model="searchText" v-bind:filter="true" v-on:filter="toggleNavigation()" />
+      <v-autocomplete
+        @change="showinfo"
+        @keyup.enter="submitSearch"
+        v-model="completeSelected"
+        :items="completeOptions"
+        :loading="isLoadingOptions"
+        :search-input.sync="searchTerm"
+        hide-no-data
+        item-text="text"
+        item-value="text"
+        label="What is your favorite game?"
+        :prepend-inner-icon="'mdi-magnify'"
+        @click:prepend-inner="submitSearch"
+        @click:append-outer="filterdrawer = !filterdrawer"
+        :append-outer-icon="showFilterIcon ? 'mdi-filter-variant' : ''"
+        clearable
+        return-object
+        dense
+        :error="errormessage !== ''"
+        :error-messages="errormessage"
+        rounded
+        full-width
+        solo
+      >
+        <template v-slot:item="{ item }"
+          ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+          ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
+          ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span
+        ></template>
+      </v-autocomplete>
     </v-toolbar>
 
     <!-- chip section for filters -->
@@ -124,7 +153,6 @@
   </v-card>
 </template>
 <script>
-import SearchInput from "@/components/SearchInput";
 import SearchResultGrid from "@/components/SearchResultGrid";
 import SearchResultList from "@/components/SearchResultList";
 import axios from "axios";
@@ -171,8 +199,12 @@ export default {
   },
   data: function() {
     return {
+      completeSelected: [{ text: "", type: "" }],
+      completeOptions: [{ text: "", type: "" }],
+      isLoadingOptions: false,
       errormessage: "",
-      searchText: "",
+      searchTerm: "",
+      showFilterIcon: true,
       queryparameters: {
         group: { name: "group", value: "" },
         groupname: { name: "groupname", value: "" },
@@ -230,19 +262,58 @@ export default {
       this.resetSearchResult();
       this.loadMore();
     },
-    searchText() {
-      if (this.isDevelopment) console.log("WATCH searchText(): " + this.searchText + "(" + this.$route.params.query + ")");
-      if (this.searchText != this.$route.params.query) {
-        this.replaceURL();
+    searchTerm(val) {
+      if (this.isDevelopment) console.log("searchTerm() - " + val);
+      if (!val) {
+        if (this.isDevelopment) console.log("no value, doing nothing");
+        return;
       }
+      this.isLoading = true;
+      this.errormessage = "";
+
+      // Lazily load input items
+      axios
+        .get("https://api.zxinfo.dk/api/zxinfo/suggest/" + val, { timeout: 1500 })
+        .then((response) => {
+          this.completeOptions = response.data;
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.completeOptions = [];
+          this.isLoading = false;
+          this.errormessage = error.code + ": " + error.message;
+        })
+        .finally(() => (this.isLoading = false));
     },
   },
   methods: {
+    showinfo() {
+      console.log("showinfo()");
+      console.log("showinfo() - completeSelected: " + this.completeSelected);
+      console.log("showinfo() - searchTerm: " + this.searchTerm);
+    },
+    submitSearch() {
+      console.log("submitSearch()");
+      console.log("submitSearch() - completeSelected: " + this.completeSelected);
+      console.log("submitSearch() - searchTerm: " + this.searchTerm);
+
+      this.replaceURL();
+    },
+
+    highlight(content) {
+      if (!this.searchTerm) {
+        return content;
+      }
+      return content.replace(new RegExp(this.searchTerm, "gi"), (match) => {
+        return '<span class="font-weight-bold">' + match + "</span>";
+      });
+    },
     getParametersFromRequest() {
       // resetSearchResultialize parameters from request
       if (this.isDevelopment) console.log("getParametersFromRequest()");
 
-      this.searchText = this.$route.params.query ? this.$route.params.query : "";
+      // this.searchTerm = this.$route.params.query ? this.$route.params.query : "";
       for (var qp in this.queryparameters) {
         var paramname = this.queryparameters[qp].name;
         var queryvalue = this.$route.query[paramname];
@@ -273,7 +344,7 @@ export default {
     replaceURL() {
       // build URL for current selection
       if (this.isDevelopment) console.log("replaceURL()");
-      const queryparam = this.searchText;
+      const queryparam = this.searchTerm;
       var filterquery = {};
       // Update URL query object with filter values for current selection
       for (var agg in this.facets) {
@@ -321,7 +392,7 @@ export default {
       }
 
       this.filterdrawer = false;
-      this.searchText = "";
+      // this.searchText = "";
       this.$route.params.query = "";
       this.replaceURL();
     },
@@ -358,10 +429,19 @@ export default {
       this.allResults = true;
       this.errormessage = "";
 
+      if (!this.searchTerm) return;
+      if (!this.completeSelected) return;
       this.getParametersFromRequest();
 
+      var searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      if (!searchText) {
+        searchText = this.searchTerm;
+      } else if (searchText !== this.searchTerm) {
+        searchText = this.searchTerm;
+      }
+
       var p = {
-        query: this.searchText,
+        query: searchText,
         mode: "full",
         size: this.getPageSize,
         offset: this.pageindex,
@@ -493,11 +573,12 @@ export default {
   },
   mounted() {
     if (this.isDevelopment) console.log("mounted()");
+    if (this.$route.params.query)
+      this.completeOptions[0].text = this.completeSelected.text = this.searchTerm = this.$route.params.query;
     this.$emit("updateContenttype", "");
     this.loadMore();
   },
   components: {
-    SearchInput,
     SearchResultGrid,
     SearchResultList,
   },

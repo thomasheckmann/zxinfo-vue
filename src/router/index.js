@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
+import SearchView from "@/views/SearchView.vue";
 import Meta from "vue-meta";
 
 Vue.use(VueRouter);
@@ -15,10 +16,7 @@ const routes = [
   {
     path: "/search/:query",
     name: "EntrySearch",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "@/views/SearchView.vue"),
+    component: SearchView,
   },
   {
     path: "/search",
@@ -26,7 +24,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "@/views/SearchView.vue"),
+    component: SearchView,
   },
   {
     path: "/details/:entryid",
@@ -63,6 +61,11 @@ const routes = [
     path: "/zx81",
     name: "ZX81",
     component: () => import(/* webpackChunkName: "about" */ "@/views/CompareZX81Scr.vue"),
+  },
+  {
+    path: "/testpage",
+    name: "testpage",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/TestPage.vue"),
   },
 ];
 
