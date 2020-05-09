@@ -344,7 +344,8 @@ export default {
     replaceURL() {
       // build URL for current selection
       if (this.isDevelopment) console.log("replaceURL()");
-      const queryparam = this.searchTerm;
+      const queryparam = this.searchTerm ? this.searchTerm : "";
+
       var filterquery = {};
       // Update URL query object with filter values for current selection
       for (var agg in this.facets) {
@@ -429,11 +430,10 @@ export default {
       this.allResults = true;
       this.errormessage = "";
 
-      if (!this.searchTerm) return;
-      if (!this.completeSelected) return;
       this.getParametersFromRequest();
 
       var searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+
       if (!searchText) {
         searchText = this.searchTerm;
       } else if (searchText !== this.searchTerm) {
