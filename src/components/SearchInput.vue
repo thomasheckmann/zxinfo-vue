@@ -104,6 +104,8 @@ export default {
     console.log("mounted(): " + this.value + ", " + this.initialText);
     if (this.value) {
       this.completeOptions[0].text = this.completeSelected.text = this.searchTerm = this.value;
+    } else {
+      this.completeOptions = [];
     }
   },
 };
