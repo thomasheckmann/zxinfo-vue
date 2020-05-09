@@ -1,5 +1,6 @@
 <template>
   <v-autocomplete
+    @change="searchSelected"
     @keyup.enter="search"
     v-model="completeSelected"
     :items="completeOptions"
@@ -44,6 +45,12 @@ export default {
     };
   },
   methods: {
+    searchSelected() {
+      var searchText = JSON.parse(JSON.stringify(this.completeSelected));
+      if (this.isDevelopment) console.log("searchSelected() - signal value to parent: " + searchText);
+      this.$emit("input", searchText);
+    },
+
     search() {
       if (this.isDevelopment) console.log("search(): " + this.searchTerm);
 
@@ -84,6 +91,7 @@ export default {
       this.isLoading = true;
       this.errormessage = "";
 
+      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
       // Lazily load input items
       axios
         .get("https://api.zxinfo.dk/api/zxinfo/suggest/" + val, { timeout: 1500 })
