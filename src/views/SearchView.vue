@@ -56,7 +56,7 @@
     </v-navigation-drawer>
 
     <!-- search bar -->
-    <v-toolbar flat>
+    <v-toolbar flat class="py-4">
       <v-autocomplete
         @change="showinfo"
         @keyup.enter="submitSearch"
