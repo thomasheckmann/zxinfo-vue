@@ -452,6 +452,9 @@ export default {
       } else if (this.searchTerm === cs) {
         if (this.isDevelopment) console.log("=> The same, use one");
         searchText = this.searchTerm;
+      } else if (this.searchTerm !== cs) {
+        if (this.isDevelopment) console.log("=> Different - using searchTerm");
+        searchText = this.searchTerm;
       } else {
         if (this.isDevelopment) console.log("=> CONFUSED)");
       }
