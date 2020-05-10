@@ -56,7 +56,7 @@
     <v-container v-if="steps && steps.length > 0" style="max-width: 800px;">
       <v-timeline :dense="this.$vuetify.breakpoint.xsOnly">
         <div v-for="(step, i) in steps" :key="i">
-          <v-timeline-item v-if="step.relationtype" class="white--text mb-6" small>
+          <v-timeline-item :left="(i - 1) % 4 == 0" v-if="step.relationtype" class="white--text mb-6" small>
             <template v-slot:icon>
               <span class="caption font-weight-bold">{{ step.level }}</span>
             </template>
@@ -65,17 +65,67 @@
           </v-timeline-item>
           <v-timeline-item :left="i % 4 == 0" v-if="step.type == 'Author' || step.type == 'Publisher'" color="green" fill-dot="">
             <v-card class="elevation-2">
-              <v-card-subtitle>{{ step.name }}</v-card-subtitle>
+              <v-card-text>
+                <v-row align="start" justify-space-between>
+                  <v-col>
+                    <v-icon>person</v-icon>
+                    <span>{{ step.name }}</span>
+                  </v-col>
+                  <v-col cols="1">
+                    <v-icon @click="$router.push({ path: '/publisher/' + step.name })">link</v-icon>
+                  </v-col>
+                  <v-col cols="1"> </v-col>
+                </v-row>
+              </v-card-text>
             </v-card>
           </v-timeline-item>
+          <!-- ZXDB ENTRY -->
           <v-timeline-item
             :left="i % 4 == 0"
             v-if="['Game', 'Compilation', 'Utility'].includes(step.type)"
             color="yellow"
             fill-dot=""
           >
+            <v-card class="elevation-2 mx-auto" max-width="344">
+              <!-- image -->
+              <v-img
+                :src="images[step.id]"
+                class="white--text align-end"
+                lazy-src="https://zxinfo.dk/media/images/empty.png"
+                aspect-ratio="1.33"
+              >
+                <template v-slot:placeholder>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+                  </v-row> </template
+              ></v-img>
+              <v-card-text>
+                <v-row align="start" justify-space-between>
+                  <v-col>
+                    <span class="subtitle-2">{{ step.title }}</span>
+                  </v-col>
+                  <v-col cols="1">
+                    <v-icon @click="$router.push({ path: '/details/' + step.id })">link</v-icon>
+                  </v-col>
+                  <v-col cols="1"> </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-timeline-item>
+          <v-timeline-item :left="i % 4 == 0" v-if="['Video_game'].includes(step.type)" color="yellow" fill-dot="">
             <v-card class="elevation-2">
-              <v-card-subtitle>{{ step.title }}</v-card-subtitle>
+              <v-card-text>
+                <v-row align="start" justify-space-between>
+                  <v-col>
+                    <v-icon>mdi-gamepad-variant</v-icon>
+                    <span>{{ step.name }}</span>
+                  </v-col>
+                  <v-col cols="1" v-if="step.url">
+                    <v-icon @click="openUrl(step.url)">mdi-share</v-icon>
+                  </v-col>
+                  <v-col cols="1"> </v-col>
+                </v-row>
+              </v-card-text>
             </v-card>
           </v-timeline-item>
           <v-timeline-item :left="i % 4 == 0" v-if="step.type == 'Inspiration'" color="cyan" fill-dot="">
@@ -90,9 +140,7 @@
 </template>
 <script>
 import axios from "axios";
-// import debounce from "debounce";
-
-//import GameCard from "@/components/GameCard";
+import imageHelper from "@/helpers/image-helper";
 
 export default {
   name: "GraphPage",
@@ -113,10 +161,9 @@ export default {
       errormessage: "",
       loading: true,
       steps: null,
+      images: {},
     };
   },
-  //components: { GameCard },
-
   methods: {
     lookUpNames: function(name) {
       this.errormessage = "";
@@ -129,6 +176,7 @@ export default {
     loadMore: function() {
       if (this.isDevelopment) console.log("loadMore()");
       this.steps = [];
+      // this.images = {};
       this.loading = true;
       this.errormessage = "";
 
@@ -158,6 +206,13 @@ export default {
         })
         .then((response) => {
           this.steps = response.data.result;
+          for (var step in this.steps) {
+            var item = this.steps[step];
+            console.log(item);
+            if (item.id) {
+              this.lookupEntry(item.id);
+            }
+          }
           this.loading = false;
           if (this.isDevelopment) console.log("...DONE!");
         })
@@ -168,6 +223,28 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    openUrl: function(url) {
+      window.open(url);
+    },
+    getCoverImage: imageHelper.getCoverImage,
+    lookupEntry: function(id) {
+      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
+      axios
+        .get("https://api.zxinfo.dk/api/zxinfo/games/" + id + "?mode=tiny", {
+          timeout: 5000,
+        })
+        .then((response) => {
+          var gamedata = response.data;
+          var entry = {};
+          entry.coverimage = this.getCoverImage(gamedata);
+          this.images[id] = entry.coverimage;
+          if (this.isDevelopment) console.log("...DONE!");
+        })
+        .catch((error) => {
+          Promise.reject(error);
+        })
+        .finally(() => {});
     },
   },
   computed: {
