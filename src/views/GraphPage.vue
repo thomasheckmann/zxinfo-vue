@@ -80,25 +80,10 @@
             </v-card>
           </v-timeline-item>
           <!-- ZXDB ENTRY -->
-          <v-timeline-item
-            :left="i % 4 == 0"
-            v-if="['Game', 'Compilation', 'Utility'].includes(step.type)"
-            color="yellow"
-            fill-dot=""
-          >
+          <v-timeline-item :left="i % 4 == 0" v-if="step.id" color="yellow" fill-dot="">
             <v-card class="elevation-2 mx-auto" max-width="344">
               <!-- image -->
-              <v-img
-                :src="images[step.id]"
-                class="white--text align-end"
-                lazy-src="https://zxinfo.dk/media/images/empty.png"
-                aspect-ratio="1.33"
-              >
-                <template v-slot:placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                  </v-row> </template
-              ></v-img>
+              <ImageAsync v-bind:entry="step.id"></ImageAsync>
               <v-card-text>
                 <v-row align="start" justify-space-between>
                   <v-col>
@@ -140,7 +125,7 @@
 </template>
 <script>
 import axios from "axios";
-import imageHelper from "@/helpers/image-helper";
+import ImageAsync from "@/components/ImageAsync";
 
 export default {
   name: "GraphPage",
@@ -161,9 +146,9 @@ export default {
       errormessage: "",
       loading: true,
       steps: null,
-      images: {},
     };
   },
+  components: { ImageAsync },
   methods: {
     lookUpNames: function(name) {
       this.errormessage = "";
@@ -176,7 +161,6 @@ export default {
     loadMore: function() {
       if (this.isDevelopment) console.log("loadMore()");
       this.steps = [];
-      // this.images = {};
       this.loading = true;
       this.errormessage = "";
 
@@ -206,13 +190,6 @@ export default {
         })
         .then((response) => {
           this.steps = response.data.result;
-          for (var step in this.steps) {
-            var item = this.steps[step];
-            console.log(item);
-            if (item.id) {
-              this.lookupEntry(item.id);
-            }
-          }
           this.loading = false;
           if (this.isDevelopment) console.log("...DONE!");
         })
@@ -226,25 +203,6 @@ export default {
     },
     openUrl: function(url) {
       window.open(url);
-    },
-    getCoverImage: imageHelper.getCoverImage,
-    lookupEntry: function(id) {
-      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
-      axios
-        .get("https://api.zxinfo.dk/api/zxinfo/games/" + id + "?mode=tiny", {
-          timeout: 5000,
-        })
-        .then((response) => {
-          var gamedata = response.data;
-          var entry = {};
-          entry.coverimage = this.getCoverImage(gamedata);
-          this.images[id] = entry.coverimage;
-          if (this.isDevelopment) console.log("...DONE!");
-        })
-        .catch((error) => {
-          Promise.reject(error);
-        })
-        .finally(() => {});
     },
   },
   computed: {
