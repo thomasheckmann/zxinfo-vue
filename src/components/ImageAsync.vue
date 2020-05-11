@@ -39,13 +39,13 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-          Promise.reject(error);
+          this.src = "https://zxinfo.dk/media/images/empty.png";
+          console.error(error);
         })
         .finally(() => {});
     },
   },
   mounted() {
-    console.log("mounted(): " + this.entry);
     this.loadMore();
   },
 };
