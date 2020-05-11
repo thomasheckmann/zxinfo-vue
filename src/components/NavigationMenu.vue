@@ -15,7 +15,7 @@
           <v-list-item-title><a class="plain" href="/search/">All</a></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-group v-model="entrytypes.active" v-if="!loading" nav>
+      <v-list-group v-model="entrytypes.active" v-if="!isLoading" nav>
         <template v-slot:activator>
           <v-list-item-title>Entry type</v-list-item-title>
         </template>
@@ -58,7 +58,7 @@
         </v-list-item>
       </v-list-group>
       <!-- MACHINE TYPES -->
-      <v-list-group v-model="machinetypes.active" v-if="!loading">
+      <v-list-group v-model="machinetypes.active" v-if="!isLoading">
         <template v-slot:activator>
           <v-list-item-title>Machine type</v-list-item-title>
         </template>
@@ -75,7 +75,7 @@
       </v-list-group>
       <!-- MACHINE TYPES -->
       <!-- ENTRY GENRES -->
-      <v-list-group v-model="genretypes.active" v-if="!loading">
+      <v-list-group v-model="genretypes.active" v-if="!isLoading">
         <template v-slot:activator>
           <v-list-item-title>Genre type</v-list-item-title>
         </template>
@@ -90,7 +90,7 @@
       </v-list-group>
       <!-- ENTRY GENRES -->
       <!-- FEATURES -->
-      <v-list-group v-model="features.active" v-if="!loading">
+      <v-list-group v-model="features.active" v-if="!isLoading">
         <template v-slot:activator>
           <v-list-item-title>Features</v-list-item-title>
         </template>
@@ -156,7 +156,7 @@ export default {
   data() {
     return {
       navdrawer: true,
-      loading: false,
+      isLoading: false,
       errormessage: "",
       metadata: [],
       entrytypes: {},
@@ -165,30 +165,27 @@ export default {
       features: {},
     };
   },
-  computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
-  },
+  computed: {},
   created() {
-    if (this.isDevelopment) console.log("created()");
+    if (this.$isDevelopment) console.log("created()");
     this.navdrawer = this.value;
-    this.loading = true;
+    this.isLoading = true;
     this.allResults = true;
     this.errormessage = "";
-    if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
+    if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
     axios
-      .get("https://api.zxinfo.dk/api/zxinfo/v2/metadata", { timeout: 5000 })
+      .get(this.$api_base_url + "/v2/metadata", { timeout: 5000 })
       .then((response) => {
-        if (this.isDevelopment) console.log("...DONE!");
         this.metadata = response.data;
+        this.isLoading = false;
+        if (this.$isDevelopment) console.log("...DONE!");
       })
       .catch((error) => {
-        this.loading = false;
+        this.isLoading = false;
         this.errormessage = error.code + ": " + error.message;
       })
       .finally(() => {
-        this.loading = false;
+        this.v = false;
       });
   },
 };

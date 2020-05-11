@@ -10,11 +10,11 @@
         <router-link to="/"> <v-img src="@/assets/ZXInfo_25.png"></v-img> </router-link
       ></v-toolbar-title>
       <v-spacer></v-spacer>
-      <div v-if="$vuetify.breakpoint.xs && isDevelopment">XS</div>
-      <div v-if="$vuetify.breakpoint.sm && isDevelopment">SM</div>
-      <div v-if="$vuetify.breakpoint.md && isDevelopment">MD</div>
-      <div v-if="$vuetify.breakpoint.lg && isDevelopment">LG</div>
-      <div v-if="$vuetify.breakpoint.xl && isDevelopment">XL</div>
+      <div v-if="$vuetify.breakpoint.xs && $isDevelopment">XS</div>
+      <div v-if="$vuetify.breakpoint.sm && $isDevelopment">SM</div>
+      <div v-if="$vuetify.breakpoint.md && $isDevelopment">MD</div>
+      <div v-if="$vuetify.breakpoint.lg && $isDevelopment">LG</div>
+      <div v-if="$vuetify.breakpoint.xl && $isDevelopment">XL</div>
       <v-spacer />
       <v-icon>{{ getContenttypeIcon }}</v-icon>
     </v-app-bar>
@@ -37,7 +37,7 @@
 <script>
 import navigationmenu from "@/components/NavigationMenu";
 export default {
-  name: "App",
+  name: "ZXInfoApp",
   metaInfo() {
     return {
       title: "ZXInfo - The open source ZXDB frontend",
@@ -47,7 +47,6 @@ export default {
     return {
       contenttype: "",
       drawer: false,
-      loading: false,
       errormessage: "",
     };
   },
@@ -58,9 +57,6 @@ export default {
   },
   components: { navigationmenu },
   computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
     getContenttypeIcon() {
       switch (this.contenttype) {
         case "SOFTWARE":

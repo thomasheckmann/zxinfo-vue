@@ -6,11 +6,11 @@
     </v-btn>
 
     <v-toolbar color="grey" flat dense>
-      <span v-if="!loading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
+      <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
       <span v-else>searching: {{ this.$route.params.name }}</span>
       <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
-      ><v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear
+      ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
     ></v-toolbar>
     <v-system-bar dark window v-if="this.$route.params.name"
       ><span
@@ -45,7 +45,6 @@ import SearchResultGrid from "@/components/SearchResultGrid";
 import SearchResultList from "@/components/SearchResultList";
 import axios from "axios";
 
-var dataURL = "https://api.zxinfo.dk/api/zxinfo/publishers/";
 // QUeryBuilder Helper
 var buildQuery = function(data) {
   // If the data is already a string, return it as-is
@@ -88,7 +87,7 @@ export default {
       errormessage: "",
       listtype: "grid",
       fab: false,
-      loading: true,
+      isLoading: true,
       searchTimeOf: 0,
       searchNumberOfResults: 0,
       allResults: true,
@@ -99,8 +98,8 @@ export default {
   components: { SearchResultGrid, SearchResultList },
   methods: {
     resetSearchResult() {
-      if (this.isDevelopment) console.log("resetSearchResult()");
-      this.loading = false;
+      if (this.$isDevelopment) console.log("resetSearchResult()");
+      this.isLoading = false;
       this.searchTimeOf = 0;
       this.searchNumberOfResults = 0;
       this.allResults = false;
@@ -113,10 +112,10 @@ export default {
       this.loadMore();
     },
     loadMore: function() {
-      if (this.isDevelopment) console.log("loadMore()");
+      if (this.$isDevelopment) console.log("loadMore()");
 
       // Get games for requested publisher
-      this.loading = true;
+      this.isLoading = true;
       this.allResults = true;
       this.errormessage = "";
       var p = {
@@ -124,10 +123,11 @@ export default {
         size: this.getPageSize,
         offset: this.pageindex,
       };
-      if (this.isDevelopment) console.log(p);
-      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
+      if (this.$isDevelopment) console.log(buildQuery(p));
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+
       axios
-        .get(dataURL + this.$route.params.name + "/games?" + buildQuery(p), { timeout: 5000 })
+        .get(this.$api_base_url + "/publishers/" + this.$route.params.name + "/games?" + buildQuery(p), { timeout: 5000 })
         .then((response) => {
           var cards = response.data;
 
@@ -147,16 +147,16 @@ export default {
           this.pageindex++;
           this.searchNumberOfResults = cards.hits.total;
           this.searchTimeOf = cards.took;
-          this.loading = false;
-          if (this.isDevelopment) console.log("...DONE!");
+          this.isLoading = false;
+          if (this.$isDevelopment) console.log("...DONE!");
         })
         .catch((error) => {
-          this.loading = false;
+          this.isLoading = false;
           this.allResults = true;
           this.errormessage = error.code + ": " + error.message;
         })
         .finally(() => {
-          this.loading = false;
+          this.isLoading = false;
         });
     },
     /* FAB scroll to top */
@@ -171,7 +171,7 @@ export default {
   },
   watch: {
     $route() {
-      if (this.isDevelopment) {
+      if (this.$isDevelopment) {
         console.log("WATCH route");
       }
       this.resetSearchResult();
@@ -179,9 +179,6 @@ export default {
     },
   },
   computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
     // calculate page size, so each "page" are filled out based on breakpoint
     // TODO: recalculate on resize window.
     getPageSize() {
@@ -203,7 +200,7 @@ export default {
   },
   mounted() {
     // fire event to parent
-    if (this.isDevelopment) {
+    if (this.$isDevelopment) {
       console.log("mounted()");
       console.log("looking for publisher: " + this.$route.params.name);
     }

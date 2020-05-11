@@ -119,11 +119,11 @@
       >
     </v-row>
     <v-toolbar color="grey" flat dense>
-      <span v-if="!loading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
+      <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
       <span v-else>searching: {{ this.$route.params.query }}</span>
       <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
-      ><v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear
+      ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
     ></v-toolbar>
     <v-system-bar dark window v-if="this.$route.params.query"
       ><span
@@ -157,7 +157,6 @@ import SearchResultGrid from "@/components/SearchResultGrid";
 import SearchResultList from "@/components/SearchResultList";
 import axios from "axios";
 
-var dataURL = "https://api.zxinfo.dk/api/zxinfo/v2/search?";
 // QUeryBuilder Helper
 var buildQuery = function(data) {
   // If the data is already a string, return it as-is
@@ -201,7 +200,7 @@ export default {
     return {
       completeSelected: [{ text: "", type: "" }],
       completeOptions: [{ text: "", type: "" }],
-      isLoadingOptions: false,
+      isLoadingOptions: true,
       errormessage: "",
       searchTerm: "",
       showFilterIcon: true,
@@ -244,7 +243,7 @@ export default {
       filterdrawer: null,
       listtype: "grid",
       fab: false,
-      loading: true,
+      isLoading: true,
       searchTimeOf: 0,
       searchNumberOfResults: 0,
       allResults: false,
@@ -256,35 +255,35 @@ export default {
   watch: {
     // reload page when linking to new entry
     $route() {
-      if (this.isDevelopment) {
+      if (this.$isDevelopment) {
         console.log("WATCH route");
       }
       this.resetSearchResult();
       this.loadMore();
     },
     searchTerm(val) {
-      if (this.isDevelopment) console.log("searchTerm() - " + val);
+      if (this.$isDevelopment) console.log("searchTerm() - " + val);
       if (!val) {
-        if (this.isDevelopment) console.log("no value, doing nothing");
+        if (this.$isDevelopment) console.log("no value, doing nothing");
         return;
       }
-      this.isLoading = true;
+      this.isLoadingOptions = true;
       this.errormessage = "";
 
-      // Lazily load input items
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get("https://api.zxinfo.dk/api/zxinfo/suggest/" + val, { timeout: 1500 })
+        .get(this.$api_base_url + "/suggest/" + val, { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
-          this.isLoading = false;
+          this.isLoadingOptions = false;
         })
         .catch((error) => {
           console.log(error);
           this.completeOptions = [];
-          this.isLoading = false;
           this.errormessage = error.code + ": " + error.message;
+          this.isLoadingOptions = false;
         })
-        .finally(() => (this.isLoading = false));
+        .finally(() => (this.isLoadingOptions = false));
     },
   },
   methods: {
@@ -315,7 +314,7 @@ export default {
     },
     getParametersFromRequest() {
       // resetSearchResultialize parameters from request
-      if (this.isDevelopment) console.log("getParametersFromRequest()");
+      if (this.$isDevelopment) console.log("getParametersFromRequest()");
 
       // this.searchTerm = this.$route.params.query ? this.$route.params.query : "";
       for (var qp in this.queryparameters) {
@@ -337,8 +336,8 @@ export default {
       this.filterdrawer = !this.filterdrawer;
     },
     resetSearchResult() {
-      if (this.isDevelopment) console.log("resetSearchResult()");
-      this.loading = false;
+      if (this.$isDevelopment) console.log("resetSearchResult()");
+      this.isLoading = false;
       this.searchTimeOf = 0;
       this.searchNumberOfResults = 0;
       this.allResults = false;
@@ -347,7 +346,7 @@ export default {
     },
     replaceURL() {
       // build URL for current selection
-      if (this.isDevelopment) console.log("replaceURL()");
+      if (this.$isDevelopment) console.log("replaceURL()");
       const queryparam = this.searchTerm ? this.searchTerm : "";
 
       var filterquery = {};
@@ -369,7 +368,7 @@ export default {
         }
       }
 
-      if (this.isDevelopment) console.log(filterquery);
+      if (this.$isDevelopment) console.log(filterquery);
       // fire event to parent
       if (this.queryparameters.contenttype) {
         this.$emit("updateContenttype", this.queryparameters.contenttype.value);
@@ -381,14 +380,14 @@ export default {
 
     /* NAVIGATION FILTERS */
     searchFilters() {
-      if (this.isDevelopment) {
+      if (this.$isDevelopment) {
         console.log("searchFilters()");
       }
       this.filterdrawer = false;
       this.replaceURL();
     },
     resetfilters() {
-      if (this.isDevelopment) console.log("resetfilters()");
+      if (this.$isDevelopment) console.log("resetfilters()");
       for (var agg in this.facets) {
         this.facets[agg].selected = [];
       }
@@ -402,7 +401,7 @@ export default {
       this.replaceURL();
     },
     uncheckFilter(group, value) {
-      if (this.isDevelopment) console.log("uncheck(): " + group + " = " + value);
+      if (this.$isDevelopment) console.log("uncheck(): " + group + " = " + value);
       var idx = this.facets[group].selected.indexOf(value);
       if (idx > -1) {
         this.facets[group].selected.splice(idx, 1);
@@ -411,7 +410,7 @@ export default {
       this.replaceURL();
     },
     uncheckGroup() {
-      if (this.isDevelopment) {
+      if (this.$isDevelopment) {
         console.log("uncheckGroup");
       }
       this.queryparameters.group = {};
@@ -429,34 +428,34 @@ export default {
       this.loadMore();
     },
     loadMore: function() {
-      if (this.isDevelopment) console.log("loadMore()");
-      this.loading = true;
+      if (this.$isDevelopment) console.log("loadMore()");
+      this.isLoading = true;
       this.allResults = true;
       this.errormessage = "";
 
       this.getParametersFromRequest();
 
       var cs = JSON.parse(JSON.stringify(this.completeSelected)).text;
-      if (this.isDevelopment) {
+      if (this.$isDevelopment) {
         console.log("- completeSelected: " + cs + ", " + typeof cs);
         console.log("- searchTerm: " + this.searchTerm);
       }
       let searchText = "";
       if (typeof cs !== "undefined" && !this.searchTerm) {
-        if (this.isDevelopment) console.log("=> Using completeSelected (what is selected)");
+        if (this.$isDevelopment) console.log("=> Using completeSelected (what is selected)");
         searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
       } else if (this.searchTerm && typeof cs === "undefined") {
         // entering URL /search/<text>
-        if (this.isDevelopment) console.log("=> Using searchTerm (what is typed in)");
+        if (this.$isDevelopment) console.log("=> Using searchTerm (what is typed in)");
         searchText = this.searchTerm;
       } else if (this.searchTerm === cs) {
-        if (this.isDevelopment) console.log("=> The same, use one");
+        if (this.$isDevelopment) console.log("=> The same, use one");
         searchText = this.searchTerm;
       } else if (this.searchTerm !== cs) {
-        if (this.isDevelopment) console.log("=> Different - using searchTerm");
+        if (this.$isDevelopment) console.log("=> Different - using searchTerm");
         searchText = this.searchTerm;
       } else {
-        if (this.isDevelopment) console.log("=> CONFUSED)");
+        if (this.$isDevelopment) console.log("=> CONFUSED)");
       }
 
       var p = {
@@ -483,10 +482,10 @@ export default {
         }
       }
 
-      if (this.isDevelopment) console.log(buildQuery(p));
-      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
+      if (this.$isDevelopment) console.log(buildQuery(p));
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get(dataURL + buildQuery(p), { timeout: 5000 })
+        .get(this.$api_base_url + "/v2/search?" + buildQuery(p), { timeout: 5000 })
         .then((response) => {
           var cards = response.data;
 
@@ -522,16 +521,16 @@ export default {
           this.pageindex++;
           this.searchNumberOfResults = cards.hits.total;
           this.searchTimeOf = cards.took;
-          this.loading = false;
-          if (this.isDevelopment) console.log("...DONE!");
+          this.isLoading = false;
+          if (this.$isDevelopment) console.log("...DONE!");
         })
         .catch((error) => {
-          this.loading = false;
+          this.isLoading = false;
           this.allResults = true;
           this.errormessage = error.code + ": " + error.message;
         })
         .finally(() => {
-          this.loading = false;
+          this.isLoading = false;
         });
     },
 
@@ -546,10 +545,6 @@ export default {
     },
   },
   computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
-
     // Only return non-empty facets
     activeFacets: function() {
       var active = {};
@@ -591,7 +586,7 @@ export default {
     },
   },
   mounted() {
-    if (this.isDevelopment) console.log("mounted()");
+    if (this.$isDevelopment) console.log("mounted()");
     if (this.$route.params.query) {
       this.completeOptions[0].text = this.completeSelected.text = this.searchTerm = this.$route.params.query;
     } else {

@@ -47,15 +47,15 @@ export default {
   methods: {
     searchSelected() {
       var searchText = JSON.parse(JSON.stringify(this.completeSelected));
-      if (this.isDevelopment) console.log("searchSelected() - signal value to parent: " + searchText);
+      if (this.$isDevelopment) console.log("searchSelected() - signal value to parent: " + searchText);
       this.$emit("input", searchText);
     },
 
     search() {
-      if (this.isDevelopment) console.log("search(): " + this.searchTerm);
+      if (this.$isDevelopment) console.log("search(): " + this.searchTerm);
 
       if (this.searchTerm) {
-        if (this.isDevelopment) console.log("search() - signal value to parent: " + this.searchTerm);
+        if (this.$isDevelopment) console.log("search() - signal value to parent: " + this.searchTerm);
         this.$emit("input", this.searchTerm);
       }
     },
@@ -68,14 +68,9 @@ export default {
       });
     },
   },
-  computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
-  },
   watch: {
     value(v) {
-      if (this.isDevelopment) console.log("model() - got input from parent: " + v);
+      if (this.$isDevelopment) console.log("model() - got input from parent: " + v);
       if (!v) {
         return;
       }
@@ -83,18 +78,17 @@ export default {
       this.search();
     },
     searchTerm(val) {
-      if (this.isDevelopment) console.log("searchTerm() - " + val);
+      if (this.$isDevelopment) console.log("searchTerm() - " + val);
       if (!val) {
-        if (this.isDevelopment) console.log("no value, doing nothing");
+        if (this.$isDevelopment) console.log("no value, doing nothing");
         return;
       }
       this.isLoading = true;
       this.errormessage = "";
 
-      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
-      // Lazily load input items
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get("https://api.zxinfo.dk/api/zxinfo/suggest/" + val, { timeout: 1500 })
+        .get(this.$api_base_url + "/suggest/" + val, { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoading = false;

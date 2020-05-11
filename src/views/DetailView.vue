@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="isLoaded">
+  <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="!isLoading">
     <DetailViewTopSmall v-if="$vuetify.breakpoint.xsOnly" v-bind:entry="entry"></DetailViewTopSmall>
     <DetailViewTop v-if="$vuetify.breakpoint.smAndUp" v-bind:entry="entry"></DetailViewTop>
 
@@ -15,15 +15,15 @@
               ><span v-else>{{ entry.title }}</span>
             </td>
           </tr>
-          <tr :style="!isDevelopment && !entry.alsoKnownAs ? 'display: none;' : ''">
+          <tr :style="!$isDevelopment && !entry.alsoKnownAs ? 'display: none;' : ''">
             <td :class="entry.alsoKnownAs ? 'font-weight-bold' : 'font-weight-light'">Also known as</td>
             <td style="white-space: normal;">{{ entry.alsoKnownAs }}</td>
           </tr>
-          <tr :style="!isDevelopment && !entry.availability ? 'display: none;' : ''">
+          <tr :style="!$isDevelopment && !entry.availability ? 'display: none;' : ''">
             <td :class="entry.availability ? 'font-weight-bold' : 'font-weight-light'">Availability</td>
             <td style="white-space: normal;">{{ entry.availability }}</td>
           </tr>
-          <tr :style="entry.originalReleaseYear == '-' && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="entry.originalReleaseYear == '-' && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalReleaseYear != '-' ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
             <td valign="top">
               <router-link :to="{ path: '/search', query: { year: entry.originalReleaseYear } }">{{
@@ -31,7 +31,7 @@
               }}</router-link>
             </td>
           </tr>
-          <tr :style="!entry.originalPublisher && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.originalPublisher && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalPublisher ? 'font-weight-bold' : 'font-weight-light'">Original Publisher</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
@@ -47,7 +47,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="entry.originalpublication == '-' && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="entry.originalpublication == '-' && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalpublication != '-' ? 'font-weight-bold' : 'font-weight-light'">Original publication</td>
             <td valign="top">
               <router-link :to="{ path: '/search', query: { originalpublication: entry.originalpublication } }">{{
@@ -55,7 +55,7 @@
               }}</router-link>
             </td>
           </tr>
-          <tr :style="!entry.authors.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.authors.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.authors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authors</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
@@ -74,7 +74,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.roles.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.roles.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.roles.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Roles</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
@@ -86,7 +86,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.licensed && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.licensed && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.licensed ? 'font-weight-bold' : 'font-weight-light'" valign="top">Tie-in Licence</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
@@ -101,7 +101,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.modFrom.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.modFrom.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.modFrom.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Mod from
             </td>
@@ -120,7 +120,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.inspiredBy.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.inspiredBy.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.inspiredBy.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Inspired by
             </td>
@@ -137,11 +137,11 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.messageLanguage && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.messageLanguage && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.messageLanguage ? 'font-weight-bold' : 'font-weight-light'">Message Language</td>
             <td valign="top">{{ entry.messageLanguage }}</td>
           </tr>
-          <tr :style="entry.machinetype == '-' && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="entry.machinetype == '-' && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.machinetype != '-' ? 'font-weight-bold' : 'font-weight-light'">Machine Type</td>
             <td>
               <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{
@@ -149,17 +149,17 @@
               }}</router-link>
             </td>
           </tr>
-          <tr :style="entry.genre == '-/-' && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="entry.genre == '-/-' && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.genre != '-/-' ? 'font-weight-bold' : 'font-weight-light'">Genre</td>
             <td>
               <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.genre }}</router-link>
             </td>
           </tr>
-          <tr :style="!entry.maximumPlayers && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.maximumPlayers && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.maximumPlayers ? 'font-weight-bold' : 'font-weight-light'">Maximum Players</td>
             <td valign="top">{{ entry.maximumPlayers }}</td>
           </tr>
-          <tr :style="!entry.multiTurnType && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.multiTurnType && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.multiTurnType ? 'font-weight-bold' : 'font-weight-light'">Multi-Turn Type</td>
             <td valign="top">
               <router-link :to="{ path: '/search', query: { multiplayermode: entry.multiTurnType } }">{{
@@ -167,7 +167,7 @@
               }}</router-link>
             </td>
           </tr>
-          <tr :style="!entry.controlOptions.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.controlOptions.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.controlOptions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
               Control Options
             </td>
@@ -185,15 +185,15 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.originalPriceAmount && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.originalPriceAmount && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.originalPriceAmount ? 'font-weight-bold' : 'font-weight-light'">Original Price</td>
             <td>{{ entry.originalPriceAmount }} {{ entry.originalPriceCurrency }}</td>
           </tr>
-          <tr :style="!entry.comments && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.comments && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.comments ? 'font-weight-bold' : 'font-weight-light'" valign="top">Comments</td>
             <td class="wrap-text"><span v-html="entry.comments"></span></td>
           </tr>
-          <tr :style="!entry.themedgroups.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.themedgroups.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.themedgroups.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Themes</td>
             <td>
               <v-row justify="start" align="center">
@@ -211,7 +211,7 @@
               </v-row>
             </td>
           </tr>
-          <tr :style="!entry.features.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.features.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.features.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Features</td>
             <td>
               <v-row justify="start" align="center">
@@ -229,7 +229,7 @@
               </v-row>
             </td>
           </tr>
-          <tr :style="!entry.competitions.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.competitions.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.competitions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Competitions</td>
             <td>
               <v-list flat dense class="pa-0">
@@ -245,7 +245,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.unsortedgroups.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.unsortedgroups.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.unsortedgroups.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Groups</td>
             <td>
               <v-row justify="start" align="center">
@@ -263,7 +263,7 @@
               </v-row>
             </td>
           </tr>
-          <tr :style="!entry.authoredWith.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.authoredWith.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.authoredWith.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authored with</td>
             <td>
               <v-list flat dense class="pa-0">
@@ -280,7 +280,7 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.otherPlatforms.length && !isDevelopment ? 'display: none;' : ''">
+          <tr :style="!entry.otherPlatforms.length && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Other platforms</td>
             <td>
               <v-row justify="start" align="center">
@@ -304,7 +304,7 @@
     >
     <v-expansion-panels class="pa-0" multiple>
       <!-- * RELEASES * -->
-      <v-expansion-panel :hidden="!entry.youtubelinks.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.youtubelinks.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.youtubelinks.length ? 'font-weight-bold' : 'font-weight-light'"
           >Video(s)</v-expansion-panel-header
         >
@@ -325,7 +325,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * RELEASES * -->
-      <v-expansion-panel :hidden="!entry.releases.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.releases.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
           >Releases</v-expansion-panel-header
         >
@@ -342,7 +342,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * AVAILABLE FORMATS * -->
-      <v-expansion-panel :hidden="!entry.availableformat.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.availableformat.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
           >Available formats</v-expansion-panel-header
         >
@@ -357,7 +357,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * PROTECTION SCHEMES * -->
-      <v-expansion-panel :hidden="!entry.protectionscheme.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.protectionscheme.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
           >Protection schemes</v-expansion-panel-header
         >
@@ -370,7 +370,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * INSPIRATION FOR * -->
-      <v-expansion-panel :hidden="!entry.inspirationFor.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.inspirationFor.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
           >Inspiration for</v-expansion-panel-header
         >
@@ -390,7 +390,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- *MODIFIED BY * -->
-      <v-expansion-panel :hidden="!entry.modifiedBy.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.modifiedBy.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
           >Modified by</v-expansion-panel-header
         >
@@ -410,7 +410,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * PROGRAMS AUTHORED WITH * -->
-      <v-expansion-panel :hidden="!entry.authoring.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.authoring.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
           >Programs authored</v-expansion-panel-header
         >
@@ -430,7 +430,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * IN COMPILATIONS  * -->
-      <v-expansion-panel :hidden="!entry.inCompilations.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.inCompilations.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
           >In compilations</v-expansion-panel-header
         >
@@ -450,7 +450,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * COMPILATION CONTENT  * -->
-      <v-expansion-panel :hidden="!entry.compilationContent.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.compilationContent.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.compilationContent.length ? 'font-weight-bold' : 'font-weight-light'"
           >Compilation content</v-expansion-panel-header
         >
@@ -471,7 +471,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * Series  * -->
-      <v-expansion-panel :hidden="!entry.series.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.series.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
           >Series</v-expansion-panel-header
         >
@@ -492,7 +492,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * TOSEC * -->
-      <v-expansion-panel :hidden="!entry.tosec.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.tosec.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
           >TOSEC Info</v-expansion-panel-header
         >
@@ -507,7 +507,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * Download info * -->
-      <v-expansion-panel :hidden="!entry.downloads.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.downloads.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
           >Download info</v-expansion-panel-header
         >
@@ -527,7 +527,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * Additional downloads  * -->
-      <v-expansion-panel :hidden="!entry.additionals.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.additionals.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
           >Additional Download</v-expansion-panel-header
         >
@@ -549,7 +549,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * Related links  * -->
-      <v-expansion-panel :hidden="!entry.relatedlinks.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.relatedlinks.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"
           >Related links</v-expansion-panel-header
         >
@@ -570,7 +570,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- * Related sites  * -->
-      <v-expansion-panel :hidden="!entry.relatedsites.length && !isDevelopment">
+      <v-expansion-panel :hidden="!entry.relatedsites.length && !$isDevelopment">
         <v-expansion-panel-header :class="entry.relatedsites.length ? 'font-weight-bold' : 'font-weight-light'"
           >Related sites</v-expansion-panel-header
         >
@@ -596,9 +596,6 @@
 <script>
 import axios from "axios";
 
-// import Vue from "vue";
-// import VueMeta from "vue-meta";
-
 import imageHelper from "@/helpers/image-helper";
 import DetailViewTopSmall from "@/components/DetailViewTopSmall";
 import DetailViewTop from "@/components/DetailViewTop";
@@ -610,11 +607,11 @@ import DetailViewTop from "@/components/DetailViewTop";
 export default {
   name: "DetailView",
   metaInfo() {
-    if (this.isDevelopment) {
+    if (this.$isDevelopment) {
       console.log("metaInfo()");
     }
 
-    if (this.isLoaded) {
+    if (!this.isLoading) {
       return {
         title: this.entry.title,
         titleTemplate: "%s | ZXInfo",
@@ -623,13 +620,13 @@ export default {
   },
   data() {
     return {
-      isLoaded: false,
+      isLoading: true,
       GameData: Object,
       BasicInfo: [],
     };
   },
   mounted() {
-    if (this.isDevelopment) {
+    if (this.$isDevelopment) {
       console.log("mounted()");
     }
     this.loadentry();
@@ -660,26 +657,27 @@ export default {
       window.open(url);
     },
     loadentry() {
-      this.isLoaded = false;
+      this.isLoading = true;
+
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get("https://api.zxinfo.dk/api/zxinfo/games/" + this.$route.params.entryid + "?mode=full")
+        .get(this.$api_base_url + "/games/" + this.$route.params.entryid + "?mode=full")
         .then((response) => {
           this.GameData = response.data;
-          this.isLoaded = true;
+          this.isLoading = false;
         })
         .catch((error) => {
-          this.isLoaded = false;
+          this.isLoading = false;
           console.log(error);
         })
-        .finally(() => {});
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
   },
   computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
     // cleaned version of JSON
 
     /*
@@ -804,7 +802,7 @@ export default {
           curMatch;
 
         while ((curMatch = rxp.exec(str))) {
-          if (this.isDevelopment) {
+          if (this.$isDevelopment) {
             console.log("Found match: " + curMatch[1]);
           }
           let embedded = curMatch[1];

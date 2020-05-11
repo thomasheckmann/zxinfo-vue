@@ -47,4 +47,5 @@ var getCoverImageForEntry = function(gamedata) {
 module.exports = {
   getCoverImage: getCoverImageForEntry,
   getScreenUrl: getScreenUrl,
+  DEFAULT_SRC: "https://zxinfo.dk/media/images/empty.png",
 };

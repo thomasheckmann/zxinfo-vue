@@ -53,6 +53,7 @@ export default {
     },
   },
   mounted() {
+    if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
     axios
       .get(
         "https://api.zxinfo.dk/api/zxinfo/v2/search?sort=title_asc&mode=tiny&contenttype=SOFTWARE&size=2000&offset=0&machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
@@ -68,7 +69,7 @@ export default {
           }
         }
         this.loading = false;
-        if (this.isDevelopment) console.log("...DONE!");
+        if (this.$isDevelopment) console.log("...DONE!");
         //this.items.sort((a, b) => (a._id > b._id ? 1 : -1));
       })
       .catch((error) => {

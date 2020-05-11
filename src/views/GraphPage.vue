@@ -7,7 +7,7 @@
           <v-autocomplete
             v-model="name1"
             :items="nameOptions1"
-            :loading="loadingNames2"
+            :loading="isLoadingNames1"
             :search-input.sync="searchName1"
             hide-no-data
             item-text="text"
@@ -24,7 +24,7 @@
           <v-autocomplete
             v-model="name2"
             :items="nameOptions2"
-            :loading="loadingNames2"
+            :loading="isLoadingNames2"
             :search-input.sync="searchName2"
             hide-no-data
             item-text="text"
@@ -49,7 +49,7 @@
     <div align="center" class="red--text font-weight-black" v-if="errormessage">
       {{ errormessage }}
     </div>
-    <div align="center" class="red--text font-weight-black" v-if="!loading && steps && steps.length == 0">
+    <div align="center" class="red--text font-weight-black" v-if="!isLoading && steps && steps.length == 0">
       Ooops! you got me, didn't find a relation.
     </div>
     <!-- DISPLAY PATH -->
@@ -138,13 +138,13 @@ export default {
       searchName2: "",
       nameOptions1: [{ text: "William J. Wray", type: "AUTHOR" }],
       nameOptions2: [{ text: "Matthew Smith", type: "AUTHOR" }],
-      loadingNames1: false,
-      loadingNames2: false,
+      isLoadingNames1: true,
+      isLoadingNames2: true,
       includeall: false,
       includerereleases: false,
       includeallsteps: false,
       errormessage: "",
-      loading: true,
+      isLoading: true,
       steps: null,
     };
   },
@@ -152,16 +152,16 @@ export default {
   methods: {
     lookUpNames: function(name) {
       this.errormessage = "";
-      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
 
-      return axios.get("https://api.zxinfo.dk/api/zxinfo/suggest/author/" + name, {
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+      return axios.get(this.$api_base_url + "/suggest/author/" + name, {
         timeout: 5000,
       });
     },
     loadMore: function() {
-      if (this.isDevelopment) console.log("loadMore()");
+      if (this.$isDevelopment) console.log("loadMore()");
       this.steps = [];
-      this.loading = true;
+      this.isLoading = true;
       this.errormessage = "";
 
       if (!this.name1 || !this.name2) return;
@@ -170,7 +170,7 @@ export default {
       var p1 = JSON.parse(JSON.stringify(this.name1));
       var p2 = JSON.parse(JSON.stringify(this.name2));
 
-      if (this.isDevelopment) console.log(p1.text + " = > " + p2.text);
+      if (this.$isDevelopment) console.log(p1.text + " = > " + p2.text);
 
       var include = "?";
       if (this.includeall) {
@@ -183,33 +183,29 @@ export default {
         include += "&includeallsteps=1";
       }
 
-      if (this.isDevelopment) console.log("CALLING ZXINFO API...()");
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get("https://api.zxinfo.dk/api/zxinfo/graph/path/" + p1.text + "/" + p2.text + include, {
+        .get(this.$api_base_url + "/graph/path/" + p1.text + "/" + p2.text + include, {
           timeout: 5000,
         })
         .then((response) => {
           this.steps = response.data.result;
-          this.loading = false;
-          if (this.isDevelopment) console.log("...DONE!");
+          this.isLoading = false;
+          if (this.$isDevelopment) console.log("...DONE!");
         })
         .catch((error) => {
-          this.loading = false;
+          this.isLoading = false;
           this.errormessage = error.code + ": " + error.message;
         })
         .finally(() => {
-          this.loading = false;
+          this.isLoading = false;
         });
     },
     openUrl: function(url) {
       window.open(url);
     },
   },
-  computed: {
-    isDevelopment() {
-      return process.env.NODE_ENV == "development";
-    },
-  },
+  computed: {},
   watch: {
     searchName1(value) {
       if (!value) {
@@ -219,15 +215,16 @@ export default {
       // least 200 milliseconds. This can be changed to
       // suit your needs.
       //debounce(this.makeSearch, 200)(value, this);
+      this.isLoadingNames1 = true;
       this.lookUpNames(value)
         .then((response) => {
           this.nameOptions1 = response.data;
-          this.loading = false;
-          if (this.isDevelopment) console.log("...DONE!");
+          this.isLoadingNames1 = false;
+          if (this.$isDevelopment) console.log("...DONE!");
         })
         .catch((error) => {
           console.log(error);
-          this.loading = false;
+          this.isLoadingNames1 = false;
           this.nameOptions1 = [];
           this.errormessage = error.code + ": " + error.message;
         });
@@ -240,15 +237,16 @@ export default {
       // least 200 milliseconds. This can be changed to
       // suit your needs.
       //debounce(this.makeSearch, 200)(value, this);
+      this.isLoadingNames2 = true;
       this.lookUpNames(value)
         .then((response) => {
           this.nameOptions2 = response.data;
-          this.loading = false;
-          if (this.isDevelopment) console.log("...DONE!");
+          this.isLoadingNames2 = false;
+          if (this.$isDevelopment) console.log("...DONE!");
         })
         .catch((error) => {
           console.log(error);
-          this.loading = false;
+          this.isLoadingNames2 = false;
           this.nameOptions2 = [];
           this.errormessage = error.code + ": " + error.message;
         });
