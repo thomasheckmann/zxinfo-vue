@@ -116,13 +116,15 @@
       <v-divider></v-divider>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title><router-link to="/animated">Animated Loading Screens</router-link></v-list-item-title>
+          <v-list-item-subtitle
+            ><router-link class="plain" to="/animated">Animated Loading Screens</router-link></v-list-item-subtitle
+          >
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title><router-link to="/graph">Six degrees</router-link></v-list-item-title>
+          <v-list-item-subtitle><router-link class="plain" to="/graph">Six degrees</router-link></v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
