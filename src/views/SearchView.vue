@@ -55,40 +55,41 @@
       </template>
     </v-navigation-drawer>
 
-    <!-- search bar -->
-    <v-toolbar flat class="py-4">
-      <v-autocomplete
-        @change="showinfo"
-        @keyup.enter="submitSearch"
-        v-model="completeSelected"
-        :items="completeOptions"
-        :loading="isLoadingOptions"
-        :search-input.sync="searchTerm"
-        hide-no-data
-        item-text="text"
-        item-value="text"
-        label="What is your favorite game?"
-        :prepend-inner-icon="'mdi-magnify'"
-        @click:prepend-inner="submitSearch"
-        @click:append-outer="filterdrawer = !filterdrawer"
-        :append-outer-icon="showFilterIcon ? 'mdi-filter-variant' : ''"
-        clearable
-        return-object
-        dense
-        :error="errormessage !== ''"
-        :error-messages="errormessage"
-        rounded
-        full-width
-        solo
-      >
-        <template v-slot:item="{ item }"
-          ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
-          ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
-          ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span
-        ></template>
-      </v-autocomplete>
-    </v-toolbar>
-
+    <v-card flat class="mx-auto" max-width="100%">
+      <!-- search bar -->
+      <v-toolbar flat class="py-4">
+        <v-autocomplete
+          @change="showinfo"
+          @keyup.enter="submitSearch"
+          v-model="completeSelected"
+          :items="completeOptions"
+          :loading="isLoadingOptions"
+          :search-input.sync="searchTerm"
+          hide-no-data
+          item-text="text"
+          item-value="text"
+          label="What is your favorite game?"
+          :prepend-inner-icon="'mdi-magnify'"
+          @click:prepend-inner="submitSearch"
+          @click:append-outer="filterdrawer = !filterdrawer"
+          :append-outer-icon="showFilterIcon ? 'mdi-filter-variant' : ''"
+          clearable
+          return-object
+          dense
+          :error="errormessage !== ''"
+          :error-messages="errormessage"
+          rounded
+          full-width
+          solo
+        >
+          <template v-slot:item="{ item }"
+            ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+            ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
+            ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span
+          ></template>
+        </v-autocomplete>
+      </v-toolbar>
+    </v-card>
     <!-- chip section for filters -->
     <v-row justify="start" align="center" class="px-2 py-1">
       <v-chip
