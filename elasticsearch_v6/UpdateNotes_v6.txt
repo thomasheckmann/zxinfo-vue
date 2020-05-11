@@ -1,0 +1,17 @@
+CHANGELOG:
+ES 2.4.x -> 6.1.x
+
+Index/Type -> Index only
+
+Mapping:
+string -> text
+string/not_analyzed -> keyword
+
+Aggs: terms - by default shows top 10
+
+https://www.elastic.co/guide/en/elasticsearch/reference/5.0/query-dsl-filtered-query.html
+
+random 5 (home.js)
+
+zxinfo-services - npm uninstall elasticsearch --save-dev / install => upgrade to 14.0.0 (6.0 API)
+zxinfo-app - bower uninstall elasticsearch / install --save => upgrade to 14.0.0 (6.0 API)
