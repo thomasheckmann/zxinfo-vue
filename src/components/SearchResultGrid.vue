@@ -1,5 +1,5 @@
 <template>
-  <v-container justify-start class="scroll-y pa-0" fluid>
+  <v-container justify-start class="scroll-y pa-0">
     <v-row :align="'start'" :justify="'start'" dense>
       <v-col v-for="(card, index) in cards" :key="index" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
         <v-responsive :aspect-ratio="1 / 1">
