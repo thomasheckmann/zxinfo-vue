@@ -119,6 +119,9 @@
       >
     </v-row>
     <v-toolbar color="grey" flat dense>
+      <v-icon class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
+        >mdi-monitor-screenshot</v-icon
+      ><v-icon @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''">mdi-book-open-outline</v-icon>
       <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
       <span v-else>searching: {{ this.$route.params.query }}</span>
       <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
@@ -134,6 +137,7 @@
     <!-- SEARCH RESULT -->
     <SearchResultGrid
       v-if="listtype == 'grid'"
+      v-bind:imagetype="imagetype"
       v-bind:cards="cards"
       v-bind:allResults="allResults"
       v-bind:getPageSize="getPageSize"
@@ -142,6 +146,7 @@
     />
     <SearchResultList
       v-if="listtype == 'list'"
+      v-bind:imagetype="imagetype"
       v-bind:cards="cards"
       v-bind:allResults="allResults"
       v-bind:getPageSize="getPageSize"
@@ -200,7 +205,7 @@ export default {
     return {
       completeSelected: [{ text: "", type: "" }],
       completeOptions: [{ text: "", type: "" }],
-      isLoadingOptions: true,
+      isLoadingOptions: false,
       errormessage: "",
       searchTerm: "",
       showFilterIcon: true,
@@ -242,8 +247,9 @@ export default {
       },
       filterdrawer: null,
       listtype: "grid",
+      imagetype: "inlay",
       fab: false,
-      isLoading: true,
+      isLoading: false,
       searchTimeOf: 0,
       searchNumberOfResults: 0,
       allResults: false,

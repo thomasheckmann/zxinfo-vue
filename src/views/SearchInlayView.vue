@@ -204,7 +204,7 @@ export default {
       isLoadingOptions: false,
       errormessage: "",
       searchTerm: "",
-      showFilterIcon: false,
+      showFilterIcon: true,
       queryparameters: {
         group: { name: "group", value: "" },
         groupname: { name: "groupname", value: "" },

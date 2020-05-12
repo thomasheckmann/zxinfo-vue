@@ -2,7 +2,7 @@
   <v-card outlined>
     <router-link :to="'/details/' + entry.id">
       <!-- image -->
-      <ImageContainer v-bind:entry="entry"></ImageContainer>
+      <ImageContainer v-bind:entry="entry" v-bind:imagetype="imagetype"></ImageContainer>
     </router-link>
     <v-card-title class="d-inline-block text-truncate" style="max-width: 100%;"
       ><v-badge v-if="entry.availability == 'MIA'" color="pink" dot> {{ entry.title }} </v-badge>
@@ -59,9 +59,10 @@ import ImageContainer from "@/components/Image";
 
 export default {
   name: "GameCard",
-  props: ["GameData"],
+  props: ["GameData", "imagetype"],
   methods: {
     getCoverImage: imageHelper.getCoverImage,
+    getScreenUrl: imageHelper.getScreenUrl,
     search() {
       if (this.searchterm) {
         this.$emit("input", this.searchterm);
@@ -70,6 +71,9 @@ export default {
   },
   components: { ImageContainer },
   computed: {
+    getDefaultImageSrc() {
+      return imageHelper.DEFAULT_SRC;
+    },
     // cleaned version of JSON
     entry() {
       let entry = {};
@@ -111,6 +115,20 @@ export default {
       entry.score.score = this.GameData._source.score.score;
       entry.score.votes = this.GameData._source.score.votes;
       entry.coverimage = this.getCoverImage(this.GameData);
+
+      // look for inlay
+      var inlays = [];
+      for (var idx = 0; idx < this.GameData._source.additionals.length; idx++) {
+        let item = this.GameData._source.additionals[idx];
+        if (item.type === "Cassette inlay") {
+          inlays.push(item);
+        }
+      }
+
+      inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
+      entry.inlayimage = this.getDefaultImageSrc;
+      if (inlays[0]) entry.inlayimage = this.getScreenUrl(inlays[0].url);
+      if (this.$isDevelopment) console.log("inlay: " + entry.inlayimage);
 
       return entry;
     },
