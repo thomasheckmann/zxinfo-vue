@@ -1,0 +1,31 @@
+<template>
+  <v-container justify-start class="scroll-y pa-0">
+    <v-row :align="'start'" :justify="'start'" dense>
+      <v-col v-for="(card, index) in cards" :key="index" :xl="2" :lg="2" :md="3" :sm="6" :xs="12">
+        <v-responsive :aspect-ratio="1 / 1">
+          <GameCardInlay v-bind:GameData="card" :id="index / getPageSize == pageindex - 1 ? pageindex : ''" />
+        </v-responsive>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center">
+      <v-col class="text-center" cols="12" sm="4">
+        <div class="my-2">
+          <v-btn :disabled="allResults" @click="loadMore" color="black" :dark="!allResults">SHOW MORE</v-btn>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+<script>
+import GameCardInlay from "@/components/GameCardInlay";
+export default {
+  name: "SearchResultInlay",
+  props: ["cards", "allResults", "getPageSize", "pageindex", "searchNumberOfResults"],
+  methods: {
+    loadMore: function() {
+      this.$emit("loadMore", true);
+    },
+  },
+  components: { GameCardInlay },
+};
+</script>
