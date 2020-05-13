@@ -72,7 +72,7 @@
         :prepend-inner-icon="'mdi-magnify'"
         @click:prepend-inner="submitSearch"
         @click:append-outer="filterdrawer = !filterdrawer"
-        :append-outer-icon="showFilterIcon ? 'mdi-filter-variant' : ''"
+        :append-outer-icon="isEntrySearch ? 'mdi-filter-variant' : ''"
         clearable
         return-object
         dense
@@ -82,11 +82,19 @@
         full-width
         solo
       >
-        <template v-slot:item="{ item }"
-          ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
-          ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
-          ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span
-        ></template>
+        <template v-slot:item="{ item }">
+          <div v-if="isEntrySearch">
+            <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+            ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
+            ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span>
+          </div>
+          <div v-if="isPublisherPage">
+            <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon
+            ><v-icon v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon
+            ><v-icon v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon
+            ><v-icon v-if="item.labeltype == ''" left>mdi-map-marker-question</v-icon> <span v-html="highlight(item.text)"></span>
+          </div>
+        </template>
       </v-combobox>
     </v-toolbar>
 
@@ -122,18 +130,15 @@
     <v-toolbar color="grey" flat dense>
       <v-icon class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
         >mdi-monitor-screenshot</v-icon
-      ><v-icon @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''">mdi-book-open-outline</v-icon>
+      ><v-icon class="pr-1" @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''"
+        >mdi-book-open-outline</v-icon
+      >
       <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
       <span v-else>searching: {{ this.$route.params.query }}</span>
       <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
       ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
       ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
     ></v-toolbar>
-    <v-system-bar dark window v-if="this.$route.params.query"
-      ><span
-        ><kbd style="white-space: normal;" class="wrap-text">{{ this.$route.params.query }}</kbd></span
-      ></v-system-bar
-    >
     <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar>
     <!-- SEARCH RESULT -->
     <SearchResultGrid
@@ -209,7 +214,6 @@ export default {
       isLoadingOptions: false,
       errormessage: "",
       searchTerm: "",
-      showFilterIcon: true,
       queryparameters: {
         group: { name: "group", value: "" },
         groupname: { name: "groupname", value: "" },
@@ -279,7 +283,7 @@ export default {
 
       if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get(this.$api_base_url + "/suggest/" + val, { timeout: 1500 })
+        .get(this.$api_base_url + this.suggestEndpoint + val, { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoadingOptions = false;
@@ -298,9 +302,15 @@ export default {
       console.log("showinfo()");
       console.log("showinfo() - completeSelected: " + this.completeSelected);
       console.log("showinfo() - searchTerm: " + this.searchTerm);
-      var searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
-      console.log("showinfo() - searchText: " + searchText);
-      this.searchTerm = searchText;
+      var selected = this.completeSelected;
+      var selectedText;
+      if (selected === Object(selected)) {
+        selectedText = JSON.parse(JSON.stringify(selected)).text;
+      } else {
+        selectedText = selected;
+      }
+      console.log("showinfo() - searchText: " + selectedText);
+      this.searchTerm = selectedText;
       this.submitSearch();
     },
     submitSearch() {
@@ -322,7 +332,11 @@ export default {
     getParametersFromRequest() {
       // resetSearchResultialize parameters from request
       if (this.$isDevelopment) console.log("getParametersFromRequest()");
-
+      if (this.$route.params.query) {
+        this.completeSelected = this.searchTerm = this.$route.params.query;
+      } else {
+        this.completeOptions = [];
+      }
       // this.searchTerm = this.$route.params.query ? this.$route.params.query : "";
       for (var qp in this.queryparameters) {
         var paramname = this.queryparameters[qp].name;
@@ -350,6 +364,7 @@ export default {
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
+      this.searchTerm = "";
     },
     replaceURL() {
       // build URL for current selection
@@ -382,7 +397,10 @@ export default {
       } else {
         this.$emit("updateContenttype", "");
       }
-      this.$router.replace({ path: `/search/${queryparam}`, query: filterquery }, () => {});
+      var path;
+      if (this.isEntrySearch) path = "search";
+      if (this.isPublisherPage) path = "publisher";
+      this.$router.replace({ path: `/${path}/${queryparam}`, query: filterquery }, () => {});
     },
 
     /* NAVIGATION FILTERS */
@@ -496,27 +514,32 @@ export default {
 
       if (this.$isDevelopment) console.log(buildQuery(p));
       if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+
+      var dataURL;
+      if (this.isEntrySearch) dataURL = this.$api_base_url + "/v2/search?" + buildQuery(p);
+      if (this.isPublisherPage)
+        dataURL = this.$api_base_url + "/publishers/" + this.$route.params.query + "/games?" + buildQuery(p);
       axios
-        .get(this.$api_base_url + "/v2/search?" + buildQuery(p), { timeout: 5000 })
+        .get(dataURL, { timeout: 5000 })
         .then((response) => {
           var cards = response.data;
 
           // initialize options for filters
-
-          for (var agg in this.facets) {
-            this.facets[agg].items = [];
-            if (agg === "controls") {
-              // temp fix...
-              for (var ic = 0; ic < cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets.length; ic++) {
-                this.facets[agg].items.push(cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets[ic]);
-              }
-            } else {
-              for (var i = 0; i < cards.aggregations.all_entries[agg]["filtered_" + agg].buckets.length; i++) {
-                this.facets[agg].items.push(cards.aggregations.all_entries[agg]["filtered_" + agg].buckets[i]);
+          if (this.isEntrySearch) {
+            for (var agg in this.facets) {
+              this.facets[agg].items = [];
+              if (agg === "controls") {
+                // temp fix...
+                for (var ic = 0; ic < cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets.length; ic++) {
+                  this.facets[agg].items.push(cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets[ic]);
+                }
+              } else {
+                for (var i = 0; i < cards.aggregations.all_entries[agg]["filtered_" + agg].buckets.length; i++) {
+                  this.facets[agg].items.push(cards.aggregations.all_entries[agg]["filtered_" + agg].buckets[i]);
+                }
               }
             }
           }
-
           // append to cards
           if (cards.hits.hits) {
             for (var ii = 0; ii < cards.hits.hits.length; ii++) {
@@ -557,6 +580,17 @@ export default {
     },
   },
   computed: {
+    isEntrySearch() {
+      return this.$route.name == "EntrySearch";
+    },
+    isPublisherPage() {
+      return this.$route.name == "PublisherPage";
+    },
+    suggestEndpoint() {
+      if (this.isEntrySearch) return "/suggest/";
+      else if (this.isPublisherPage) return "/suggest/publisher/";
+      else return "/suggest/";
+    },
     // Only return non-empty facets
     activeFacets: function() {
       var active = {};
@@ -598,7 +632,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$isDevelopment) console.log("mounted()");
+    if (this.$isDevelopment) console.log("mounted(): " + this.$route.params.query);
     if (this.$route.params.query) {
       this.completeSelected = this.searchTerm = this.$route.params.query;
     } else {

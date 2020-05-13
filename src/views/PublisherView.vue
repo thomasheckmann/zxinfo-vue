@@ -1,9 +1,44 @@
 <template>
-  <v-container justify-start class="scroll-y ma-0 px-0 py-4" fluid>
+  <v-card flat class="mx-auto" max-width="100%">
     <!-- FAB button for scroll to top -->
     <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary" @click="toTop">
       <v-icon>keyboard_arrow_up</v-icon>
     </v-btn>
+
+    <!-- search bar -->
+    <v-toolbar flat class="py-4">
+      <v-combobox
+        @change="showinfo"
+        @keyup.enter="submitSearch"
+        v-model="completeSelected"
+        :items="completeOptions"
+        :loading="isLoadingOptions"
+        :search-input.sync="searchTerm"
+        hide-no-data
+        no-filter
+        item-text="text"
+        item-value="text"
+        label="What is your favorite game?"
+        :prepend-inner-icon="'mdi-magnify'"
+        @click:prepend-inner="submitSearch"
+        @click:append-outer="filterdrawer = !filterdrawer"
+        :append-outer-icon="showFilterIcon ? 'mdi-filter-variant' : ''"
+        clearable
+        return-object
+        dense
+        :error="errormessage !== ''"
+        :error-messages="errormessage"
+        rounded
+        full-width
+        solo
+      >
+        <template v-slot:item="{ item }"
+          ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+          ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
+          ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span
+        ></template>
+      </v-combobox>
+    </v-toolbar>
 
     <v-toolbar color="grey" flat dense
       ><v-icon class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
@@ -43,7 +78,7 @@
       v-on:loadPage="loadPage"
     />
     <!-- SEARCH RESULT -->
-  </v-container>
+  </v-card>
 </template>
 <script>
 import SearchResultGrid from "@/components/SearchResultGrid";
@@ -89,6 +124,11 @@ export default {
   },
   data() {
     return {
+      completeSelected: null,
+      completeOptions: [],
+      isLoadingOptions: false,
+      searchTerm: "",
+      showFilterIcon: true,
       errormessage: "",
       listtype: "grid",
       imagetype: "screen",
@@ -103,6 +143,31 @@ export default {
   },
   components: { SearchResultGrid, SearchResultList },
   methods: {
+    showinfo() {
+      console.log("showinfo()");
+      console.log("showinfo() - completeSelected: " + this.completeSelected);
+      console.log("showinfo() - searchTerm: " + this.searchTerm);
+      var searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      console.log("showinfo() - searchText: " + searchText);
+      this.searchTerm = searchText;
+      this.submitSearch();
+    },
+
+    submitSearch() {
+      console.log("submitSearch()");
+      console.log("submitSearch() - completeSelected: " + this.completeSelected);
+      console.log("submitSearch() - searchTerm: " + this.searchTerm);
+      this.loadMore();
+      // this.replaceURL();
+    },
+    highlight(content) {
+      if (!this.searchTerm) {
+        return content;
+      }
+      return content.replace(new RegExp(this.searchTerm, "gi"), (match) => {
+        return '<span class="font-weight-bold">' + match + "</span>";
+      });
+    },
     resetSearchResult() {
       if (this.$isDevelopment) console.log("resetSearchResult()");
       this.isLoading = false;
@@ -183,6 +248,30 @@ export default {
       this.resetSearchResult();
       this.loadMore();
     },
+    searchTerm(val) {
+      if (this.$isDevelopment) console.log("searchTerm() - " + val);
+      if (!val) {
+        if (this.$isDevelopment) console.log("no value, doing nothing");
+        return;
+      }
+      this.isLoadingOptions = true;
+      this.errormessage = "";
+
+      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+      axios
+        .get(this.$api_base_url + "/suggest/publisher/" + val, { timeout: 1500 })
+        .then((response) => {
+          this.completeOptions = response.data;
+          this.isLoadingOptions = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.completeOptions = [];
+          this.errormessage = error.code + ": " + error.message;
+          this.isLoadingOptions = false;
+        })
+        .finally(() => (this.isLoadingOptions = false));
+    },
   },
   computed: {
     // calculate page size, so each "page" are filled out based on breakpoint
@@ -209,6 +298,11 @@ export default {
     if (this.$isDevelopment) {
       console.log("mounted()");
       console.log("looking for publisher: " + this.$route.params.name);
+    }
+    if (this.$route.params.name) {
+      this.completeSelected = this.searchTerm = this.$route.params.name;
+    } else {
+      this.completeOptions = [];
     }
     this.$emit("updateContenttype", "PUBLISHER");
     this.loadMore();

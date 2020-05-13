@@ -6,6 +6,10 @@
           <v-card-text>
             <div>
               <SearchInput v-model="searchText" />
+              <div class="text-center">
+                <v-btn elevation="0" small @action="search">ZXDB search</v-btn>&nbsp;
+                <v-btn elevation="0" small disabled="">I'm Feeling Lucky</v-btn>
+              </div>
               <p></p>
               <p class="text-center .caption .font-weight-thin	">ZXDB update 29.04.2020</p>
             </div>
