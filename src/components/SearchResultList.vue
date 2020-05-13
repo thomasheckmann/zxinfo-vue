@@ -6,7 +6,7 @@
           <v-row justify="start" align="start" no-gutters>
             <v-col cols="2">
               <router-link :to="{ path: '/details/' + entry(card).id }">
-                <ImageContainer v-bind:entry="entry(card)"></ImageContainer>
+                <ImageContainer v-bind:entry="entry(card)" v-bind:imagetype="imagetype"></ImageContainer>
               </router-link>
             </v-col>
             <v-col
@@ -46,7 +46,7 @@ import imageHelper from "@/helpers/image-helper";
 import ImageContainer from "@/components/Image";
 
 export default {
-  name: "SearchResultGrid",
+  name: "SearchResultList",
   data() {
     return {
       page: this.pageindex,
@@ -57,14 +57,18 @@ export default {
       this.$emit("loadPage", p - 1);
     },
   },
-  props: ["cards", "allResults", "getPageSize", "pageindex", "searchNumberOfResults"],
+  props: ["cards", "allResults", "getPageSize", "pageindex", "searchNumberOfResults", "imagetype"],
   computed: {
     numberOfPages() {
       return Math.floor(this.searchNumberOfResults / this.getPageSize) + 1;
     },
+    getDefaultImageSrc() {
+      return imageHelper.DEFAULT_SRC;
+    },
   },
   methods: {
     getCoverImage: imageHelper.getCoverImage,
+    getScreenUrl: imageHelper.getScreenUrl,
     // cleaned version of JSON
     entry: function(GameData) {
       let entry = {};
@@ -105,6 +109,20 @@ export default {
       entry.score.score = GameData._source.score.score;
       entry.score.votes = GameData._source.score.votes;
       entry.coverimage = this.getCoverImage(GameData);
+
+      // look for inlay
+      var inlays = [];
+      for (var idx = 0; idx < GameData._source.additionals.length; idx++) {
+        let item = GameData._source.additionals[idx];
+        if (item.type === "Cassette inlay") {
+          inlays.push(item);
+        }
+      }
+
+      inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
+      entry.inlayimage = this.getDefaultImageSrc;
+      if (inlays[0]) entry.inlayimage = this.getScreenUrl(inlays[0].url);
+      if (this.$isDevelopment) console.log("inlay: " + entry.inlayimage);
 
       return entry;
     },
