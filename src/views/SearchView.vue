@@ -442,7 +442,10 @@ export default {
 
       this.getParametersFromRequest();
 
-      var cs = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      var cs = "";
+      if (this.completeSelected) {
+        cs = JSON.parse(JSON.stringify(this.completeSelected)).text;
+      }
       if (this.$isDevelopment) {
         console.log("- completeSelected: " + cs + ", " + typeof cs);
         console.log("- searchTerm: " + this.searchTerm);
@@ -450,7 +453,9 @@ export default {
       let searchText = "";
       if (typeof cs !== "undefined" && !this.searchTerm) {
         if (this.$isDevelopment) console.log("=> Using completeSelected (what is selected)");
-        searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+        if (this.completeSelected) {
+          searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
+        }
       } else if (this.searchTerm && typeof cs === "undefined") {
         // entering URL /search/<text>
         if (this.$isDevelopment) console.log("=> Using searchTerm (what is typed in)");
