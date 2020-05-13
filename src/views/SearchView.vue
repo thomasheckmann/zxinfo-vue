@@ -57,7 +57,7 @@
 
     <!-- search bar -->
     <v-toolbar flat class="py-4">
-      <v-autocomplete
+      <v-combobox
         @change="showinfo"
         @keyup.enter="submitSearch"
         v-model="completeSelected"
@@ -65,6 +65,7 @@
         :loading="isLoadingOptions"
         :search-input.sync="searchTerm"
         hide-no-data
+        no-filter
         item-text="text"
         item-value="text"
         label="What is your favorite game?"
@@ -86,7 +87,7 @@
           ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
           ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span
         ></template>
-      </v-autocomplete>
+      </v-combobox>
     </v-toolbar>
 
     <!-- chip section for filters -->

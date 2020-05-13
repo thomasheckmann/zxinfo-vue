@@ -1,7 +1,6 @@
 <template>
   <v-combobox
     @change="searchSelected"
-    @keyup.enter="search"
     v-model="completeSelected"
     :items="completeOptions"
     :loading="isLoading"
@@ -96,6 +95,7 @@ export default {
       axios
         .get(this.$api_base_url + "/suggest/" + val, { timeout: 1500 })
         .then((response) => {
+          console.log(response.data);
           this.completeOptions = response.data;
           this.isLoading = false;
         })

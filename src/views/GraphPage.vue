@@ -10,6 +10,7 @@
             :loading="isLoadingNames1"
             :search-input.sync="searchName1"
             hide-no-data
+            no-filter
             item-text="text"
             item-value="text"
             label="Favorite ZX Spectrum programmer you like"
@@ -27,6 +28,7 @@
             :loading="isLoadingNames2"
             :search-input.sync="searchName2"
             hide-no-data
+            no-filter
             item-text="text"
             item-value="text"
             label="Another ZX Spectrum programmer you like"

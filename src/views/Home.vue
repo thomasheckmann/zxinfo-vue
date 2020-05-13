@@ -37,7 +37,14 @@ export default {
     },
   },
   watch: {
-    searchText() {
+    searchText(v) {
+      console.log("watch: " + v);
+      if (v === Object(v)) {
+        console.log("Got object: " + v.text);
+        this.searchText = v.text;
+      } else {
+        console.log("plain value: " + v);
+      }
       this.search();
     },
   },
