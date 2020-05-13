@@ -7,7 +7,7 @@
             v-bind:GameData="card"
             v-bind:imagetype="imagetype"
             :id="index / getPageSize == pageindex - 1 ? pageindex : ''"
-          />
+          ></GameCard>
         </v-responsive>
       </v-col>
     </v-row>
