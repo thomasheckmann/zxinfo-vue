@@ -204,8 +204,8 @@ export default {
   },
   data: function() {
     return {
-      completeSelected: [{ text: "", type: "" }],
-      completeOptions: [{ text: "", type: "" }],
+      completeSelected: null,
+      completeOptions: [],
       isLoadingOptions: false,
       errormessage: "",
       searchTerm: "",
@@ -595,7 +595,7 @@ export default {
   mounted() {
     if (this.$isDevelopment) console.log("mounted()");
     if (this.$route.params.query) {
-      this.completeOptions[0].text = this.completeSelected.text = this.searchTerm = this.$route.params.query;
+      this.completeSelected = this.searchTerm = this.$route.params.query;
     } else {
       this.completeOptions = [];
     }
