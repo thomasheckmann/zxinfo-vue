@@ -247,7 +247,7 @@ export default {
       },
       filterdrawer: null,
       listtype: "grid",
-      imagetype: "inlay",
+      imagetype: "screen",
       fab: false,
       isLoading: false,
       searchTimeOf: 0,
