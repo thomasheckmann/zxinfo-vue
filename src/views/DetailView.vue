@@ -35,7 +35,12 @@
             <td :class="entry.originalPublisher ? 'font-weight-bold' : 'font-weight-light'">Original Publisher</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(publisher, i) in entry.originalPublisher" :key="i">
+                <v-list-item
+                  style="min-height:16px;"
+                  class="pa-0 ma-0 auto"
+                  v-for="(publisher, i) in entry.originalPublisher"
+                  :key="i"
+                >
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
                       ><router-link :to="{ path: '/publisher/' + publisher.name }"
@@ -59,7 +64,7 @@
             <td :class="entry.authors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authors</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
+                <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
                       ><router-link :to="{ path: '/author/' + author.name }">{{ author.name }} {{ author.country }}</router-link>
@@ -76,7 +81,7 @@
             <td :class="entry.roles.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Roles</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(role, i) in entry.roles" :key="i">
+                <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(role, i) in entry.roles" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle>{{ role.name }}: {{ role.role }}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -88,7 +93,7 @@
             <td :class="entry.licensed ? 'font-weight-bold' : 'font-weight-light'" valign="top">Tie-in Licence</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(license, i) in entry.licensed" :key="i">
+                <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(license, i) in entry.licensed" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
                       >{{ license.name }}({{ license.country }}) - {{ license.type }}:
@@ -105,7 +110,7 @@
             </td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(mod, i) in entry.modFrom" :key="i" two-line>
+                <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(mod, i) in entry.modFrom" :key="i" two-line>
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + mod.id">
                       <v-list-item-subtitle
@@ -124,7 +129,13 @@
             </td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(insp, i) in entry.inspiredBy" :key="i" two-line>
+                <v-list-item
+                  style="min-height:16px;"
+                  class="pa-0 ma-0 auto"
+                  v-for="(insp, i) in entry.inspiredBy"
+                  :key="i"
+                  two-line
+                >
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + insp.id">
                       <v-list-item-subtitle>{{ insp.title }} - {{ insp.publisher }}</v-list-item-subtitle>
@@ -171,7 +182,12 @@
             </td>
             <td>
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(control, i) in entry.controlOptions" :key="i">
+                <v-list-item
+                  style="min-height:16px;"
+                  class="pa-0 ma-0 auto"
+                  v-for="(control, i) in entry.controlOptions"
+                  :key="i"
+                >
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle
                       ><router-link :to="{ path: '/search', query: { control: control } }">{{
@@ -231,7 +247,12 @@
             <td :class="entry.competitions.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Competitions</td>
             <td>
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(competition, i) in entry.competitions" :key="i">
+                <v-list-item
+                  style="min-height:16px;"
+                  class="pa-0 ma-0 auto"
+                  v-for="(competition, i) in entry.competitions"
+                  :key="i"
+                >
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
                       ><router-link :to="{ path: '/search', query: { group: 'C', groupname: competition } }">{{
@@ -265,7 +286,13 @@
             <td :class="entry.authoredWith.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Authored with</td>
             <td>
               <v-list flat dense class="pa-0">
-                <v-list-item class="pa-0 ma-0 auto" v-for="(authoredwith, i) in entry.authoredWith" :key="i" two-line>
+                <v-list-item
+                  style="min-height:16px;"
+                  class="pa-0 ma-0 auto"
+                  v-for="(authoredwith, i) in entry.authoredWith"
+                  :key="i"
+                  two-line
+                >
                   <v-list-item-content class="py-1">
                     <router-link :to="'/details/' + authoredwith.id">
                       <v-list-item-subtitle style="white-space: normal;"
