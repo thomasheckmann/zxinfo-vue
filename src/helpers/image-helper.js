@@ -14,7 +14,7 @@ var getCoverImageForEntry = function(gamedata) {
   // handle screens, make one a "cover"
   var entry = {};
 
-  entry.screenurl = "/images/empty.png";
+  entry.screenurl = "/images/placeholder.png";
   if (gamedata._source.type === "Compilation") {
     entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
 
@@ -54,5 +54,5 @@ var getCoverImageForEntry = function(gamedata) {
 module.exports = {
   getCoverImage: getCoverImageForEntry,
   getScreenUrl: getScreenUrl,
-  DEFAULT_SRC: "https://zxinfo.dk/media/images/empty.png",
+  DEFAULT_SRC: "https://zxinfo.dk/media/images/placeholder.png",
 };
