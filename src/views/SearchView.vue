@@ -68,7 +68,7 @@
         no-filter
         item-text="text"
         item-value="text"
-        label="What is your favorite game?"
+        :label="labelText"
         :prepend-inner-icon="'mdi-magnify'"
         @click:prepend-inner="submitSearch"
         @click:append-outer="filterdrawer = !filterdrawer"
@@ -630,6 +630,13 @@ export default {
       else if (this.isAuthorPage) return "/suggest/author/";
       else return "/suggest/";
     },
+    labelText() {
+      if (this.isEntrySearch) return "What is your favorite game, publisher or author?";
+      else if (this.isPublisherPage) return "What is your favorite publisher?";
+      else if (this.isAuthorPage) return "WHo is your favorite coder?";
+      else return "Type something to search for";
+    },
+
     // Only return non-empty facets
     activeFacets: function() {
       var active = {};
