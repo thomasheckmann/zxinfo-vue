@@ -115,7 +115,7 @@ export default {
       var inlays = [];
       for (var idx = 0; idx < GameData._source.additionals.length; idx++) {
         let item = GameData._source.additionals[idx];
-        if (item.type === "Cassette inlay") {
+        if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
           inlays.push(item);
         }
       }
