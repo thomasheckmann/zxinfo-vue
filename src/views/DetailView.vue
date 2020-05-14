@@ -64,7 +64,7 @@
                     <v-list-item-subtitle style="white-space: normal;"
                       ><router-link :to="{ path: '/author/' + author.name }">{{ author.name }} {{ author.country }}</router-link>
                       <router-link v-if="author.group" :to="{ path: '/author/' + author.group }">
-                        {{ author.group }}</router-link
+                        [{{ author.group }}]</router-link
                       ></v-list-item-subtitle
                     >
                   </v-list-item-content>
@@ -506,7 +506,7 @@
         >
         <v-expansion-panel-content>
           <v-list flat dense class="pa-0">
-            <v-list-item class="pa-0 ma-0 auto" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
+            <v-list-item style="min-height:16px;" class="pa-0 ma-0" v-for="(tosec, i) in entry.tosec" :key="i" two-line>
               <v-list-item-subtitle class="py-1 word-wrap" style="white-space: normal;">
                 {{ tosec.url.replace("Sinclair ZX Spectrum/", "") }}
               </v-list-item-subtitle>
