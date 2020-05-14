@@ -35,14 +35,14 @@ export default {
     },
     getLG() {
       if (this.imagetype == "screen") {
-        return 2;
+        return 3;
       } else {
         return 4;
       }
     },
     getMD() {
       if (this.imagetype == "screen") {
-        return 3;
+        return 4;
       } else {
         return 6;
       }
