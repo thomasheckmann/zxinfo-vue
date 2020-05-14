@@ -23,7 +23,7 @@
                   }}</router-link>
                   -
                   <router-link :to="{ path: '/search', query: { type: entry(card).genretype } }">{{
-                    entry(card).type
+                    entry(card).genre
                   }}</router-link></v-list-item-subtitle
                 ></v-card
               ></v-col
@@ -99,10 +99,11 @@ export default {
       }
 
       entry.genretype = GameData._source.type;
-      if (GameData._source.type === undefined) {
-        entry.type = "-/-";
-      } else {
-        entry.type = GameData._source.type + "/" + GameData._source.subtype;
+      entry.genre = "-/-";
+      if (GameData._source.type && GameData._source.subtype) {
+        entry.genre = GameData._source.type + "/" + GameData._source.subtype;
+      } else if (GameData._source.type && !GameData._source.subtype) {
+        entry.genre = GameData._source.type;
       }
 
       entry.score = {};

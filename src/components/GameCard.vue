@@ -21,7 +21,7 @@
         <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{ entry.machinetype }}</router-link>
       </div>
       <div class="d-inline-block text-truncate" style="max-width: 100%;">
-        <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.type }}</router-link>
+        <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.genre }}</router-link>
       </div>
       <div>
         <v-rating
@@ -105,10 +105,11 @@ export default {
       }
 
       entry.genretype = this.GameData._source.type;
-      if (this.GameData._source.type === undefined) {
-        entry.type = "-/-";
-      } else {
-        entry.type = this.GameData._source.type + "/" + this.GameData._source.subtype;
+      entry.genre = "-/-";
+      if (this.GameData._source.type && this.GameData._source.subtype) {
+        entry.genre = this.GameData._source.type + "/" + this.GameData._source.subtype;
+      } else if (this.GameData._source.type && !this.GameData._source.subtype) {
+        entry.genre = this.GameData._source.type;
       }
 
       entry.score = {};

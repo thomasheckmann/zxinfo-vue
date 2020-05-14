@@ -779,8 +779,10 @@ export default {
 
       entry.genretype = this.GameData._source.type;
       entry.genre = "-/-";
-      if (this.GameData._source.type !== undefined) {
+      if (this.GameData._source.type && this.GameData._source.subtype) {
         entry.genre = this.GameData._source.type + "/" + this.GameData._source.subtype;
+      } else if (this.GameData._source.type && !this.GameData._source.subtype) {
+        entry.genre = this.GameData._source.type;
       }
 
       entry.maximumPlayers = this.GameData._source.numberofplayers == undefined ? "" : this.GameData._source.numberofplayers;
@@ -1056,12 +1058,6 @@ export default {
 /* disable hover effect on table */
 .v-data-table /deep/ tbody /deep/ tr:hover:not(.v-data-table__expanded__content) {
   background: #ffffff !important;
-}
-
-/* dense. extra dense! */
-.v-list-item--dense,
-.v-list--dense .v-list-item {
-  min-height: 16px;
 }
 
 /* remove padding from expansion-panel-content */
