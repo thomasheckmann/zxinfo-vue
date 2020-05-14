@@ -128,7 +128,6 @@ export default {
       inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
       entry.inlayimage = this.getDefaultImageSrc;
       if (inlays[0]) entry.inlayimage = this.getScreenUrl(inlays[0].url);
-      if (this.$isDevelopment) console.log("inlay: " + entry.inlayimage);
 
       return entry;
     },

@@ -633,7 +633,7 @@ export default {
     labelText() {
       if (this.isEntrySearch) return "What is your favorite game, publisher or author?";
       else if (this.isPublisherPage) return "What is your favorite publisher?";
-      else if (this.isAuthorPage) return "WHo is your favorite coder?";
+      else if (this.isAuthorPage) return "Who is your favorite coder?";
       else return "Type something to search for";
     },
 
