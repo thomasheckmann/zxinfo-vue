@@ -10,7 +10,7 @@
     no-filter
     item-text="text"
     item-value="text"
-    label="What is your favorite game?"
+    label="What is your favorite game, publisher or author?"
     :prepend-inner-icon="'mdi-magnify'"
     @click:prepend-inner="search"
     @click:append-outer="$emit('filter', (filterdrawer = !filterdrawer))"
@@ -23,11 +23,17 @@
     full-width
     solo
   >
-    <template v-slot:item="{ item }"
-      ><v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
-      ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
-      <span v-html="highlight(item.text)"></span
-    ></template>
+    <template v-slot:item="{ item }">
+      <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+      ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
+      <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')" left>mdi-bank</v-icon>
+      <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')" left>mdi-account</v-icon>
+      <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')" left
+        >mdi-account-multiple</v-icon
+      >
+      <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''" left>mdi-map-marker-question</v-icon>
+      <span v-html="highlight(item.text)"></span>
+    </template>
   </v-combobox>
 </template>
 <script>
@@ -47,7 +53,14 @@ export default {
   },
   methods: {
     searchSelected() {
-      var selected = JSON.parse(JSON.stringify(this.completeSelected));
+      if (this.$isDevelopment) console.log("searchSelected(): " + this.completeSelected);
+
+      var selected = this.completeSelected;
+      if (!selected) return;
+
+      if (selected === Object(selected)) {
+        selected = JSON.parse(JSON.stringify(selected)).text;
+      }
       if (this.$isDevelopment) console.log("searchSelected() - signal value to parent: " + selected);
       this.$emit("input", this.completeSelected);
     },

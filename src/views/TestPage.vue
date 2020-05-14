@@ -17,7 +17,7 @@
   </v-container>
 </template>
 <script>
-import SearchInput from "@/components/SearchInput2";
+import SearchInput from "@/components/SearchInput";
 
 export default {
   name: "Home",

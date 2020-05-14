@@ -329,6 +329,10 @@ export default {
         console.log("showinfo() - completeSelected: " + this.completeSelected);
         console.log("showinfo() - searchTerm: " + this.searchTerm);
       }
+      if (!this.searchTerm && !this.completeSelected) {
+        if (this.$isDevelopment) console.log("Nothing to do - probaly just cleared");
+        return;
+      }
       var selected = this.completeSelected;
       var selectedText;
       if (selected === Object(selected)) {
