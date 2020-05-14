@@ -663,15 +663,15 @@ export default {
     getPageSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 16; // cols=12 (1 column),
+          return 20; // cols=12 (1 column),
         case "sm":
-          return 16; // cols=6 (2 columns),
+          return 20; // cols=6 (2 columns),
         case "md":
-          return 16; // cols=3 (4 columns)
+          return 21; // cols=3 (3 columns)
         case "lg":
-          return 18; // cols=2 (6 columns)
+          return 20; // cols=2 (4 columns)
         case "xl":
-          return 18; // cols=2 (6 columns)
+          return 24; // cols=2 (6 columns)
         default:
           return 20;
       }

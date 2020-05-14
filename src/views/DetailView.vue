@@ -301,9 +301,9 @@
       ></v-simple-table
     >
     <v-expansion-panels class="pa-0" multiple>
-      <!-- * RELEASES * -->
+      <!-- * VIDEO LINKS * -->
       <v-expansion-panel :hidden="!entry.youtubelinks.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.youtubelinks.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.youtubelinks.length ? 'font-weight-bold' : 'font-weight-light'"
           >Video(s)</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -324,10 +324,10 @@
       </v-expansion-panel>
       <!-- * RELEASES * -->
       <v-expansion-panel :hidden="!entry.releases.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.releases.length ? 'font-weight-bold' : 'font-weight-light'"
           >Releases</v-expansion-panel-header
         >
-        <v-expansion-panel-content>
+        <v-expansion-panel-content class="pa-0">
           <v-data-table
             class="pl-0"
             :headers="entry.releases.headers"
@@ -341,7 +341,9 @@
       </v-expansion-panel>
       <!-- * AVAILABLE FORMATS * -->
       <v-expansion-panel :hidden="!entry.availableformat.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header
+          class="px-4 py-0"
+          :class="entry.availableformat.length ? 'font-weight-bold' : 'font-weight-light'"
           >Available formats</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -356,7 +358,9 @@
       </v-expansion-panel>
       <!-- * PROTECTION SCHEMES * -->
       <v-expansion-panel :hidden="!entry.protectionscheme.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header
+          class="px-4 py-0"
+          :class="entry.protectionscheme.length ? 'font-weight-bold' : 'font-weight-light'"
           >Protection schemes</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -369,7 +373,9 @@
       </v-expansion-panel>
       <!-- * INSPIRATION FOR * -->
       <v-expansion-panel :hidden="!entry.inspirationFor.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header
+          class="px-4 py-0"
+          :class="entry.inspirationFor.length ? 'font-weight-bold' : 'font-weight-light'"
           >Inspiration for</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -389,7 +395,7 @@
       </v-expansion-panel>
       <!-- *MODIFIED BY * -->
       <v-expansion-panel :hidden="!entry.modifiedBy.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.modifiedBy.length ? 'font-weight-bold' : 'font-weight-light'"
           >Modified by</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -409,7 +415,7 @@
       </v-expansion-panel>
       <!-- * PROGRAMS AUTHORED WITH * -->
       <v-expansion-panel :hidden="!entry.authoring.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.authoring.length ? 'font-weight-bold' : 'font-weight-light'"
           >Programs authored</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -429,7 +435,9 @@
       </v-expansion-panel>
       <!-- * IN COMPILATIONS  * -->
       <v-expansion-panel :hidden="!entry.inCompilations.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header
+          class="px-4 py-0"
+          :class="entry.inCompilations.length ? 'font-weight-bold' : 'font-weight-light'"
           >In compilations</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -449,7 +457,9 @@
       </v-expansion-panel>
       <!-- * COMPILATION CONTENT  * -->
       <v-expansion-panel :hidden="!entry.compilationContent.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.compilationContent.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header
+          class="px-4 py-0"
+          :class="entry.compilationContent.length ? 'font-weight-bold' : 'font-weight-light'"
           >Compilation content</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -470,7 +480,7 @@
       </v-expansion-panel>
       <!-- * Series  * -->
       <v-expansion-panel :hidden="!entry.series.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
           >Series</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -491,7 +501,7 @@
       </v-expansion-panel>
       <!-- * TOSEC * -->
       <v-expansion-panel :hidden="!entry.tosec.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.tosec.length ? 'font-weight-bold' : 'font-weight-light'"
           >TOSEC Info</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -506,7 +516,7 @@
       </v-expansion-panel>
       <!-- * Download info * -->
       <v-expansion-panel :hidden="!entry.downloads.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
           >Download info</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -526,7 +536,7 @@
       </v-expansion-panel>
       <!-- * Additional downloads  * -->
       <v-expansion-panel :hidden="!entry.additionals.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
           >Additional Download</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -548,7 +558,7 @@
       </v-expansion-panel>
       <!-- * Related links  * -->
       <v-expansion-panel :hidden="!entry.relatedlinks.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"
           >Related links</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -569,7 +579,7 @@
       </v-expansion-panel>
       <!-- * Related sites  * -->
       <v-expansion-panel :hidden="!entry.relatedsites.length && !$isDevelopment">
-        <v-expansion-panel-header :class="entry.relatedsites.length ? 'font-weight-bold' : 'font-weight-light'"
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.relatedsites.length ? 'font-weight-bold' : 'font-weight-light'"
           >Related sites</v-expansion-panel-header
         >
         <v-expansion-panel-content>
@@ -1057,11 +1067,6 @@ export default {
 /* remove padding from expansion-panel-content */
 .v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
   padding: 4px;
-}
-
-.v-expansion-panel-header {
-  min-height: 32px; /* panel header smaller */
-  padding: 8px 16px; /* 8px align with other property labels */
 }
 
 a:hover,
