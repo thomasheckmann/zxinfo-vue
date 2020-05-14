@@ -62,10 +62,8 @@
                 <v-list-item class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
-                      ><router-link :to="{ path: '/publisher/' + author.name }"
-                        >{{ author.name }} {{ author.country }}</router-link
-                      >
-                      <router-link v-if="author.group" :to="{ path: '/publisher/' + author.group }">
+                      ><router-link :to="{ path: '/author/' + author.name }">{{ author.name }} {{ author.country }}</router-link>
+                      <router-link v-if="author.group" :to="{ path: '/author/' + author.group }">
                         {{ author.group }}</router-link
                       ></v-list-item-subtitle
                     >

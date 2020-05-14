@@ -51,6 +51,22 @@ const routes = [
     component: SearchView,
   },
   {
+    path: "/author",
+    name: "AuthorPage",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: SearchView,
+  },
+  {
+    path: "/author/:query",
+    name: "AuthorPage",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: SearchView,
+  },
+  {
     path: "/animated/",
     name: "AnimatedLoadingPage",
     component: () => import(/* webpackChunkName: "about" */ "@/views/AnimatedLoadingPage.vue"),

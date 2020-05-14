@@ -85,10 +85,22 @@
         <template v-slot:item="{ item }">
           <div v-if="isEntrySearch">
             <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
-            ><v-icon v-if="item.type == 'AUTHOR'" left>mdi-account</v-icon
-            ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon> <span v-html="highlight(item.text)"></span>
+            ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
+            <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')" left
+              >mdi-bank</v-icon
+            >
+            <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')" left
+              >mdi-account</v-icon
+            >
+            <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')" left
+              >mdi-account-multiple</v-icon
+            >
+            <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''" left
+              >mdi-map-marker-question</v-icon
+            >
+            <span v-html="highlight(item.text)"></span>
           </div>
-          <div v-if="isPublisherPage">
+          <div v-if="isPublisherPage || isAuthorPage">
             <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon
             ><v-icon v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon
             ><v-icon v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon
@@ -269,6 +281,8 @@ export default {
       if (this.$isDevelopment) {
         console.log("WATCH route");
       }
+
+      this.updateContenttypeIcon();
       this.resetSearchResult();
       this.loadMore();
     },
@@ -298,10 +312,23 @@ export default {
     },
   },
   methods: {
+    updateContenttypeIcon() {
+      if (this.$route.query.contenttype) {
+        this.$emit("updateContenttype", this.$route.query.contenttype);
+      } else if (this.isPublisherPage) {
+        this.$emit("updateContenttype", "PUBLISHER");
+      } else if (this.isAuthorPage) {
+        this.$emit("updateContenttype", "AUTHOR");
+      } else {
+        this.$emit("updateContenttype", "");
+      }
+    },
     showinfo() {
-      console.log("showinfo()");
-      console.log("showinfo() - completeSelected: " + this.completeSelected);
-      console.log("showinfo() - searchTerm: " + this.searchTerm);
+      if (this.$isDevelopment) {
+        console.log("showinfo()");
+        console.log("showinfo() - completeSelected: " + this.completeSelected);
+        console.log("showinfo() - searchTerm: " + this.searchTerm);
+      }
       var selected = this.completeSelected;
       var selectedText;
       if (selected === Object(selected)) {
@@ -309,14 +336,16 @@ export default {
       } else {
         selectedText = selected;
       }
-      console.log("showinfo() - searchText: " + selectedText);
+      if (this.$isDevelopment) console.log("showinfo() - searchText: " + selectedText);
       this.searchTerm = selectedText;
       this.submitSearch();
     },
     submitSearch() {
-      console.log("submitSearch()");
-      console.log("submitSearch() - completeSelected: " + this.completeSelected);
-      console.log("submitSearch() - searchTerm: " + this.searchTerm);
+      if (this.$isDevelopment) {
+        console.log("submitSearch()");
+        console.log("submitSearch() - completeSelected: " + this.completeSelected);
+        console.log("submitSearch() - searchTerm: " + this.searchTerm);
+      }
 
       this.replaceURL();
     },
@@ -400,6 +429,7 @@ export default {
       var path;
       if (this.isEntrySearch) path = "search";
       if (this.isPublisherPage) path = "publisher";
+      if (this.isAuthorPage) path = "author";
       this.$router.replace({ path: `/${path}/${queryparam}`, query: filterquery }, () => {});
     },
 
@@ -519,6 +549,7 @@ export default {
       if (this.isEntrySearch) dataURL = this.$api_base_url + "/v2/search?" + buildQuery(p);
       if (this.isPublisherPage)
         dataURL = this.$api_base_url + "/publishers/" + this.$route.params.query + "/games?" + buildQuery(p);
+      if (this.isAuthorPage) dataURL = this.$api_base_url + "/authors/" + this.$route.params.query + "/games?" + buildQuery(p);
       axios
         .get(dataURL, { timeout: 5000 })
         .then((response) => {
@@ -586,9 +617,13 @@ export default {
     isPublisherPage() {
       return this.$route.name == "PublisherPage";
     },
+    isAuthorPage() {
+      return this.$route.name == "AuthorPage";
+    },
     suggestEndpoint() {
       if (this.isEntrySearch) return "/suggest/";
       else if (this.isPublisherPage) return "/suggest/publisher/";
+      else if (this.isAuthorPage) return "/suggest/author/";
       else return "/suggest/";
     },
     // Only return non-empty facets
@@ -638,7 +673,7 @@ export default {
     } else {
       this.completeOptions = [];
     }
-    this.$emit("updateContenttype", "");
+    this.updateContenttypeIcon();
     this.loadMore();
   },
   components: {

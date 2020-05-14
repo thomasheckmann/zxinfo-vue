@@ -67,6 +67,8 @@ export default {
           return "book";
         case "PUBLISHER":
           return "mdi-bank";
+        case "AUTHOR":
+          return "mdi-account";
         default:
           return "";
       }
