@@ -5,6 +5,12 @@ var getScreenUrl = function(path) {
       "https://ia800604.us.archive.org/view_archive.php?archive=/1/items/World_of_Spectrum_June_2017_Mirror/World%20of%20Spectrum%20June%202017%20Mirror.zip&file=World%20of%20Spectrum%20June%202017%20Mirror/" +
       path
     );
+  } else if (path.startsWith("/pub/sinclair/zx81/games-inlays/")) {
+    path = path.replace("/pub/", "");
+    return (
+      "https://ia800604.us.archive.org/view_archive.php?archive=/1/items/World_of_Spectrum_June_2017_Mirror/World%20of%20Spectrum%20June%202017%20Mirror.zip&file=World%20of%20Spectrum%20June%202017%20Mirror/" +
+      path
+    );
   }
   path = path.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
   return "https://zxinfo.dk/media" + path;

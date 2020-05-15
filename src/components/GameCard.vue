@@ -128,8 +128,10 @@ export default {
 
       inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
       entry.inlayimage = this.getDefaultImageSrc;
-      if (inlays[0]) entry.inlayimage = this.getScreenUrl(inlays[0].url);
-
+      if (inlays.length > 0) {
+        entry.inlayimage = this.getScreenUrl(inlays[0].url);
+        console.log(this.GameData._id + " - Inlay: " + inlays[0].url + " => " + entry.inlayimage);
+      }
       return entry;
     },
   },
