@@ -2,7 +2,7 @@ version: "3"
 
 services:
   zxinfo-es:
-    image: "blacktop/elasticsearch:6.1"
+    image: "blacktop/elasticsearch:6.8"
     volumes:
       - ./elasticsearch_v6:/usr/share/elasticsearch/data
       - ./elasticsearch_v6:/usr/share/elasticsearch/config
