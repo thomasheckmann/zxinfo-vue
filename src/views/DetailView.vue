@@ -555,7 +555,6 @@
                     <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
                     </v-row> </template
-                  ><v-card-subtitle v-text="''"></v-card-subtitle
                 ></v-img>
               </v-card>
             </v-slide-item> </v-slide-group
