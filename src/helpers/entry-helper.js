@@ -54,7 +54,7 @@ var entry = function(gamedata) {
     }
   }
   inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
-  allInlays = allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
+  allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
 
   entry.inlayimage = this.getDefaultImageSrc;
   if (inlays.length > 0) {
