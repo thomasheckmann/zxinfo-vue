@@ -541,6 +541,26 @@
           </v-list>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <!-- * Inlay info * -->
+      <v-expansion-panel :hidden="!entry.allinlays.length && !$isDevelopment">
+        <v-expansion-panel-header class="px-4 py-0" :class="entry.allinlays.length ? 'font-weight-bold' : 'font-weight-light'"
+          >Inlays</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-slide-group v-model="entry.allinlays" class="pa-0 ma-0" :show-arrows="true" :center-active="true">
+            <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{ active, toggle }">
+              <v-card :color="active ? 'grey lighten-5' : 'grey lighten-1'" class="ma-4" width="250" height="250" @click="toggle">
+                <v-img :src="inlay" class="white--text align-end">
+                  <template v-slot:placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+                    </v-row> </template
+                  ><v-card-subtitle v-text="''"></v-card-subtitle
+                ></v-img>
+              </v-card>
+            </v-slide-item> </v-slide-group
+        ></v-expansion-panel-content>
+      </v-expansion-panel>
       <!-- * Download info * -->
       <v-expansion-panel :hidden="!entry.downloads.length && !$isDevelopment">
         <v-expansion-panel-header class="px-4 py-0" :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
@@ -561,6 +581,7 @@
           ></v-data-table>
         </v-expansion-panel-content>
       </v-expansion-panel>
+
       <!-- * Additional downloads  * -->
       <v-expansion-panel :hidden="!entry.additionals.length && !$isDevelopment">
         <v-expansion-panel-header class="px-4 py-0" :class="entry.additionals.length ? 'font-weight-bold' : 'font-weight-light'"
@@ -1068,6 +1089,34 @@ export default {
       entry.score.votes = this.GameData._source.score.votes;
 
       entry.coverimage = this.getCoverImage(this.GameData);
+
+      // look for inlay
+      var inlays = []; // contains inlay, if found from Type
+      var allInlays = []; // contains all matching type or inlay in filename
+      for (idx = 0; idx < this.GameData._source.additionals.length; idx++) {
+        let item = this.GameData._source.additionals[idx];
+        if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
+          inlays.push(item);
+        }
+        if (item.type.toLowerCase().indexOf("inlay") !== -1 || item.url.toLowerCase().indexOf("inlay") !== -1) {
+          allInlays.push(item);
+        }
+      }
+      inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
+      allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
+
+      entry.inlayimage = this.getDefaultImageSrc;
+      if (inlays.length > 0) {
+        entry.inlayimage = this.getScreenUrl(inlays[0].url);
+        //console.log(gamedata._id + " - Inlay: " + inlays[0].url + " => " + entry.inlayimage);
+      } else if (allInlays.length > 0) {
+        entry.inlayimage = this.getScreenUrl(allInlays[0].url);
+      }
+      entry.allinlays = [];
+      for (idx = 0; idx < allInlays.length; idx++) {
+        entry.allinlays.push(this.getScreenUrl(allInlays[idx].url));
+      }
+
       return entry;
     },
   },

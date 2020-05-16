@@ -42,20 +42,32 @@ var entry = function(gamedata) {
   entry.coverimage = this.getCoverImage(gamedata);
 
   // look for inlay
-  var inlays = [];
+  var inlays = []; // contains inlay, if found from Type
+  var allInlays = []; // contains all matching type or inlay in filename
   for (var idx = 0; idx < gamedata._source.additionals.length; idx++) {
     let item = gamedata._source.additionals[idx];
     if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
       inlays.push(item);
     }
+    if (item.type.toLowerCase().indexOf("inlay") !== -1 || item.url.toLowerCase().indexOf("inlay") !== -1) {
+      allInlays.push(item);
+    }
   }
-
   inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
+  allInlays = allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
+
   entry.inlayimage = this.getDefaultImageSrc;
   if (inlays.length > 0) {
     entry.inlayimage = this.getScreenUrl(inlays[0].url);
-    console.log(gamedata._id + " - Inlay: " + inlays[0].url + " => " + entry.inlayimage);
+    //console.log(gamedata._id + " - Inlay: " + inlays[0].url + " => " + entry.inlayimage);
+  } else if (allInlays.length > 0) {
+    entry.inlayimage = this.getScreenUrl(allInlays[0].url);
   }
+  entry.allinlays = [];
+  for (idx = 0; idx < allInlays.length; idx++) {
+    entry.allinlays.push(this.getScreenUrl(allInlays[idx].url));
+  }
+
   return entry;
 };
 
