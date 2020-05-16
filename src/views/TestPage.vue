@@ -4,9 +4,9 @@
       <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
         <v-card flat>
           <v-card-text>
-            <v-card-title>{{ searchText }}</v-card-title>
+            <v-card-title></v-card-title>
             <div>
-              <SearchInput v-model="searchText" v-bind:initialText="starttext" />
+              <StreamBarcodeReader @decode="onDecode" @loaded="onLoaded"></StreamBarcodeReader>
               <p></p>
               <p class="text-center .caption .font-weight-thin	">ZXDB update 29.04.2020</p>
             </div>
@@ -17,44 +17,27 @@
   </v-container>
 </template>
 <script>
-import SearchInput from "@/components/SearchInput";
+import { StreamBarcodeReader } from "vue-barcode-reader";
 
 export default {
-  name: "Home",
+  name: "TestPage",
   metaInfo() {
     return {
       title: "ZXInfo - The open source ZXDB frontend",
     };
   },
   data() {
-    return {
-      starttext: "",
-      searchText: null,
-    };
+    return {};
   },
-  components: { SearchInput },
+  components: {
+    StreamBarcodeReader: StreamBarcodeReader,
+  },
   methods: {
-    search() {
-      //this.$router.push({ path: `/search/${this.searchText}` }, () => {});
+    onDecode(result) {
+      console.log(result);
     },
   },
-  watch: {
-    searchText(v) {
-      console.log("watch: " + v);
-      if (v === Object(v)) {
-        console.log("Got object: " + v.text);
-        this.searchText = v.text;
-      } else {
-        console.log("plain value: " + v);
-      }
-      this.search();
-    },
-  },
-  mounted() {
-    // fire event to parent
-    this.$emit("updateContenttype", "");
-    console.log(this.$route.query.input);
-    if (this.$route.query.input) this.starttext = this.$route.query.input;
-  },
+  watch: {},
+  mounted() {},
 };
 </script>
