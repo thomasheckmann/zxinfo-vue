@@ -55,6 +55,7 @@
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
+import entry from "@/helpers/entry-helper";
 import ImageContainer from "@/components/Image";
 
 export default {
@@ -63,6 +64,7 @@ export default {
   methods: {
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
+    entryData: entry.entryData,
     search() {
       if (this.searchterm) {
         this.$emit("input", this.searchterm);
@@ -74,65 +76,8 @@ export default {
     getDefaultImageSrc() {
       return imageHelper.DEFAULT_SRC;
     },
-    // cleaned version of JSON
     entry() {
-      let entry = {};
-      entry.id = this.GameData._id;
-      entry.title = this.GameData._source.fulltitle;
-
-      entry.availability = this.GameData._source.availability;
-
-      if (this.GameData._source.yearofrelease === undefined) {
-        entry.yearofrelease = "-";
-      } else {
-        entry.yearofrelease = this.GameData._source.yearofrelease;
-      }
-
-      if (this.GameData._source.machinetype === undefined) {
-        entry.machinetype = "-";
-      } else {
-        entry.machinetype = this.GameData._source.machinetype;
-      }
-
-      entry.originalPublisher = [];
-      for (var publisher in this.GameData._source.publisher) {
-        var originalPublisher = this.GameData._source.publisher[publisher].name;
-        var originalPublisherCountry = "";
-        if (this.GameData._source.publisher[publisher].country !== undefined) {
-          originalPublisherCountry = "(" + this.GameData._source.publisher[publisher].country + ")";
-        }
-        entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
-      }
-
-      entry.genretype = this.GameData._source.type;
-      entry.genre = "-/-";
-      if (this.GameData._source.type && this.GameData._source.subtype) {
-        entry.genre = this.GameData._source.type + "/" + this.GameData._source.subtype;
-      } else if (this.GameData._source.type && !this.GameData._source.subtype) {
-        entry.genre = this.GameData._source.type;
-      }
-
-      entry.score = {};
-      entry.score.score = this.GameData._source.score.score;
-      entry.score.votes = this.GameData._source.score.votes;
-      entry.coverimage = this.getCoverImage(this.GameData);
-
-      // look for inlay
-      var inlays = [];
-      for (var idx = 0; idx < this.GameData._source.additionals.length; idx++) {
-        let item = this.GameData._source.additionals[idx];
-        if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
-          inlays.push(item);
-        }
-      }
-
-      inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
-      entry.inlayimage = this.getDefaultImageSrc;
-      if (inlays.length > 0) {
-        entry.inlayimage = this.getScreenUrl(inlays[0].url);
-        console.log(this.GameData._id + " - Inlay: " + inlays[0].url + " => " + entry.inlayimage);
-      }
-      return entry;
+      return this.entryData(this.GameData);
     },
   },
 };

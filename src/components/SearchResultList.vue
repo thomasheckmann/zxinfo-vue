@@ -43,6 +43,7 @@
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
+import entry from "@/helpers/entry-helper";
 import ImageContainer from "@/components/Image";
 
 export default {
@@ -69,64 +70,7 @@ export default {
   methods: {
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
-    // cleaned version of JSON
-    entry: function(GameData) {
-      let entry = {};
-      entry.screens = GameData._source.screens;
-      entry.id = GameData._id;
-      entry.title = GameData._source.fulltitle;
-
-      if (GameData._source.yearofrelease === undefined) {
-        entry.yearofrelease = "-";
-      } else {
-        entry.yearofrelease = GameData._source.yearofrelease;
-      }
-
-      if (GameData._source.machinetype === undefined) {
-        entry.machinetype = "-";
-      } else {
-        entry.machinetype = GameData._source.machinetype;
-      }
-
-      entry.originalPublisher = [];
-      for (var publisher in GameData._source.publisher) {
-        var originalPublisher = GameData._source.publisher[publisher].name;
-        var originalPublisherCountry = "";
-        if (GameData._source.publisher[publisher].country !== undefined) {
-          originalPublisherCountry = "(" + GameData._source.publisher[publisher].country + ")";
-        }
-        entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
-      }
-
-      entry.genretype = GameData._source.type;
-      entry.genre = "-/-";
-      if (GameData._source.type && GameData._source.subtype) {
-        entry.genre = GameData._source.type + "/" + GameData._source.subtype;
-      } else if (GameData._source.type && !GameData._source.subtype) {
-        entry.genre = GameData._source.type;
-      }
-
-      entry.score = {};
-      entry.score.score = GameData._source.score.score;
-      entry.score.votes = GameData._source.score.votes;
-      entry.coverimage = this.getCoverImage(GameData);
-
-      // look for inlay
-      var inlays = [];
-      for (var idx = 0; idx < GameData._source.additionals.length; idx++) {
-        let item = GameData._source.additionals[idx];
-        if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
-          inlays.push(item);
-        }
-      }
-
-      inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
-      entry.inlayimage = this.getDefaultImageSrc;
-      if (inlays[0]) entry.inlayimage = this.getScreenUrl(inlays[0].url);
-      if (this.$isDevelopment) console.log("inlay: " + entry.inlayimage);
-
-      return entry;
-    },
+    entry: entry.entryData,
   },
   components: { ImageContainer },
 };

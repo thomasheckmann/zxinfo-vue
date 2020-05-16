@@ -22,4 +22,5 @@ yarn-error.log*
 
 /elasticsearch/elasticsearch/
 /elasticsearch_v6/nodes/
+*.keystore
 /neo4jdata/
