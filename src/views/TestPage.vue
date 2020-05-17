@@ -19,13 +19,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import VueQuagga from "vue-z-quaggajs";
-import VueBarcodeScanner from "vue-barcode-scanner";
-
-// register component 'v-quagga'
-Vue.use(VueQuagga, VueBarcodeScanner);
-
 export default {
   name: "VueBarcodeTest",
   data() {
