@@ -324,9 +324,24 @@
               </v-row>
             </td>
           </tr>
-        </tbody></template
-      ></v-simple-table
-    >
+          <tr :style="!entry.allinlays.length && !$isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.allinlays.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Inlays</td>
+            <td></td>
+          </tr></tbody></template
+    ></v-simple-table>
+    <!-- * Inlay info * -->
+    <v-slide-group v-model="entry.allinlays" class="py-2 ma-0" :show-arrows="true" :center-active="true">
+      <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{ active, toggle }">
+        <v-card :color="active ? 'grey lighten-5' : 'grey lighten-1'" class="ma-4" width="250" height="250" @click="toggle">
+          <v-img :src="inlay" class="white--text align-end">
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+              </v-row> </template
+          ></v-img>
+        </v-card>
+      </v-slide-item>
+    </v-slide-group>
     <v-expansion-panels class="pa-0" multiple>
       <!-- * VIDEO LINKS * -->
       <v-expansion-panel :hidden="!entry.youtubelinks.length && !$isDevelopment">
@@ -541,25 +556,6 @@
           </v-list>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <!-- * Inlay info * -->
-      <v-expansion-panel :hidden="!entry.allinlays.length && !$isDevelopment">
-        <v-expansion-panel-header class="px-4 py-0" :class="entry.allinlays.length ? 'font-weight-bold' : 'font-weight-light'"
-          >Inlays</v-expansion-panel-header
-        >
-        <v-expansion-panel-content>
-          <v-slide-group v-model="entry.allinlays" class="pa-0 ma-0" :show-arrows="true" :center-active="true">
-            <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{ active, toggle }">
-              <v-card :color="active ? 'grey lighten-5' : 'grey lighten-1'" class="ma-4" width="250" height="250" @click="toggle">
-                <v-img :src="inlay" class="white--text align-end">
-                  <template v-slot:placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                    </v-row> </template
-                ></v-img>
-              </v-card>
-            </v-slide-item> </v-slide-group
-        ></v-expansion-panel-content>
-      </v-expansion-panel>
       <!-- * Download info * -->
       <v-expansion-panel :hidden="!entry.downloads.length && !$isDevelopment">
         <v-expansion-panel-header class="px-4 py-0" :class="entry.downloads.length ? 'font-weight-bold' : 'font-weight-light'"
@@ -598,7 +594,7 @@
             :mobile-breakpoint="0"
           >
             ><template v-slot:item.actions="{ item }">
-              <router-link :to="'/details/' + item.url"> <v-icon small right>mdi-download</v-icon></router-link></template
+              <v-icon small right @click="openUrl(getScreenUrl(item.url))">mdi-download</v-icon></template
             ></v-data-table
           >
         </v-expansion-panel-content>
@@ -1048,12 +1044,6 @@ export default {
         entry.downloads.headers = [{ text: "Filename", value: "url" }];
       }
 
-      entry.additionals = [];
-      for (var aidx in this.GameData._source.additionals) {
-        var item = this.GameData._source.additionals[aidx];
-        entry.additionals.push(item);
-      }
-
       entry.inspirationFor = [];
       entry.modifiedBy = [];
       for (var modby in this.GameData._source.modified_by) {
@@ -1088,6 +1078,12 @@ export default {
       entry.score.votes = this.GameData._source.score.votes;
 
       entry.coverimage = this.getCoverImage(this.GameData);
+
+      entry.additionals = [];
+      for (var aidx in this.GameData._source.additionals) {
+        var item = this.GameData._source.additionals[aidx];
+        entry.additionals.push(item);
+      }
 
       // look for inlay
       var inlays = []; // contains inlay, if found from Type
