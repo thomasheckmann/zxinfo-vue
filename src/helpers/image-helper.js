@@ -1,4 +1,6 @@
 var getScreenUrl = function(path) {
+  if (!path) return this.DEFAULT_SRC;
+
   if (path.startsWith("/pub/sinclair/books-pics")) {
     // book pics, resized
     path = path.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
@@ -44,7 +46,7 @@ var getCoverImageForEntry = function(gamedata) {
     }
   }
 
-  if (gamedata._source.screens.length && gamedata._source.type !== "Compilation") {
+  if (gamedata._source.screens.length && gamedata._source.screens[0].url && gamedata._source.type !== "Compilation") {
     entry.screenurl = gamedata._source.screens[0].url;
     entry.screenurl = entry.screenurl.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
     entry.screenurl = "https://zxinfo.dk/media" + entry.screenurl;
