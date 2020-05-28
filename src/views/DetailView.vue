@@ -755,6 +755,9 @@ export default {
     entry() {
       let entry = {};
       entry.screens = this.GameData._source.screens;
+      if (entry.screens.length == 0) {
+        entry.screens.push({ url: "/images/placeholder.png" });
+      }
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.fulltitle;
       entry.availability = this.GameData._source.availability;
