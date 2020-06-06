@@ -11,7 +11,7 @@
                 <v-btn elevation="0" small disabled="">I'm Feeling Lucky</v-btn>
               </div>
               <p></p>
-              <p class="text-center .caption .font-weight-thin	">ZXDB update 27.05.2020</p>
+              <p class="text-center .caption .font-weight-thin	">ZXDB update 04.06.2020</p>
             </div>
           </v-card-text>
         </v-card>
