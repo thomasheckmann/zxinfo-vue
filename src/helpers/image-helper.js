@@ -6,7 +6,6 @@ var getScreenUrl = function(path) {
     path = path.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
   } else if (path.startsWith("/pub/sinclair/")) {
     path = path.replace("+", "%2B");
-    console.log(path);
     path = path.replace("/pub/", "");
     return (
       "https://ia800604.us.archive.org/view_archive.php?archive=/1/items/World_of_Spectrum_June_2017_Mirror/World%20of%20Spectrum%20June%202017%20Mirror.zip&file=World%20of%20Spectrum%20June%202017%20Mirror/" +
