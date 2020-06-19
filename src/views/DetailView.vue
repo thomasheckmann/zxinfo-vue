@@ -77,13 +77,37 @@
               </v-list>
             </td>
           </tr>
-          <tr :style="!entry.roles.length && !$isDevelopment ? 'display: none;' : ''">
-            <td :class="entry.roles.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Roles</td>
+          <tr :style="!entry.contributors.length && !$isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.contributors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Contributors</td>
             <td valign="top">
               <v-list flat dense class="pa-0">
-                <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(role, i) in entry.roles" :key="i">
+                <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(author, i) in entry.contributors" :key="i">
                   <v-list-item-content class="py-1">
-                    <v-list-item-subtitle>{{ role.name }}: {{ role.role }}</v-list-item-subtitle>
+                    <v-list-item-subtitle style="white-space: normal;"
+                      ><router-link :to="{ path: '/author/' + author.name }">{{ author.name }} {{ author.country }}</router-link>
+                      <router-link v-if="author.group" :to="{ path: '/author/' + author.group }">
+                        [{{ author.group }}]</router-link
+                      ></v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </td>
+          </tr>
+          <tr :style="!Object.keys(entry.roles).length && !$isDevelopment ? 'display: none;' : ''">
+            <td :class="Object.keys(entry.roles).length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Roles</td>
+            <td valign="top">
+              <v-list flat dense class="pa-0">
+                <v-list-item
+                  style="min-height:16px;"
+                  class="pa-0 ma-0 auto"
+                  v-for="(role, i) in Object.keys(entry.roles)"
+                  :key="i"
+                >
+                  <v-list-item-content class="py-1">
+                    <v-list-item-subtitle style="white-space: normal; color: black;"
+                      ><b>{{ role }}:</b> {{ entry.roles[role].toString().replace(",", ", ") }}</v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -774,21 +798,59 @@ export default {
         entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
       }
 
+      entry.roles = []; // this.GameData._source.roles;
+
       entry.authors = [];
       if (this.GameData._source.authors.length) {
         for (var authorBlock in this.GameData._source.authors) {
           for (var author in this.GameData._source.authors[authorBlock].authors) {
-            var country = this.GameData._source.authors[authorBlock].authors[author].country;
-            entry.authors.push({
-              name: this.GameData._source.authors[authorBlock].authors[author].name,
-              country: country == undefined ? "" : "(" + country + ")",
-              group: this.GameData._source.authors[authorBlock].group,
-            });
+            var authorName = this.GameData._source.authors[authorBlock].authors[author].name;
+            if (!entry.authors.filter((e) => e.name === authorName).length > 0) {
+              var country = this.GameData._source.authors[authorBlock].authors[author].country;
+              entry.authors.push({
+                name: authorName,
+                country: country == undefined ? "" : "(" + country + ")",
+                group: this.GameData._source.authors[authorBlock].group,
+              });
+            }
+
+            // check role
+            var authorRole = this.GameData._source.authors[authorBlock].authors[author].role;
+            if (authorRole !== undefined) {
+              if (entry.roles[authorName] == undefined) {
+                entry.roles[authorName] = [];
+              }
+              entry.roles[authorName].push(authorRole);
+            }
           }
         }
       }
 
-      entry.roles = this.GameData._source.roles;
+      entry.contributors = [];
+      if (this.GameData._source.contributors && this.GameData._source.contributors.length) {
+        for (var contributorBlock in this.GameData._source.contributors) {
+          for (var contributor in this.GameData._source.contributors[contributorBlock].names) {
+            var contributorName = this.GameData._source.contributors[contributorBlock].names[contributor].name;
+            if (!entry.contributors.filter((e) => e.name === contributorName).length > 0) {
+              var country2 = this.GameData._source.contributors[contributorBlock].names[contributor].country;
+              entry.contributors.push({
+                name: contributorName,
+                country: country2 == undefined ? "" : "(" + country2 + ")",
+                group: this.GameData._source.contributors[contributorBlock].group,
+              });
+            }
+
+            // check role
+            var contributorRole = this.GameData._source.contributors[contributorBlock].names[contributor].role;
+            if (contributorRole !== undefined) {
+              if (entry.roles[contributorName] == undefined) {
+                entry.roles[contributorName] = [];
+              }
+              entry.roles[contributorName].push(contributorRole);
+            }
+          }
+        }
+      }
 
       entry.licensed = this.GameData._source.licensed;
 
