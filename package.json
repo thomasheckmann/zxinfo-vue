@@ -10,6 +10,9 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "nodemon": "^2.0.4",
+    "to": "^0.2.9",
+    "update": "^0.7.4",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-meta": "^2.3.3",
