@@ -9,11 +9,11 @@
     </v-btn>
 
     <!-- top app bar -->
-    <v-app-bar app clipped-left dark color="black">
+    <v-app-bar app clipped-left dark color="black" short>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <template v-if="!$vuetify.breakpoint.xs || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
         <v-toolbar-title>
-          <router-link to="/"> <v-img src="@/assets/ZXInfo_25.png"></v-img> </router-link
+          <router-link to="/"> <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
         ></v-toolbar-title>
         <v-spacer></v-spacer>
       </template>
@@ -77,6 +77,7 @@
 
       <v-spacer />
       <v-icon>{{ getContenttypeIcon }}</v-icon>
+      <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
     </v-app-bar>
 
     <!-- Navigation drawer - filters -->
