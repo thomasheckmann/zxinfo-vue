@@ -9,7 +9,7 @@
     </v-btn>
 
     <!-- top app bar -->
-    <v-app-bar app clipped-left dark color="black" short>
+    <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <template v-if="!$vuetify.breakpoint.xs || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
         <v-toolbar-title>
