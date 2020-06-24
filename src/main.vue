@@ -11,14 +11,15 @@
     <!-- top app bar -->
     <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <template v-if="!$vuetify.breakpoint.xs">
+      <template v-if="!$vuetify.breakpoint.xs || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
         <v-toolbar-title>
           <router-link to="/"> <v-img src="@/assets/ZXInfo_25.png"></v-img> </router-link
         ></v-toolbar-title>
         <v-spacer></v-spacer>
       </template>
+      <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
       <!-- search bar -->
-      <v-toolbar v-if="showSearchBar" flat class="py-4" color="black">
+      <v-toolbar v-if="showSearchBar" flat class="py-4" color="black" min-width="75%">
         <v-combobox
           @change="showinfo"
           @keypress="showAutoselectMenu"
@@ -74,7 +75,6 @@
         </v-combobox>
       </v-toolbar>
 
-      <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
       <v-spacer />
       <v-icon>{{ getContenttypeIcon }}</v-icon>
     </v-app-bar>
@@ -592,6 +592,12 @@ export default {
     },
     isDetailPage() {
       return this.$route.name == "DetailPage";
+    },
+    isGraphPage() {
+      return this.$route.name == "GraphPage";
+    },
+    isAnimatedLoadingPage() {
+      return this.$route.name == "AnimatedLoadingPage";
     },
     suggestEndpoint() {
       if (this.isEntrySearch) return "/suggest/";
