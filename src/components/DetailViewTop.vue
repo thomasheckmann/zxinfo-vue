@@ -4,7 +4,7 @@
       <v-col cols="6" class="ma-0 py-4 px-4">
         <v-sheet tile>
           <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
-            <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)">
+            <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)" eager="true">
               <v-row class="fill-height" align="end" justify="center">
                 <v-system-bar v-if="item.title" lights-out dark width="100%"
                   ><span class="white--text">{{ item.title }}</span></v-system-bar
