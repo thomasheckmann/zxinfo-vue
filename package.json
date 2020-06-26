@@ -1,6 +1,6 @@
 {
   "name": "zxinfo-vue",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,16 +9,16 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "core-js": "^3.6.4",
+    "core-js": "^3.6.5",
     "nodemon": "^2.0.4",
     "to": "^0.2.9",
     "update": "^0.7.4",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
-    "vue-meta": "^2.3.3",
-    "vue-router": "^3.1.6",
-    "vuetify": "^2.2.11",
-    "vuex": "^3.3.0"
+    "vue-meta": "^2.4.0",
+    "vue-router": "^3.3.4",
+    "vuetify": "^2.3.2",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",
