@@ -607,7 +607,7 @@ export default {
       else return "/suggest/";
     },
     labelText() {
-      if (this.isEntrySearch) return "What is your favorite game, publisher or author?";
+      if (this.isEntrySearch || this.isDetailPage) return "What is your favorite game, publisher or author?";
       else if (this.isPublisherPage) return "What is your favorite publisher?";
       else if (this.isAuthorPage) return "Who is your favorite coder?";
       else return "Type something to search for";
