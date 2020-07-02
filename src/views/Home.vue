@@ -37,7 +37,7 @@ export default {
   components: { SearchInput },
   methods: {
     search() {
-      this.$router.push({ path: `/search/${this.searchText}` }, () => {});
+      this.$router.push({ path: `/search/${encodeURIComponent(this.searchText)}` }, () => {});
     },
   },
   watch: {

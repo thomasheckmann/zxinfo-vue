@@ -107,7 +107,7 @@ export default {
 
       if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get(this.$api_base_url + "/suggest/" + val, { timeout: 1500 })
+        .get(this.$api_base_url + "/suggest/" + encodeURIComponent(val), { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoading = false;

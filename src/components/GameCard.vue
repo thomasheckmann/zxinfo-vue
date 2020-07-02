@@ -12,7 +12,9 @@
       ><router-link :to="{ path: '/search', query: { year: entry.yearofrelease } }">{{ entry.yearofrelease }}</router-link
       >&nbsp;
       <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
-        ><router-link :to="{ path: '/publisher/' + orgpub.name }">{{ orgpub.name }} {{ orgpub.country }}</router-link>
+        ><router-link :to="{ path: '/publisher/' + encodeURIComponent(orgpub.name) }"
+          >{{ orgpub.name }} {{ orgpub.country }}</router-link
+        >
         <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
       ></v-card-subtitle
     >

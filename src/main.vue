@@ -184,6 +184,7 @@ var buildQuery = function(data) {
           query.push(encodeURIComponent(key) + "=" + encodeURIComponent(subitems[items]));
         }
       } else {
+        console.log(key + " = " + encodeURIComponent(data[key]));
         query.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
       }
     }
@@ -347,7 +348,7 @@ export default {
       if (this.isEntrySearch || this.isDetailPage) path = "search";
       if (this.isPublisherPage) path = "publisher";
       if (this.isAuthorPage) path = "author";
-      this.$router.replace({ path: `/${path}/${queryparam}`, query: filterquery }, () => {});
+      this.$router.replace({ path: `/${path}/${encodeURIComponent(queryparam)}`, query: filterquery }, () => {});
     },
     toggleNavigation() {
       this.filterdrawer = !this.filterdrawer;
@@ -476,8 +477,9 @@ export default {
       var dataURL;
       if (this.isEntrySearch || this.isDetailPage) dataURL = this.$api_base_url + "/v2/search?" + buildQuery(p);
       if (this.isPublisherPage)
-        dataURL = this.$api_base_url + "/publishers/" + this.$route.params.query + "/games?" + buildQuery(p);
-      if (this.isAuthorPage) dataURL = this.$api_base_url + "/authors/" + this.$route.params.query + "/games?" + buildQuery(p);
+        dataURL = this.$api_base_url + "/publishers/" + encodeURIComponent(this.$route.params.query) + "/games?" + buildQuery(p);
+      if (this.isAuthorPage)
+        dataURL = this.$api_base_url + "/authors/" + encodeURIComponent(this.$route.params.query) + "/games?" + buildQuery(p);
       axios
         .get(dataURL, { timeout: 5000 })
         .then((response) => {
@@ -651,7 +653,7 @@ export default {
 
       if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get(this.$api_base_url + this.suggestEndpoint + val, { timeout: 1500 })
+        .get(this.$api_base_url + this.suggestEndpoint + encodeURIComponent(val), { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoadingOptions = false;
