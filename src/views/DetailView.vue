@@ -43,7 +43,7 @@
                 >
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
-                      ><router-link :to="{ path: '/publisher/' + publisher.name }"
+                      ><router-link :to="{ path: '/publisher/' + encodeURIComponent(publisher.name) }"
                         >{{ publisher.name }} {{ publisher.country }}</router-link
                       ></v-list-item-subtitle
                     >
@@ -67,8 +67,10 @@
                 <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(author, i) in entry.authors" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
-                      ><router-link :to="{ path: '/author/' + author.name }">{{ author.name }} {{ author.country }}</router-link>
-                      <router-link v-if="author.group" :to="{ path: '/author/' + author.group }">
+                      ><router-link :to="{ path: '/author/' + encodeURIComponent(author.name) }"
+                        >{{ author.name }} {{ author.country }}</router-link
+                      >
+                      <router-link v-if="author.group" :to="{ path: '/author/' + encodeURIComponent(author.group) }">
                         [{{ author.group }}]</router-link
                       ></v-list-item-subtitle
                     >
@@ -84,8 +86,10 @@
                 <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(author, i) in entry.contributors" :key="i">
                   <v-list-item-content class="py-1">
                     <v-list-item-subtitle style="white-space: normal;"
-                      ><router-link :to="{ path: '/author/' + author.name }">{{ author.name }} {{ author.country }}</router-link>
-                      <router-link v-if="author.group" :to="{ path: '/author/' + author.group }">
+                      ><router-link :to="{ path: '/author/' + encodeURIComponent(author.name) }"
+                        >{{ author.name }} {{ author.country }}</router-link
+                      >
+                      <router-link v-if="author.group" :to="{ path: '/author/' + encodeURIComponent(author.group) }">
                         [{{ author.group }}]</router-link
                       ></v-list-item-subtitle
                     >
