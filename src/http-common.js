@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:8300/api/zxinfo/scr",
+  baseURL: "https://api.zxinfo.dk/api/zxinfo/scr",
   headers: {
     "Content-type": "application/json",
   },
