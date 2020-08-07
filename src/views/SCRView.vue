@@ -43,6 +43,7 @@
                   <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.scr'">SCR</a></li>
                   <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.txt'">TXT</a></li>
                 </ul>
+                {{ file }}
               </v-card>
               <!-- -->
             </div>
@@ -88,7 +89,7 @@ export default {
             .split(".")
             .slice(0, -1)
             .join(".");
-          return UploadService.getFiles();
+          return;
         })
         .catch((e) => {
           this.progress = 0;
