@@ -90,9 +90,9 @@ export default {
             .join(".");
           return UploadService.getFiles();
         })
-        .catch(() => {
+        .catch((e) => {
           this.progress = 0;
-          this.message = "Could not upload the file!";
+          this.message = e;
           this.currentFile = undefined;
         });
     },
