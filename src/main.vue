@@ -131,7 +131,7 @@
     </v-navigation-drawer>
 
     <!-- PAGE CONTENT -->
-    <v-content>
+    <v-main>
       <router-view
         :facets="facets"
         :queryparameters="queryparameters"
@@ -147,7 +147,7 @@
         @replaceURL="replaceURL"
         class="view"
       ></router-view
-    ></v-content>
+    ></v-main>
 
     <v-footer app padless class="caption .font-weight-thin">
       <v-row justify="space-between" align="center" class="px-4">

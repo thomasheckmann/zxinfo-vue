@@ -87,6 +87,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "@/views/CompareZX81Scr.vue"),
   },
   {
+    path: "/scr",
+    name: "SCRPage",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/SCRView.vue"),
+  },
+  {
     path: "/testpage",
     name: "testpage",
     component: () => import(/* webpackChunkName: "about" */ "@/views/TestPage.vue"),
