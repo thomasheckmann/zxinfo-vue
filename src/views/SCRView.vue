@@ -2,13 +2,13 @@
   <v-container class="fill-height" fluid>
     <v-row align="center" justify="center">
       <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
-        <v-card flat>
+        <v-card>
           <v-card-text>
             <div>
               <!-- -->
               <div v-if="currentFile">
                 <div>
-                  <v-progress-linear v-model="progress" color="light-blue" height="25" reactive>
+                  <v-progress-linear v-model="progress" color="grey" height="25" reactive>
                     <strong>{{ progress }} %</strong>
                   </v-progress-linear>
                 </div>
@@ -20,7 +20,7 @@
                 </v-col>
 
                 <v-col cols="4" class="pl-2">
-                  <v-btn color="success" dark small @click="upload">
+                  <v-btn :disabled="!this.currentFile" dark small @click="upload">
                     Upload
                     <v-icon right dark>mdi-cloud-upload</v-icon>
                   </v-btn>
@@ -78,7 +78,7 @@ export default {
 
       this.message = "";
 
-      UploadService.upload(this.currentFile, (event) => {
+      UploadService.upload(this.currentFile, this.$api_base_url, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
         .then((response) => {
