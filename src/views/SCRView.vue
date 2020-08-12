@@ -2,6 +2,9 @@
   <v-container class="fill-height" fluid>
     <v-row align="center" justify="center">
       <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
+        ZX81 Screen Converter.<br />
+        Takes as input: .BMP <br />
+        ...and generates the following files: .SCR, .A81, .TXT &amp; .PNG
         <v-card>
           <v-card-text>
             <div>
@@ -36,14 +39,12 @@
                   image.img_height
                 }}
                 <br />
-
                 <ul>
                   <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.png'">PNG</a></li>
                   <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.a81'">A81</a></li>
                   <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.scr'">SCR</a></li>
                   <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.txt'">TXT</a></li>
                 </ul>
-                {{ file }}
               </v-card>
               <!-- -->
             </div>
@@ -98,15 +99,23 @@ export default {
         });
     },
     selectFile(file) {
+      const allowedTypes = ["image/bmp"];
+
+      this.message = "";
       this.progress = 0;
       this.currentFile = file;
+
+      if (!file) return;
+      if (file.size > 1000000) {
+        this.message = "Too large, max size allowed is 1000000KB";
+        this.currentFile = undefined;
+      }
+      if (!allowedTypes.includes(file.type)) {
+        this.message = "Invalid file type: " + file.type;
+        this.currentFile = undefined;
+      }
     },
   },
-  mounted() {
-    /*
-    UploadService.getFiles().then((response) => {
-      this.fileInfos = response.data;
-	});*/
-  },
+  mounted() {},
 };
 </script>
