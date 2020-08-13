@@ -8,12 +8,12 @@
             Take as input a screen dump file and converts to different formats. Allowed input formats:
             <ul>
               <li>.bmp as produced by various emulators (e.g. EightyOne and SZ81)</li>
-              <li>.a81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
+              <li>.s81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
               <li>.scr Widely used screen format used for ZX Spectrum (ZX81 hi-res)</li>
             </ul>
             Creates the following output for downloads:
             <ul>
-              <li>.a81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
+              <li>.s81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
               <li>.scr for hires screens with regular size (in ZX Spectrum display format)</li>
               <li>.png for big screens, that goes beyond the 256x192 size</li>
               <li>.txt for printing in console - mostly for fun (ANSI control codes to implement inverse print)</li>
@@ -74,7 +74,7 @@
           ></v-card-text>
           <v-card-subtitle>{{ r.txt.filename }}</v-card-subtitle>
           <v-card-actions>
-            <v-btn icon>
+            <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.txt.filename">
               <v-icon>mdi-download</v-icon>
             </v-btn></v-card-actions
           ></v-card
@@ -89,7 +89,7 @@
                 <a :href="this.$api_base_url + '/scr/files/' + r.png.filename">{{ r.png.filename }}</a>
               </li>
               <li>
-                <a :href="this.$api_base_url + '/scr/files/' + r.a81.filename">{{ r.a81.filename }}</a>
+                <a :href="this.$api_base_url + '/scr/files/' + r.s81.filename">{{ r.s81.filename }}</a>
               </li>
               <li>
                 <a :href="this.$api_base_url + '/scr/files/' + r.scr.filename">{{ r.scr.filename }}</a>
@@ -148,7 +148,7 @@ export default {
         });
     },
     selectFile(file) {
-      const allowedTypes = ["bmp", "a81", "scr"];
+      const allowedTypes = ["bmp", "s81", "scr"];
 
       this.message = "";
       this.progress = 0;
