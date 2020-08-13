@@ -1,55 +1,104 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center">
-      <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
-        ZX81 Screen Converter.<br />
-        Takes as input: .BMP <br />
-        ...and generates the following files: .SCR, .A81, .TXT &amp; .PNG
-        <v-card>
+  <v-container fluid>
+    <v-row align="start" justify="center">
+      <v-col :xl="8" :lg="8" :md="10" :sm="8" :xs="12">
+        <v-card max-width="100%" flat>
+          <v-card-title>ZX81 Screen Converter</v-card-title>
           <v-card-text>
-            <div>
-              <!-- -->
-              <div v-if="currentFile">
-                <div>
-                  <v-progress-linear v-model="progress" color="grey" height="25" reactive>
-                    <strong>{{ progress }} %</strong>
-                  </v-progress-linear>
-                </div>
+            Take as input a screen dump file and converts to different formats. Allowed input formats:
+            <ul>
+              <li>.bmp as produced by various emulators (e.g. EightyOne and SZ81)</li>
+              <li>.scr Widely used screen format used for ZX Spectrum (ZX81 hi-res)</li>
+            </ul>
+            Creates the following output for downloads:
+            <ul>
+              <li>.s81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
+              <li>.scr for hires screens with regular size (in ZX Spectrum display format)</li>
+              <li>.png for big screens, that goes beyond the 256x192 size</li>
+              <li>.txt for printing in console - mostly for fun (ANSI control codes to implement inverse print)</li>
+            </ul>
+            <div v-if="currentFile">
+              <div>
+                <v-progress-linear v-model="progress" color="grey" height="25" reactive>
+                  <strong>{{ progress }} %</strong>
+                </v-progress-linear>
               </div>
-
-              <v-row no-gutters justify="center" align="center">
-                <v-col cols="8">
-                  <v-file-input show-size label="File input" @change="selectFile"></v-file-input>
-                </v-col>
-
-                <v-col cols="4" class="pl-2">
-                  <v-btn :disabled="!this.currentFile" dark small @click="upload">
-                    Upload
-                    <v-icon right dark>mdi-cloud-upload</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-
-              <v-alert v-if="message" border="left" color="blue-grey" dark>
-                {{ message }}
-              </v-alert>
-
-              <v-card v-if="image"
-                ><v-img v-if="image" max-width="320" :src="image.base64"></v-img> WxH: {{ image.img_width }}x{{
-                  image.img_height
-                }}
-                <br />
-                <ul>
-                  <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.png'">PNG</a></li>
-                  <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.a81'">A81</a></li>
-                  <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.scr'">SCR</a></li>
-                  <li><a :href="this.$api_base_url + '/scr/files/' + filename + '.txt'">TXT</a></li>
-                </ul>
-              </v-card>
-              <!-- -->
             </div>
+            <v-row no-gutters justify="center" align="center">
+              <v-col cols="10">
+                <v-file-input show-size label="File input" @change="selectFile"></v-file-input>
+              </v-col>
+              <v-col cols="2" class="pl-2">
+                <v-btn :disabled="!this.currentFile" dark small @click="upload">
+                  Upload
+                  <v-icon right dark>mdi-cloud-upload</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-alert v-if="message" border="left" color="blue-grey" dark> {{ message }} </v-alert>
           </v-card-text>
         </v-card>
+      </v-col>
+    </v-row>
+    <v-row dense v-if="r" align="start" justify="center">
+      <v-col cols="3">
+        <v-card max-width="320">
+          <v-img class="black--text align-end" :max-width="r.png.width" :src="r.png.base64"></v-img
+          ><v-card-subtitle>{{ r.png.filename }} ({{ r.png.width }}x{{ r.png.height }})</v-card-subtitle>
+          <v-card-actions>
+            <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.png.filename">
+              <v-icon>mdi-download</v-icon>
+            </v-btn></v-card-actions
+          ></v-card
+        >
+      </v-col>
+      <v-col cols="3">
+        <v-card max-width="320">
+          <v-img class="black--text align-end" max-width="320" :src="this.$api_base_url + '/scr/files/' + r.ovr.filename"></v-img
+          ><v-card-subtitle>{{ r.ovr.filename }}</v-card-subtitle>
+          <v-card-actions>
+            <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.ovr.filename">
+              <v-icon>mdi-download</v-icon>
+            </v-btn></v-card-actions
+          ></v-card
+        >
+      </v-col>
+      <v-col cols="3">
+        <v-card max-width="320">
+          <v-card-text
+            ><pre
+              style="font-family: 'Courier New', Courier, monospace; font-size: 9px; line-height: 90%;"
+              v-html="r.txt.data"
+            ></pre
+          ></v-card-text>
+          <v-card-subtitle>{{ r.txt.filename }}</v-card-subtitle>
+          <v-card-actions>
+            <v-btn icon>
+              <v-icon>mdi-download</v-icon>
+            </v-btn></v-card-actions
+          ></v-card
+        >
+      </v-col>
+      <v-col cols="3">
+        <v-card max-width="320">
+          <v-card-title>DOWNLOADS</v-card-title>
+          <v-card-text>
+            <ul>
+              <li>
+                <a :href="this.$api_base_url + '/scr/files/' + r.png.filename">{{ r.png.filename }}</a>
+              </li>
+              <li>
+                <a :href="this.$api_base_url + '/scr/files/' + r.a81.filename">{{ r.a81.filename }}</a>
+              </li>
+              <li>
+                <a :href="this.$api_base_url + '/scr/files/' + r.scr.filename">{{ r.scr.filename }}</a>
+              </li>
+              <li>
+                <a :href="this.$api_base_url + '/scr/files/' + r.txt.filename">{{ r.txt.filename }}</a>
+              </li>
+            </ul>
+          </v-card-text></v-card
+        >
       </v-col>
     </v-row>
   </v-container>
@@ -57,6 +106,7 @@
 
 <script>
 import UploadService from "../services/UploadFilesService";
+import AnsiUp from "ansi_up";
 
 export default {
   name: "zx81-convert-scr",
@@ -66,8 +116,7 @@ export default {
       progress: 0,
       message: "",
       file: undefined,
-      filename: undefined,
-      image: undefined,
+      r: undefined,
     };
   },
   methods: {
@@ -85,11 +134,9 @@ export default {
         .then((response) => {
           this.message = response.data.message;
           this.file = response.data.file;
-          this.image = response.data.image;
-          this.filename = this.file.originalname
-            .split(".")
-            .slice(0, -1)
-            .join(".");
+          this.r = response.data.output;
+          const ansi_up = new AnsiUp();
+          this.r.txt.data = ansi_up.ansi_to_html(this.r.txt.data);
           return;
         })
         .catch((e) => {
@@ -99,18 +146,20 @@ export default {
         });
     },
     selectFile(file) {
-      const allowedTypes = ["image/bmp"];
+      const allowedTypes = ["bmp", "scr"];
 
       this.message = "";
       this.progress = 0;
       this.currentFile = file;
 
       if (!file) return;
+      var extension = file.name.substring(file.name.lastIndexOf(".") + 1).toLowerCase();
+
       if (file.size > 1000000) {
         this.message = "Too large, max size allowed is 1000000KB";
         this.currentFile = undefined;
       }
-      if (!allowedTypes.includes(file.type)) {
+      if (!allowedTypes.includes(extension)) {
         this.message = "Invalid file type: " + file.type;
         this.currentFile = undefined;
       }
