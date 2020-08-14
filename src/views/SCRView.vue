@@ -164,7 +164,7 @@ export default {
         });
     },
     selectFile(file) {
-      const allowedTypes = ["bmp", "s81", "scr"];
+      const allowedTypes = ["bmp", "png", "s81", "scr"];
 
       this.message = "";
       this.progress = 0;
@@ -183,7 +183,7 @@ export default {
         this.message = "Invalid file type: " + file.type;
         this.currentFile = undefined;
       }
-      if (extension === "bmp") {
+      if (extension === "bmp" || extension === "png") {
         this.input_is_image = true;
       } else {
         this.input_is_image = false;
