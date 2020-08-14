@@ -36,6 +36,12 @@
                 </v-btn>
               </v-col>
             </v-row>
+            <v-row v-if="input_is_image" no-gutters justify="center" align="center">
+              <v-text-field label="Offset X" outlined v-model="offsetx"></v-text-field>
+              <v-col cols="6" class="pl-2">
+                <v-text-field label="Offset Y" outlined v-model="offsety"></v-text-field>
+              </v-col>
+            </v-row>
             <v-alert v-if="message" border="left" color="blue-grey" dark> {{ message }} </v-alert>
           </v-card-text>
         </v-card>
@@ -55,8 +61,13 @@
       </v-col>
       <v-col cols="3">
         <v-card max-width="320">
-          <v-img class="black--text align-end" max-width="320" :src="this.$api_base_url + '/scr/files/' + r.ovr.filename"></v-img
+          <v-img
+            class="black--text align-end"
+            max-width="320"
+            :src="this.$api_base_url + '/scr/files/' + r.ovr.filename + '?t=' + new Date().getTime()"
+          ></v-img
           ><v-card-subtitle>{{ r.ovr.filename }}</v-card-subtitle>
+          <v-card-text>Used offset: (x,y) = ({{ r.used_offsetx }}x{{ r.used_offsety }})</v-card-text>
           <v-card-actions>
             <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.ovr.filename">
               <v-icon>mdi-download</v-icon>
@@ -118,6 +129,9 @@ export default {
       message: "",
       file: undefined,
       r: undefined,
+      input_is_image: false,
+      offsetx: -1,
+      offsety: -1,
     };
   },
   methods: {
@@ -130,13 +144,15 @@ export default {
       this.message = "";
       this.r = undefined;
 
-      UploadService.upload(this.currentFile, this.$api_base_url, (event) => {
+      UploadService.upload(this.currentFile, this.$api_base_url, this.offsetx, this.offsety, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
         .then((response) => {
           this.message = response.data.message;
           this.file = response.data.file;
           this.r = response.data.output;
+          this.offsetx = this.r.used_offsetx;
+          this.offsety = this.r.used_offsety;
           const ansi_up = new AnsiUp();
           this.r.txt.data = ansi_up.ansi_to_html(this.r.txt.data);
           return;
@@ -153,6 +169,8 @@ export default {
       this.message = "";
       this.progress = 0;
       this.currentFile = file;
+      this.offsetx = -1;
+      this.offsety = -1;
 
       if (!file) return;
       var extension = file.name.substring(file.name.lastIndexOf(".") + 1).toLowerCase();
@@ -164,6 +182,11 @@ export default {
       if (!allowedTypes.includes(extension)) {
         this.message = "Invalid file type: " + file.type;
         this.currentFile = undefined;
+      }
+      if (extension === "bmp") {
+        this.input_is_image = true;
+      } else {
+        this.input_is_image = false;
       }
     },
   },
