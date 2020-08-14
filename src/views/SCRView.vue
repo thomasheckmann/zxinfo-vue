@@ -52,6 +52,9 @@
         <v-card max-width="320">
           <v-img class="black--text align-end" :max-width="r.png.width" :src="r.png.base64"></v-img
           ><v-card-subtitle>{{ r.png.filename }} ({{ r.png.width }}x{{ r.png.height }})</v-card-subtitle>
+          <v-card-text class="caption"
+            >Original image copied pixel-by-pixel and saved as PNG. Cleaned for e.g. TV artefacts added by EightyOne.</v-card-text
+          >
           <v-card-actions>
             <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.png.filename">
               <v-icon>mdi-download</v-icon>
@@ -67,7 +70,10 @@
             :src="this.$api_base_url + '/scr/files/' + r.ovr.filename + '?t=' + new Date().getTime()"
           ></v-img
           ><v-card-subtitle>{{ r.ovr.filename }}</v-card-subtitle>
-          <v-card-text>Used offset: (x,y) = ({{ r.used_offsetx }}x{{ r.used_offsety }})</v-card-text>
+          <v-card-text class="caption"
+            >Used offset: (x,y) = ({{ r.used_offsetx }}x{{ r.used_offsety }}) <br />Original image with marked center of screen.
+            Use to adjust offsetx and offsety.
+          </v-card-text>
           <v-card-actions>
             <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.ovr.filename">
               <v-icon>mdi-download</v-icon>
@@ -84,6 +90,9 @@
             ></pre
           ></v-card-text>
           <v-card-subtitle>{{ r.txt.filename }}</v-card-subtitle>
+          <v-card-text class="caption"
+            >ASCII version of S81 file. Use to check correct offset in order to match characters.</v-card-text
+          >
           <v-card-actions>
             <v-btn icon :href="this.$api_base_url + '/scr/files/' + r.txt.filename">
               <v-icon>mdi-download</v-icon>
