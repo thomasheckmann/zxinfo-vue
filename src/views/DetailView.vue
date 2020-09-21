@@ -196,10 +196,18 @@
             <td :class="entry.maximumPlayers ? 'font-weight-bold' : 'font-weight-light'">Maximum Players</td>
             <td valign="top">{{ entry.maximumPlayers }}</td>
           </tr>
+          <tr :style="!entry.multiTurnMode && !$isDevelopment ? 'display: none;' : ''">
+            <td :class="entry.multiTurnMode ? 'font-weight-bold' : 'font-weight-light'">Multi-Turn Mode</td>
+            <td valign="top">
+              <router-link :to="{ path: '/search', query: { multiplayermode: entry.multiTurnMode } }">{{
+                entry.multiTurnMode
+              }}</router-link>
+            </td>
+          </tr>
           <tr :style="!entry.multiTurnType && !$isDevelopment ? 'display: none;' : ''">
             <td :class="entry.multiTurnType ? 'font-weight-bold' : 'font-weight-light'">Multi-Turn Type</td>
             <td valign="top">
-              <router-link :to="{ path: '/search', query: { multiplayermode: entry.multiTurnType } }">{{
+              <router-link :to="{ path: '/search', query: { multiplayertype: entry.multiTurnType } }">{{
                 entry.multiTurnType
               }}</router-link>
             </td>
@@ -898,7 +906,8 @@ export default {
       }
 
       entry.maximumPlayers = this.GameData._source.numberofplayers == undefined ? "" : this.GameData._source.numberofplayers;
-      entry.multiTurnType = this.GameData._source.multiplayermode == undefined ? "" : this.GameData._source.multiplayermode;
+      entry.multiTurnMode = this.GameData._source.multiplayermode == undefined ? "" : this.GameData._source.multiplayermode;
+      entry.multiTurnType = this.GameData._source.multiplayertype == undefined ? "" : this.GameData._source.multiplayertype;
 
       entry.controlOptions = [];
       for (var control in this.GameData._source.controls) {
