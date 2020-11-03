@@ -621,6 +621,7 @@
         <v-expansion-panel-content>
           <v-data-table
             class="pa-0"
+            :items-per-page="-1"
             :headers="entry.additionals_headers"
             :items="entry.additionals"
             disable-sort
@@ -631,6 +632,9 @@
           >
             ><template v-slot:item.actions="{ item }">
               <v-icon small right @click="openUrl(getScreenUrl(item.url))">mdi-download</v-icon></template
+            >
+            <template v-slot:item.type="{ item }">
+              {{ item.type }}<span :hidden="!item.language">({{ item.language }})</span></template
             ></v-data-table
           >
         </v-expansion-panel-content>
