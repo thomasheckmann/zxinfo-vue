@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "ansi_up": "^4.0.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "nodemon": "^2.0.4",
     "to": "^0.2.9",
