@@ -95,7 +95,7 @@ export default {
       this.$emit("loadPage", v);
     },
     uncheckFilter(group, value) {
-      if (this.$isDevelopment) console.log("uncheck(): " + group + " = " + value);
+      if (this.$isDevelopment) console.log(`SearchVuew.vue - uncheckFilter(${group}, ${value})`);
       var idx = this.facets[group].selected.indexOf(value);
       if (idx > -1) {
         this.facets[group].selected.splice(idx, 1);

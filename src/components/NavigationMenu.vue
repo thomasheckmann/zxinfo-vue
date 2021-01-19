@@ -172,13 +172,15 @@ export default {
     this.isLoading = true;
     this.allResults = true;
     this.errormessage = "";
-    if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+
+    var dataURL = this.$api_base_url + "/metadata";
+    if (this.$isDevelopment) console.log(`NavigationMenu.vue - created(): calling ZXInfo API ${dataURL}`);
     axios
-      .get(this.$api_base_url + "/v2/metadata", { timeout: 5000 })
+      .get(dataURL, { timeout: 5000 })
       .then((response) => {
         this.metadata = response.data;
         this.isLoading = false;
-        if (this.$isDevelopment) console.log("...DONE!");
+        if (this.$isDevelopment) console.log("NavigationMenu.vue - loadMore(): ZXInfo API - DONE!");
       })
       .catch((error) => {
         this.isLoading = false;

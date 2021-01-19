@@ -22,17 +22,18 @@
               <v-list-item-content>
                 <v-list-item-subtitle
                   >{{ entry.originalReleaseYear }}
-                  <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
-                    ><router-link :to="{ path: '/publisher/' + encodeURIComponent(orgpub.name) }"
-                      >{{ orgpub.name }} {{ orgpub.country }}</router-link
-                    >
-                    <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
+                  <span v-for="(orgpub, i) in entry.originalPublishers" :key="i"
+                    ><router-link :to="{ path: '/publisher/' + encodeURIComponent(orgpub.name) }">{{ orgpub.name }}</router-link
+                    ><span v-if="orgpub.country"> ({{ orgpub.country }})</span>
+                    <span v-if="i != Object.keys(entry.originalPublishers).length - 1">/ </span></span
                   ></v-list-item-subtitle
                 >
-                <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{
-                  entry.machinetype
+                <router-link :to="{ path: '/search', query: { machinetype: entry.machineType } }">{{
+                  entry.machineType
                 }}</router-link
-                ><br /><router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.genre }}</router-link
+                ><br /><router-link :to="{ path: '/search', query: { genretype: entry.genreType } }">{{
+                  entry.genre
+                }}</router-link
                 ><br />
                 <v-rating
                   v-model="entry.score.score"

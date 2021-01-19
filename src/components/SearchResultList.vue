@@ -22,7 +22,7 @@
                     entry(card).machinetype
                   }}</router-link>
                   -
-                  <router-link :to="{ path: '/search', query: { type: entry(card).genretype } }">{{
+                  <router-link :to="{ path: '/search', query: { genretype: entry(card).genretype } }">{{
                     entry(card).genre
                   }}</router-link></v-list-item-subtitle
                 ></v-card
