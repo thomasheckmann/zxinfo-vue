@@ -672,7 +672,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$isDevelopment) console.log("main.vue - mounted(): " + this.$route.params.query);
+    if (this.$isDevelopment) console.log(`main.vue - mounted(): query=${this.$route.params.query}`);
     if (this.$route.params.query) {
       this.completeSelected = this.searchTerm = this.$route.params.query;
     } else {

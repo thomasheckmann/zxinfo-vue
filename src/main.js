@@ -17,7 +17,7 @@ Vue.use(Vuetify, VueAxios, axios);
 
 Vue.prototype.$isDevelopment = process.env.NODE_ENV == "development";
 
-if (!Vue.prototype.$isDevelopment) {
+if (Vue.prototype.$isDevelopment) {
   Vue.prototype.$api_base_url = "http://localhost:8300/v3";
 } else {
   Vue.prototype.$api_base_url = "https://api.zxinfo.dk/v3";

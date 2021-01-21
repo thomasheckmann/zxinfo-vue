@@ -167,7 +167,7 @@ export default {
   },
   computed: {},
   created() {
-    if (this.$isDevelopment) console.log("created()");
+    if (this.$isDevelopment) console.log(`NavigationMenu.vue - created()`);
     this.navdrawer = this.value;
     this.isLoading = true;
     this.allResults = true;

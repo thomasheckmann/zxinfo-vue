@@ -50,9 +50,7 @@ import LinksInfoView from "@/components/ZXInfo/linksInfo";
 export default {
   name: "DetailView",
   metaInfo() {
-    if (this.$isDevelopment) {
-      console.log("metaInfo()");
-    }
+    if (this.$isDevelopment) console.log("DetailView - metaInfo()");
 
     if (!this.isLoading) {
       return {
@@ -69,9 +67,7 @@ export default {
     };
   },
   mounted() {
-    if (this.$isDevelopment) {
-      console.log("mounted()");
-    }
+    if (this.$isDevelopment) console.log("DetailView - mounted():");
     this.loadentry();
   },
   methods: {
@@ -81,10 +77,10 @@ export default {
     loadentry() {
       this.isLoading = true;
 
-      if (this.$isDevelopment)
-        console.log("CALLING ZXINFO API...(): " + this.$api_base_url + "/games/" + this.$route.params.entryid + "?mode=full");
+      var dataURL = this.$api_base_url + "/games/" + this.$route.params.entryid + "?mode=full";
+      if (this.$isDevelopment) console.log(`DetailView.vue - loadentry(): calling ZXInfo API ${dataURL}`);
       axios
-        .get(this.$api_base_url + "/games/" + this.$route.params.entryid + "?mode=full")
+        .get(dataURL)
         .then((response) => {
           this.GameData = response.data;
           this.isLoading = false;
