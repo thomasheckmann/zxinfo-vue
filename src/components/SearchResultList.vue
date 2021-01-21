@@ -61,7 +61,9 @@ export default {
   props: ["cards", "allResults", "getPageSize", "pageindex", "searchNumberOfResults", "imagetype"],
   computed: {
     numberOfPages() {
-      return Math.floor(this.searchNumberOfResults / this.getPageSize) + 1;
+      if (this.$isDevelopment) console.log(`SearchResultList.vue - ${this.searchNumberOfResults}, ${this.getPageSize}`);
+
+      return Math.floor(parseInt(this.searchNumberOfResults, 10) / this.getPageSize);
     },
     getDefaultImageSrc() {
       return imageHelper.DEFAULT_SRC;
