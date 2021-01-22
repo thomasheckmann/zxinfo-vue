@@ -121,10 +121,15 @@
           >
         </v-list-item-content>
       </v-list-item>
-      <v-divider></v-divider>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-subtitle><router-link class="plain" to="/graph">Six degrees</router-link></v-list-item-subtitle>
+          <v-list-item-subtitle><router-link class="plain" to="/scr">ZX81 Screen Converter</router-link></v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item disabled>
+        <v-list-item-content>
+          <v-list-item-subtitle><router-link class="plain" to="/graph">Six degrees (soon)</router-link></v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
