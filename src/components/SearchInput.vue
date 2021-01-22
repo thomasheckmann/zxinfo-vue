@@ -97,32 +97,37 @@ export default {
 		item = [{entry_id: <id>, text: <text to display>, type: <type, used to pick an icon>}]
 	*/
     searchTerm(val) {
-      if (this.$isDevelopment) console.log("searchTerm() - " + val);
+      if (this.$isDevelopment) console.log("SearchInput.vue - searchTerm() - " + val);
       if (!val) {
-        if (this.$isDevelopment) console.log("no value, doing nothing");
+        if (this.$isDevelopment) console.log("SearchInput.vue - no value, doing nothing");
         return;
       }
       this.isLoading = true;
       this.errormessage = "";
 
-      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+      var endPointUrl = this.$api_base_url + "/suggest/" + encodeURIComponent(val);
+      if (this.$isDevelopment) console.log(`Invoking API: ${endPointUrl}`);
       axios
-        .get(this.$api_base_url + "/suggest/" + encodeURIComponent(val), { timeout: 1500 })
+        .get(endPointUrl, { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoading = false;
+          if (this.$isDevelopment) {
+            console.log(`result:\n`);
+            console.log(response.data);
+          }
         })
         .catch((error) => {
           console.log(error);
           this.completeOptions = [];
           this.isLoading = false;
-          this.errormessage = error.code + ": " + error.message;
+          this.errormessage = error.message;
         })
         .finally(() => (this.isLoading = false));
     },
   },
   mounted() {
-    console.log("mounted(): " + this.value + ", " + this.initialText);
+    console.log("SearchInput.vue - mounted(): " + this.value + ", " + this.initialText);
     if (this.value) {
       this.completeOptions[0].text = this.completeSelected.text = this.searchTerm = this.value;
     } else {

@@ -22,7 +22,7 @@
                     entry(card).machinetype
                   }}</router-link>
                   -
-                  <router-link :to="{ path: '/search', query: { type: entry(card).genretype } }">{{
+                  <router-link :to="{ path: '/search', query: { genretype: entry(card).genretype } }">{{
                     entry(card).genre
                   }}</router-link></v-list-item-subtitle
                 ></v-card
@@ -61,7 +61,9 @@ export default {
   props: ["cards", "allResults", "getPageSize", "pageindex", "searchNumberOfResults", "imagetype"],
   computed: {
     numberOfPages() {
-      return Math.floor(this.searchNumberOfResults / this.getPageSize) + 1;
+      if (this.$isDevelopment) console.log(`SearchResultList.vue - ${this.searchNumberOfResults}, ${this.getPageSize}`);
+
+      return Math.floor(parseInt(this.searchNumberOfResults, 10) / this.getPageSize);
     },
     getDefaultImageSrc() {
       return imageHelper.DEFAULT_SRC;

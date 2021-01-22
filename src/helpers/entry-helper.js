@@ -1,39 +1,45 @@
-// cleaned version of JSON
+/**
+ * cleaned version of JSON - used in overview (using search compact view)
+ * @param {*} gamedata
+ */
 var entry = function(gamedata) {
+  if (this.$isDevelopment) {
+    console.log(`entry-helper.js - entry(): ${gamedata}`);
+  }
   let entry = {};
   entry.id = gamedata._id;
-  entry.title = gamedata._source.fulltitle;
+  entry.title = gamedata._source.title;
 
   entry.availability = gamedata._source.availability;
 
-  if (gamedata._source.yearofrelease === undefined) {
+  if (gamedata._source.originalYearOfRelease === undefined) {
     entry.yearofrelease = "-";
   } else {
-    entry.yearofrelease = gamedata._source.yearofrelease;
+    entry.yearofrelease = gamedata._source.originalYearOfRelease;
   }
 
-  if (gamedata._source.machinetype === undefined) {
-    entry.machinetype = "-";
+  if (gamedata._source.machineType) {
+    entry.machinetype = gamedata._source.machineType;
   } else {
-    entry.machinetype = gamedata._source.machinetype;
+    entry.machinetype = "N/A";
   }
 
   entry.originalPublisher = [];
-  for (var publisher in gamedata._source.publisher) {
-    var originalPublisher = gamedata._source.publisher[publisher].name;
+  for (var publisher in gamedata._source.publishers) {
+    var originalPublisher = gamedata._source.publishers[publisher].name;
     var originalPublisherCountry = "";
-    if (gamedata._source.publisher[publisher].country !== undefined) {
-      originalPublisherCountry = "(" + gamedata._source.publisher[publisher].country + ")";
+    if (gamedata._source.publishers[publisher].country !== undefined) {
+      originalPublisherCountry = "(" + gamedata._source.publishers[publisher].country + ")";
     }
     entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
   }
 
-  entry.genretype = gamedata._source.type;
+  entry.genretype = gamedata._source.genreType;
   entry.genre = "-/-";
-  if (gamedata._source.type && gamedata._source.subtype) {
-    entry.genre = gamedata._source.type + "/" + gamedata._source.subtype;
-  } else if (gamedata._source.type && !gamedata._source.subtype) {
-    entry.genre = gamedata._source.type;
+  if (gamedata._source.genreType && gamedata._source.genreSubType) {
+    entry.genre = gamedata._source.genreType + "/" + gamedata._source.genreSubType;
+  } else if (gamedata._source.genreType && !gamedata._source.genreSubType) {
+    entry.genre = gamedata._source.genreType;
   }
 
   entry.score = {};
@@ -44,12 +50,12 @@ var entry = function(gamedata) {
   // look for inlay
   var inlays = []; // contains inlay, if found from Type
   var allInlays = []; // contains all matching type or inlay in filename
-  for (var idx = 0; idx < gamedata._source.additionals.length; idx++) {
-    let item = gamedata._source.additionals[idx];
+  for (var idx = 0; idx < gamedata._source.additionalDownloads.length; idx++) {
+    let item = gamedata._source.additionalDownloads[idx];
     if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
       inlays.push(item);
     }
-    if (item.type.toLowerCase().indexOf("inlay") !== -1 || item.url.toLowerCase().indexOf("inlay") !== -1) {
+    if (item.type.toLowerCase().indexOf("inlay") !== -1 || item.path.toLowerCase().indexOf("inlay") !== -1) {
       allInlays.push(item);
     }
   }

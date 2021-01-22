@@ -23,7 +23,7 @@
         <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{ entry.machinetype }}</router-link>
       </div>
       <div class="d-inline-block text-truncate" style="max-width: 100%;">
-        <router-link :to="{ path: '/search', query: { type: entry.genretype } }">{{ entry.genre }}</router-link>
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genre }}</router-link>
       </div>
       <div>
         <v-rating

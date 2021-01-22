@@ -101,7 +101,7 @@
               </template>
               <v-list-item v-for="subItem in group.items" :key="subItem.key">
                 <v-list-item-action class="ma-0">
-                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key"></v-checkbox>
+                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key.toString()"></v-checkbox>
                 </v-list-item-action>
                 <v-list-item-content class="py-0 pl-4">
                   <v-list-item-title v-text="subItem.key"></v-list-item-title>
@@ -184,7 +184,7 @@ var buildQuery = function(data) {
           query.push(encodeURIComponent(key) + "=" + encodeURIComponent(subitems[items]));
         }
       } else {
-        console.log(key + " = " + encodeURIComponent(data[key]));
+        // if (this.$isDevelopment) console.log(`main.vue - buildQuery(): ${key} = ${encodeURIComponent(data[key])}`);
         query.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
       }
     }
@@ -223,7 +223,8 @@ export default {
       facets: {
         // key = name in agg output, paramname = parameter name for search
         machinetypes: { icon: "mdi-desktop-classic", title: "Machine type", items: [], selected: [], paramname: "machinetype" },
-        type: { icon: "mdi-drama-masks", title: "Genre type", items: [], selected: [], paramname: "type" },
+        type: { icon: "mdi-drama-masks", title: "Genre type", items: [], selected: [], paramname: "genretype" },
+        // subtype: { icon: "mdi-drama-masks", title: "Genre subtype", items: [], selected: [], paramname: "genresubtype" },
         year: { icon: "mdi-timetable", title: "Year", items: [], selected: [], paramname: "year" },
         // TODO: Should be handled seperate, as it contains: controls.controls. FIX in es-service
         controls: { icon: "mdi-controller-classic", title: "Controls", items: [], selected: [], paramname: "control" },
@@ -281,7 +282,7 @@ export default {
     },
     getParametersFromRequest() {
       // resetSearchResultialize parameters from request
-      if (this.$isDevelopment) console.log("getParametersFromRequest()");
+      if (this.$isDevelopment) console.log("main.vue - getParametersFromRequest()");
       if (this.$route.params.query) {
         this.completeSelected = this.searchTerm = this.$route.params.query;
       } else {
@@ -304,7 +305,7 @@ export default {
     },
 
     resetSearchResult() {
-      if (this.$isDevelopment) console.log("resetSearchResult()");
+      if (this.$isDevelopment) console.log("main.vue - resetSearchResult()");
       this.isLoading = false;
       this.searchTimeOf = 0;
       this.searchNumberOfResults = 0;
@@ -315,7 +316,7 @@ export default {
     },
     replaceURL() {
       // build URL for current selection
-      if (this.$isDevelopment) console.log("replaceURL()");
+      if (this.$isDevelopment) console.log("main.vue - replaceURL()");
       const queryparam = this.searchTerm ? this.searchTerm : "";
 
       var filterquery = {};
@@ -327,6 +328,7 @@ export default {
             selected.push(this.facets[agg].selected[sel]);
           }
         }
+
         filterquery[this.facets[agg].paramname] = selected;
       }
 
@@ -337,7 +339,6 @@ export default {
         }
       }
 
-      if (this.$isDevelopment) console.log(filterquery);
       // fire event to parent
       if (this.queryparameters.contenttype) {
         this.updateContenttype(this.queryparameters.contenttype.value);
@@ -412,7 +413,7 @@ export default {
       this.loadMore();
     },
     loadMore: function() {
-      if (this.$isDevelopment) console.log("loadMore()");
+      if (this.$isDevelopment) console.log("main.vue - loadMore()");
       this.isLoading = true;
       this.allResults = true;
       this.errormessage = "";
@@ -424,32 +425,32 @@ export default {
         cs = JSON.parse(JSON.stringify(this.completeSelected)).text;
       }
       if (this.$isDevelopment) {
-        console.log("- completeSelected: " + cs + ", " + typeof cs);
-        console.log("- searchTerm: " + this.searchTerm);
+        console.log("main.vue - loadMore() - completeSelected: " + cs + ", " + typeof cs);
+        console.log("main.vue - loadMore() - searchTerm: " + this.searchTerm);
       }
       let searchText = "";
       if (typeof cs !== "undefined" && !this.searchTerm) {
-        if (this.$isDevelopment) console.log("=> Using completeSelected (what is selected)");
+        if (this.$isDevelopment) console.log("main.vue - loadMore() => Using completeSelected (what is selected)");
         if (this.completeSelected) {
           searchText = JSON.parse(JSON.stringify(this.completeSelected)).text;
         }
       } else if (this.searchTerm && typeof cs === "undefined") {
         // entering URL /search/<text>
-        if (this.$isDevelopment) console.log("=> Using searchTerm (what is typed in)");
+        if (this.$isDevelopment) console.log("main.vue - loadMore() => Using searchTerm (what is typed in)");
         searchText = this.searchTerm;
       } else if (this.searchTerm === cs) {
-        if (this.$isDevelopment) console.log("=> The same, use one");
+        if (this.$isDevelopment) console.log("main.vue - loadMore() => The same, use one");
         searchText = this.searchTerm;
       } else if (this.searchTerm !== cs) {
-        if (this.$isDevelopment) console.log("=> Different - using searchTerm");
+        if (this.$isDevelopment) console.log("main.vue - loadMore() => Different - using searchTerm");
         searchText = this.searchTerm;
       } else {
-        if (this.$isDevelopment) console.log("=> CONFUSED)");
+        if (this.$isDevelopment) console.log("main.vue - loadMore() => CONFUSED)");
       }
 
       var p = {
         query: searchText,
-        mode: "full",
+        mode: "compact",
         size: this.getPageSize,
         offset: this.pageindex,
       };
@@ -471,63 +472,65 @@ export default {
         }
       }
 
-      if (this.$isDevelopment) console.log(buildQuery(p));
-      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
-
       var dataURL;
-      if (this.isEntrySearch || this.isDetailPage) dataURL = this.$api_base_url + "/v2/search?" + buildQuery(p);
+      if (this.isEntrySearch || this.isDetailPage) dataURL = this.$api_base_url + "/search?" + buildQuery(p);
       if (this.isPublisherPage)
         dataURL = this.$api_base_url + "/publishers/" + encodeURIComponent(this.$route.params.query) + "/games?" + buildQuery(p);
       if (this.isAuthorPage)
         dataURL = this.$api_base_url + "/authors/" + encodeURIComponent(this.$route.params.query) + "/games?" + buildQuery(p);
-      axios
-        .get(dataURL, { timeout: 5000 })
-        .then((response) => {
-          var cards = response.data;
+      if (dataURL) {
+        if (this.$isDevelopment) console.log(`main.vue - loadMore(): buildQuery: ${buildQuery(p)}`);
+        if (this.$isDevelopment) console.log(`main.vue - loadMore(): calling ZXInfo API ${dataURL}`);
+        axios
+          .get(dataURL, { timeout: 5000 })
+          .then((response) => {
+            var cards = response.data;
 
-          // initialize options for filters
-          if (this.isEntrySearch) {
-            for (var agg in this.facets) {
-              this.facets[agg].items = [];
-              if (agg === "controls") {
-                // temp fix...
-                for (var ic = 0; ic < cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets.length; ic++) {
-                  this.facets[agg].items.push(cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets[ic]);
-                }
-              } else {
-                for (var i = 0; i < cards.aggregations.all_entries[agg]["filtered_" + agg].buckets.length; i++) {
-                  this.facets[agg].items.push(cards.aggregations.all_entries[agg]["filtered_" + agg].buckets[i]);
+            // initialize options for filters
+            if (this.isEntrySearch) {
+              for (var agg in this.facets) {
+                this.facets[agg].items = [];
+                if (agg === "controls") {
+                  // temp fix...
+                  for (var ic = 0; ic < cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets.length; ic++) {
+                    this.facets[agg].items.push(cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets[ic]);
+                  }
+                } else {
+                  for (var i = 0; i < cards.aggregations.all_entries[agg]["filtered_" + agg].buckets.length; i++) {
+                    this.facets[agg].items.push(cards.aggregations.all_entries[agg]["filtered_" + agg].buckets[i]);
+                  }
                 }
               }
             }
-          }
-          // append to cards
-          if (cards.hits.hits) {
-            for (var ii = 0; ii < cards.hits.hits.length; ii++) {
-              this.cards.push(cards.hits.hits[ii]);
-            }
+            // append to cards
+            if (cards.hits.hits) {
+              for (var ii = 0; ii < cards.hits.hits.length; ii++) {
+                this.cards.push(cards.hits.hits[ii]);
+              }
 
-            // all shown?
-            if (cards.hits.hits.length !== this.getPageSize || cards.hits.total == this.getPageSize) {
-              this.allResults = true;
-            } else {
-              this.allResults = false;
+              // all shown?
+              if (cards.hits.hits.length !== this.getPageSize || cards.hits.total == this.getPageSize) {
+                this.allResults = true;
+              } else {
+                this.allResults = false;
+              }
             }
-          }
-          this.pageindex++;
-          this.searchNumberOfResults = cards.hits.total;
-          this.searchTimeOf = cards.took;
-          this.isLoading = false;
-          if (this.$isDevelopment) console.log("...DONE!");
-        })
-        .catch((error) => {
-          this.isLoading = false;
-          this.allResults = true;
-          this.errormessage = error.code + ": " + error.message;
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
+            this.pageindex++;
+            this.searchNumberOfResults = cards.hits.total.value;
+            if (cards.hits.total.relation === "gte") this.searchNumberOfResults += "+";
+            this.searchTimeOf = cards.took;
+            this.isLoading = false;
+            if (this.$isDevelopment) console.log("main.vue - loadMore(): ZXInfo API - DONE!");
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.allResults = true;
+            this.errormessage = error.code + ": " + error.message;
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      }
     },
 
     highlight(content) {
@@ -635,7 +638,7 @@ export default {
     // reload page when linking to new entry
     $route() {
       if (this.$isDevelopment) {
-        console.log("WATCH route");
+        console.log("main.vue - watch()");
       }
 
       this.updateContenttypeIcon();
@@ -643,17 +646,18 @@ export default {
       this.loadMore();
     },
     searchTerm(val) {
-      if (this.$isDevelopment) console.log("searchTerm() - " + val);
+      if (this.$isDevelopment) console.log(`main.vue - searchTerm(${val})`);
       if (!val) {
-        if (this.$isDevelopment) console.log("no value, doing nothing");
+        if (this.$isDevelopment) console.log("main.vue - no value, doing nothing");
         return;
       }
       this.isLoadingOptions = true;
       this.errormessage = "";
 
-      if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+      var dataURL = this.$api_base_url + this.suggestEndpoint + encodeURIComponent(val);
+      if (this.$isDevelopment) console.log(`main.vue - searchTerm(): calling ZXInfo API ${dataURL}`);
       axios
-        .get(this.$api_base_url + this.suggestEndpoint + encodeURIComponent(val), { timeout: 1500 })
+        .get(dataURL, { timeout: 1500 })
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoadingOptions = false;
@@ -668,7 +672,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$isDevelopment) console.log("mounted(): " + this.$route.params.query);
+    if (this.$isDevelopment) console.log(`main.vue - mounted(): query=${this.$route.params.query}`);
     if (this.$route.params.query) {
       this.completeSelected = this.searchTerm = this.$route.params.query;
     } else {
