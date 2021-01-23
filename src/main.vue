@@ -222,13 +222,42 @@ export default {
       },
       facets: {
         // key = name in agg output, paramname = parameter name for search
-        machinetypes: { icon: "mdi-desktop-classic", title: "Machine type", items: [], selected: [], paramname: "machinetype" },
-        type: { icon: "mdi-drama-masks", title: "Genre type", items: [], selected: [], paramname: "genretype" },
+        machinetypes: {
+          aggName: "aggMachineTypes",
+          icon: "mdi-desktop-classic",
+          title: "Machine type",
+          items: [],
+          selected: [],
+          paramname: "machinetype",
+        },
+        type: {
+          aggName: "aggType",
+          icon: "mdi-drama-masks",
+          title: "Genre type",
+          items: [],
+          selected: [],
+          paramname: "genretype",
+        },
         // subtype: { icon: "mdi-drama-masks", title: "Genre subtype", items: [], selected: [], paramname: "genresubtype" },
-        year: { icon: "mdi-timetable", title: "Year", items: [], selected: [], paramname: "year" },
+        year: {
+          aggName: "aggOriginalYearOfRelease",
+          icon: "mdi-timetable",
+          title: "Year",
+          items: [],
+          selected: [],
+          paramname: "year",
+        },
         // TODO: Should be handled seperate, as it contains: controls.controls. FIX in es-service
-        controls: { icon: "mdi-controller-classic", title: "Controls", items: [], selected: [], paramname: "control" },
+        controls: {
+          aggName: "aggControls",
+          icon: "mdi-controller-classic",
+          title: "Controls",
+          items: [],
+          selected: [],
+          paramname: "control",
+        },
         multiplayertype: {
+          aggName: "aggMultiplayerType",
           icon: "mdi-account-multiple",
           title: "Multiplayer type",
           items: [],
@@ -236,6 +265,7 @@ export default {
           paramname: "multiplayertype",
         },
         multiplayermode: {
+          aggName: "aggMultiplayerMode",
           icon: "mdi-account-multiple-check",
           title: "Multiplayer mode",
           items: [],
@@ -243,14 +273,29 @@ export default {
           paramname: "multiplayermode",
         },
         originalpublication: {
+          aggName: "aggOriginalPublication",
           icon: "mdi-rocket",
           title: "Original publication",
           items: [],
           selected: [],
           paramname: "originalpublication",
         },
-        language: { icon: "mdi-message", title: "Language", items: [], selected: [], paramname: "language" },
-        availability: { icon: "mdi-check-circle", title: "Availability", items: [], selected: [], paramname: "availability" },
+        language: {
+          aggName: "aggLanguage",
+          icon: "mdi-message",
+          title: "Language",
+          items: [],
+          selected: [],
+          paramname: "language",
+        },
+        availability: {
+          aggName: "aggAvailability",
+          icon: "mdi-check-circle",
+          title: "Availability",
+          items: [],
+          selected: [],
+          paramname: "availability",
+        },
       },
       isLoading: false,
       searchTimeOf: 0,
@@ -459,6 +504,9 @@ export default {
       for (var agg in this.facets) {
         var selected = [];
         for (var sel in this.facets[agg].selected) {
+          if (this.$isDevelopment) {
+            console.log(`main.vue - loadMore(): ${JSON.stringify(this.facets[agg])}`);
+          }
           if (this.facets[agg].selected[sel]) {
             selected.push(this.facets[agg].selected[sel]);
           }
@@ -489,15 +537,26 @@ export default {
             // initialize options for filters
             if (this.isEntrySearch) {
               for (var agg in this.facets) {
+                if (this.$isDevelopment) console.log(`main.vue - loadMore(): facets: ${agg}`);
+
                 this.facets[agg].items = [];
+                const aggName = this.facets[agg].aggName;
+                if (this.$isDevelopment) console.log(`main.vue - loadMore(): aggName: ${aggName}`);
+
                 if (agg === "controls") {
-                  // temp fix...
-                  for (var ic = 0; ic < cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets.length; ic++) {
-                    this.facets[agg].items.push(cards.aggregations.all_entries[agg].controls["filtered_" + agg].buckets[ic]);
+                  // temp fix... as controls are nested
+                  for (
+                    var ic = 0;
+                    ic < cards.aggregations.all_entries[aggName].nestedControls["filtered_" + agg].buckets.length;
+                    ic++
+                  ) {
+                    this.facets[agg].items.push(
+                      cards.aggregations.all_entries[aggName].nestedControls["filtered_" + agg].buckets[ic]
+                    );
                   }
                 } else {
-                  for (var i = 0; i < cards.aggregations.all_entries[agg]["filtered_" + agg].buckets.length; i++) {
-                    this.facets[agg].items.push(cards.aggregations.all_entries[agg]["filtered_" + agg].buckets[i]);
+                  for (var i = 0; i < cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets.length; i++) {
+                    this.facets[agg].items.push(cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets[i]);
                   }
                 }
               }
