@@ -102,7 +102,9 @@ const router = new VueRouter({
   mode: "history",
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      console.log("scrollBehaviour: " + savedPosition.y);
+      if (this.$isDevelopment) {
+        console.log("scrollBehaviour: " + savedPosition);
+      }
       return savedPosition;
     } else {
       return { x: 0, y: 0 };

@@ -151,7 +151,7 @@
 
     <v-footer app padless class="caption .font-weight-thin">
       <v-row justify="space-between" align="center" class="px-4">
-        <span>&copy; 2020 info@zxinfo.dk</span>
+        <span>&copy; 2021 info@zxinfo.dk</span>
         <span class="text-center"><a href="https://api.zxinfo.dk/">Public API</a></span
         ><span
           ><a href="https://github.com/thomasheckmann/zxinfo-vue">GitHub<v-icon small>mdi-share</v-icon></a></span
@@ -504,9 +504,6 @@ export default {
       for (var agg in this.facets) {
         var selected = [];
         for (var sel in this.facets[agg].selected) {
-          if (this.$isDevelopment) {
-            console.log(`main.vue - loadMore(): ${JSON.stringify(this.facets[agg])}`);
-          }
           if (this.facets[agg].selected[sel]) {
             selected.push(this.facets[agg].selected[sel]);
           }
@@ -537,11 +534,8 @@ export default {
             // initialize options for filters
             if (this.isEntrySearch) {
               for (var agg in this.facets) {
-                if (this.$isDevelopment) console.log(`main.vue - loadMore(): facets: ${agg}`);
-
                 this.facets[agg].items = [];
                 const aggName = this.facets[agg].aggName;
-                if (this.$isDevelopment) console.log(`main.vue - loadMore(): aggName: ${aggName}`);
 
                 if (agg === "controls") {
                   // temp fix... as controls are nested

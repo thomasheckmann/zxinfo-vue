@@ -112,10 +112,6 @@ export default {
         .then((response) => {
           this.completeOptions = response.data;
           this.isLoading = false;
-          if (this.$isDevelopment) {
-            console.log(`result:\n`);
-            console.log(response.data);
-          }
         })
         .catch((error) => {
           console.log(error);

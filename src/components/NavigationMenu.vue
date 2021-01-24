@@ -82,7 +82,7 @@
         <v-list-item v-for="(gt, i) in metadata.genretypes.values" :key="i">
           <v-list-item-content>
             <v-list-item-title
-              ><a class="plain" :href="'/search?type=' + encodeURIComponent(gt.value)">{{ gt.value }}</a></v-list-item-title
+              ><a class="plain" :href="'/search?genretype=' + encodeURIComponent(gt.value)">{{ gt.value }}</a></v-list-item-title
             >
           </v-list-item-content>
           <span class="text-right caption">{{ gt.doc_count }}</span>
