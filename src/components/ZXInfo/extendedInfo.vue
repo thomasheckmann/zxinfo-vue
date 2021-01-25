@@ -168,7 +168,7 @@
     <!-- * Other systems/platforms * -->
     <v-expansion-panel :hidden="!entry.otherPlatforms.length && !$isDevelopment">
       <v-expansion-panel-header class="px-4 py-0" :class="entry.otherPlatforms.length ? 'font-weight-bold' : 'font-weight-light'"
-        >Other platforms</v-expansion-panel-header
+        >Other platforms/Systems</v-expansion-panel-header
       >
       <v-expansion-panel-content>
         <v-container class="py-0">

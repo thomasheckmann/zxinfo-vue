@@ -21,8 +21,7 @@
     <ReleasesView v-bind:entry="entry"></ReleasesView>
     <ExtendedInfoView v-bind:entry="entry"></ExtendedInfoView>
     <CompilationInfoView v-bind:entry="entry"></CompilationInfoView>
-    <ModificationInfoView v-bind:entry="entry"></ModificationInfoView>
-    <AuthoringInfoView v-bind:entry="entry"></AuthoringInfoView>
+    <RelationsInfoView v-bind:entry="entry"></RelationsInfoView>
     <BookInfoView v-bind:entry="entry"></BookInfoView>
     <LinksInfoView v-bind:entry="entry"></LinksInfoView>
   </v-card>
@@ -38,8 +37,7 @@ import BasicInfoView from "@/components/ZXInfo/basicInfo";
 import ReleasesView from "@/components/ZXInfo/releases";
 import ExtendedInfoView from "@/components/ZXInfo/extendedInfo";
 import CompilationInfoView from "@/components/ZXInfo/compilationInfo";
-import ModificationInfoView from "@/components/ZXInfo/modificationInfo";
-import AuthoringInfoView from "@/components/ZXInfo/authoringInfo";
+import RelationsInfoView from "@/components/ZXInfo/relationsInfo";
 import BookInfoView from "@/components/ZXInfo/bookInfo";
 import LinksInfoView from "@/components/ZXInfo/linksInfo";
 
@@ -173,29 +171,6 @@ export default {
       }
       entry.licensed = this.GameData._source.licensed;
 
-      entry.modFrom = [];
-      for (var mod in this.GameData._source.modificationOf) {
-        if (this.GameData._source.modificationOf[mod]) {
-          entry.modFrom.push({
-            id: this.GameData._source.modificationOf[mod].entry_id,
-            title: this.GameData._source.modificationOf[mod].title,
-            machineType: this.GameData._source.modificationOf[mod].machineType,
-            publisher: this.GameData._source.modificationOf[mod].publishers,
-          });
-        }
-      }
-      entry.inspiredBy = [];
-      for (var insp in this.GameData._source.modifiedBy) {
-        if (!this.GameData._source.modifiedBy[mod]) {
-          entry.inspiredBy.push({
-            id: this.GameData._source.modifiedBy[insp].entry_id,
-            title: this.GameData._source.modifiedBy[insp].title,
-            machineType: this.GameData._source.modifiedBy[insp].machineType,
-            publishers: this.GameData._source.modifiedBy[insp].publishers,
-          });
-        }
-      }
-
       entry.messageLanguage = this.GameData._source.language;
 
       entry.machineType = this.GameData._source.machineType;
@@ -276,21 +251,35 @@ export default {
         entry.unsortedgroups.push(this.GameData._source.unsortedGroup[group].name);
       }
 
-      entry.authoredWith = [];
-      for (var authoredwith in this.GameData._source.authoredWith) {
-        var authoredwithitem = this.GameData._source.authoredWith[authoredwith];
-        authoredwithitem.id = this.GameData._source.authoredWith[authoredwith].entry_id;
-        authoredwithitem.machineType = this.GameData._source.authoredWith[authoredwith].machineType;
-        entry.authoredWith.push(authoredwithitem);
-      }
+      /* RELATIONS */
+      entry.authoredWith = this.GameData._source.authoredWith;
+      entry.authoring = this.GameData._source.authoring;
 
-      entry.authoring = [];
-      for (var authoring in this.GameData._source.authoring) {
-        var authoringitem = this.GameData._source.authoring[authoring];
-        authoringitem.id = this.GameData._source.authoring[authoring].entry_id;
-        authoringitem.machineType = this.GameData._source.authoring[authoring].machineType;
-        entry.authoring.push(authoringitem);
-      }
+      entry.requiresHardware = this.GameData._source.requiresHardware;
+      entry.requiredByHardware = this.GameData._source.requiredByHardware;
+
+      entry.inspiredBy = this.GameData._source.inspiredBy;
+      entry.inspirationFor = this.GameData._source.inspirationFor;
+
+      entry.addOnDependsOn = this.GameData._source.addOnDependsOn;
+      entry.addOnAvailable = this.GameData._source.addOnAvailable;
+
+      entry.modificationOf = this.GameData._source.modificationOf;
+      entry.modifiedBy = this.GameData._source.modifiedBy;
+
+      entry.otherPlatform = this.GameData._source.otherPlatform;
+
+      entry.runsWith = this.GameData._source.runsWith;
+      entry.requiredToRun = this.GameData._source.requiredToRun;
+
+      entry.derivedFrom = this.GameData._source.derivedFrom;
+      entry.originOf = this.GameData._source.originOf;
+
+      entry.bundledWith = this.GameData._source.bundledWith;
+      entry.bundleContent = this.GameData._source.bundleContent;
+
+      entry.duplicateOf = this.GameData._source.duplicateOf;
+      entry.duplicatedBy = this.GameData._source.duplicatedBy;
 
       entry.inBook = [];
       for (var book in this.GameData._source.inBook) {
@@ -525,8 +514,7 @@ export default {
     ReleasesView,
     ExtendedInfoView,
     CompilationInfoView,
-    ModificationInfoView,
-    AuthoringInfoView,
+    RelationsInfoView,
     BookInfoView,
     LinksInfoView,
   },
