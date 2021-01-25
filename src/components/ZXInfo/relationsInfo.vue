@@ -49,6 +49,55 @@
         >
       </v-expansion-panel-content>
     </v-expansion-panel>
+    <!-- Editor of -->
+    <v-expansion-panel :hidden="!entry.editorOf.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.editorOf.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Editor for</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-data-table
+          class="pa-0"
+          :headers="entry.item_short_headers"
+          :items="entry.editorOf"
+          disable-sort
+          dense
+          flat
+          :mobile-breakpoint="0"
+          ><template v-slot:item.title="{ item }">
+            <router-link :to="'/details/' + item.entry_id">{{ item.title }}</router-link> </template
+          ><template v-slot:item.publisher="{ item }">
+            <span v-for="(orgpub, i) in item.publishers" :key="i"
+              >{{ orgpub.name }} <span v-if="i != Object.keys(item.publishers).length - 1"> / </span></span
+            >
+          </template></v-data-table
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * PROGRAMS AUTHORED WITH THIS* -->
+    <v-expansion-panel :hidden="!entry.editBy.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.editBy.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Can be edited with</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-data-table
+          class="pa-0"
+          :headers="entry.item_short_headers"
+          :items="entry.editBy"
+          disable-sort
+          dense
+          flat
+          :mobile-breakpoint="0"
+          ><template v-slot:item.title="{ item }">
+            <router-link v-if="item.entry_id" :to="'/details/' + item.entry_id">{{ item.title }}</router-link>
+            <span v-else>{{ item.title }}</span> </template
+          ><template v-slot:item.publisher="{ item }">
+            <span v-for="(orgpub, i) in item.publishers" :key="i"
+              >{{ orgpub.name }} <span v-if="i != Object.keys(item.publishers).length - 1"> / </span></span
+            >
+          </template></v-data-table
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
     <!-- * Requires Hardware/Interface  * -->
     <v-expansion-panel :hidden="!entry.requiresHardware.length && !$isDevelopment">
       <v-expansion-panel-header

@@ -255,6 +255,9 @@ export default {
       entry.authoredWith = this.GameData._source.authoredWith;
       entry.authoring = this.GameData._source.authoring;
 
+      entry.editorOf = this.GameData._source.editorOf;
+      entry.editBy = this.GameData._source.editBy;
+
       entry.requiresHardware = this.GameData._source.requiresHardware;
       entry.requiredByHardware = this.GameData._source.requiredByHardware;
 
