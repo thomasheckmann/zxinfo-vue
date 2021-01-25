@@ -537,21 +537,8 @@ export default {
                 this.facets[agg].items = [];
                 const aggName = this.facets[agg].aggName;
 
-                if (agg === "controls") {
-                  // temp fix... as controls are nested
-                  for (
-                    var ic = 0;
-                    ic < cards.aggregations.all_entries[aggName].nestedControls["filtered_" + agg].buckets.length;
-                    ic++
-                  ) {
-                    this.facets[agg].items.push(
-                      cards.aggregations.all_entries[aggName].nestedControls["filtered_" + agg].buckets[ic]
-                    );
-                  }
-                } else {
-                  for (var i = 0; i < cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets.length; i++) {
-                    this.facets[agg].items.push(cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets[i]);
-                  }
+                for (var i = 0; i < cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets.length; i++) {
+                  this.facets[agg].items.push(cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets[i]);
                 }
               }
             }
