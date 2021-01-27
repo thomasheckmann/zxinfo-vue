@@ -417,7 +417,8 @@ export default {
         ];
         entry.downloads.headers = [
           { text: "Filename", value: "url" },
-          { text: "Type/format", value: "format" },
+          { text: "Type", value: "type" },
+          { text: "Format", value: "format" },
           { text: "Protection scheme", value: "encodingscheme" },
           { text: "Original", value: "origin" },
         ];
@@ -428,7 +429,8 @@ export default {
         ];
         entry.downloads.headers = [
           { text: "Filename", value: "url" },
-          { text: "Type/format", value: "format" },
+          { text: "Type", value: "type" },
+          { text: "Format", value: "format" },
           { text: "Original", value: "origin" },
         ];
       } else {

@@ -8,7 +8,7 @@
               <SearchInput v-model="searchText" />
               <div class="text-center">
                 <v-btn elevation="0" small @action="search">ZXDB search</v-btn>&nbsp;
-                <v-btn elevation="0" small disabled="">I'm Feeling Lucky</v-btn>
+                <v-btn elevation="0" small @click="random">I'm Feeling Lucky</v-btn>
               </div>
               <p></p>
               <p class="text-center .caption .font-weight-thin	">ZXDB update 15.01.2021</p>
@@ -21,6 +21,7 @@
 </template>
 <script>
 import SearchInput from "@/components/SearchInput";
+import axios from "axios";
 
 export default {
   name: "Home",
@@ -37,7 +38,20 @@ export default {
   components: { SearchInput },
   methods: {
     search() {
-      this.$router.push({ path: `/search/${encodeURIComponent(this.searchText)}` }, () => {});
+      this.$router.push({ path: `/search/${encodeURIComponent(this.searchText)}` });
+    },
+    random() {
+      var dataURL = this.$api_base_url + "/games/random/1?mode=tiny";
+      if (this.$isDevelopment) console.log(`Home.vue - reandom(): calling ZXInfo API ${dataURL}`);
+      axios
+        .get(dataURL, { timeout: 500 })
+        .then((response) => {
+          const entry_id = response.data.hits.hits[0]._id;
+          this.$router.push({ path: `/details/${entry_id}` });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   watch: {
