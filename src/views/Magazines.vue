@@ -32,7 +32,9 @@
             </thead>
             <tbody>
               <tr v-for="item in filteredItems(1, 2)" :key="item.name">
-                <td>{{ item.name }}</td>
+                <td>
+                  <router-link :to="{ path: '/magazines/' + item.name }">{{ item.name }}</router-link>
+                </td>
                 <td>{{ item.publisher }}</td>
                 <td>{{ item.language }}</td>
                 <td>{{ item.type }}</td>
@@ -115,7 +117,9 @@ export default {
       .then((response) => {
         var magazineList = response.data.hits.hits;
         for (var i = 0; i < magazineList.length; i++) {
-          this.magazineItems.push(magazineList[i]._source);
+          var item = magazineList[i]._source;
+          item.magazine_id = magazineList[i]._id;
+          this.magazineItems.push(item);
         }
         this.loading = false;
       })

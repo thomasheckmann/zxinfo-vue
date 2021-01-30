@@ -1,0 +1,75 @@
+<template>
+  <v-container v-if="!loading" justify-start class="scroll-y pa-0" fluid>
+    <v-row
+      ><v-col cols="12" justify="center" class="py-0 ma-0">
+        <v-toolbar dense dark color="grey" class="pa-0">
+          <v-spacer />
+          <v-toolbar-title class="white--text"
+            >{{ mag.name }} - {{ mag.publisher }} ({{ mag.country }}), {{ mag.language }} [{{ mag.type }}]</v-toolbar-title
+          >
+          <v-spacer />
+        </v-toolbar> </v-col
+    ></v-row>
+    <v-row :align="'start'" :justify="'start'" dense>
+      <v-col v-for="(card, index) in mag.issues" :key="index" xs="12" sm="6" md="4">
+        <v-card dark>
+          <div class="d-flex flex-no-wrap justify-space-between">
+            <div>
+              <v-card-title class="headline">Issue: {{ card.number }}</v-card-title>
+
+              <v-card-subtitle>Year: {{ card.date_year }}, Month: {{ card.date_month }}</v-card-subtitle>
+            </div>
+
+            <v-avatar class="ma-1" size="200" tile>
+              <v-img :src="getScreenUrl(card.cover_image)"></v-img>
+            </v-avatar>
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import axios from "axios";
+import imageHelper from "@/helpers/image-helper";
+
+export default {
+  name: "Magazines",
+  metaInfo() {
+    return {
+      title: "ZXInfo - The open source ZXDB frontend",
+    };
+  },
+  data() {
+    return {
+      mag: [],
+      loading: false,
+    };
+  },
+  computed: {},
+  methods: { getScreenUrl: imageHelper.getScreenUrl },
+  mounted() {
+    this.isLoading = true;
+
+    var dataURL = this.$api_base_url + `/magazines/${this.$route.params.name}/issues`;
+    if (this.$isDevelopment) console.log(`DetailView.vue - loadentry(): calling ZXInfo API ${dataURL}`);
+    axios
+      .get(dataURL)
+      .then((response) => {
+        this.mag = response.data;
+        this.loading = false;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.completeOptions = [];
+        this.errormessage = error.code + ": " + error.message;
+        this.isLoadingOptions = false;
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+  },
+};
+</script>
+<style scoped></style>
