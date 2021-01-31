@@ -4,9 +4,10 @@
       ><v-col cols="12" justify="center" class="py-0 ma-0">
         <v-toolbar dense dark color="grey" class="pa-0">
           <v-spacer />
-          <v-toolbar-title class="white--text"
-            >{{ mag.name }} - {{ mag.publisher }} ({{ mag.country }}), {{ mag.language }} [{{ mag.type }}]</v-toolbar-title
-          >
+          <v-icon>{{ getMagazineTypeIcon(mag.type) }}</v-icon
+          ><v-toolbar-title class="white--text"
+            >{{ mag.name }} - {{ mag.publisher }} ({{ mag.country }}), {{ mag.language }}
+          </v-toolbar-title>
           <v-spacer />
         </v-toolbar> </v-col
     ></v-row>
@@ -60,7 +61,21 @@ export default {
       return imageHelper.DEFAULT_PAPER_SRC;
     },
   },
-  methods: { getScreenUrl: imageHelper.getScreenUrl },
+  methods: {
+    getScreenUrl: imageHelper.getScreenUrl,
+    getMagazineTypeIcon(t) {
+      switch (t) {
+        case "PAPER":
+          return "mdi-book-open-variant";
+        case "TAPE":
+          return "mdi-cassette";
+        case "DISK":
+          return "mdi-floppy-variant";
+        default:
+          return "help";
+      }
+    },
+  },
   mounted() {
     this.isLoading = true;
 

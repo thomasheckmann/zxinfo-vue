@@ -5,13 +5,15 @@
         <v-card dark tile class="pa-2">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
-              <v-card-title class="headline">{{ issue.name }}</v-card-title>
+              <v-card-title class="headline"
+                ><v-icon>{{ getMagazineTypeIcon(issue.type) }}</v-icon> {{ issue.name }}</v-card-title
+              >
 
               <v-card-subtitle>Year: {{ issue.issue.date_year }}, Month: {{ issue.issue.date_month }}</v-card-subtitle>
               <v-card-text
                 >Publisher: {{ issue.publisher }}<br />
-                Country: {{ issue.country }}<br />Language: {{ issue.language }}, type: {{ issue.type }}</v-card-text
-              >
+                Country: {{ issue.country }}<br />Language: {{ issue.language }}
+              </v-card-text>
             </div>
 
             <v-img
@@ -92,6 +94,18 @@ export default {
   },
   methods: {
     getScreenUrl: imageHelper.getScreenUrl,
+    getMagazineTypeIcon(t) {
+      switch (t) {
+        case "PAPER":
+          return "mdi-book-open-variant";
+        case "TAPE":
+          return "mdi-cassette";
+        case "DISK":
+          return "mdi-floppy-variant";
+        default:
+          return "help";
+      }
+    },
   },
   mounted() {
     this.isLoading = true;

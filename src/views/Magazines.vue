@@ -37,7 +37,9 @@
                 </td>
                 <td>{{ item.publisher }}</td>
                 <td>{{ item.language }}</td>
-                <td>{{ item.type }}</td>
+                <td>
+                  <v-icon>{{ getMagazineTypeIcon(item.type) }}</v-icon>
+                </td>
               </tr>
             </tbody>
           </template>
@@ -69,7 +71,9 @@
                 </td>
                 <td>{{ item.publisher }}</td>
                 <td>{{ item.language }}</td>
-                <td>{{ item.type }}</td>
+                <td>
+                  <v-icon>{{ getMagazineTypeIcon(item.type) }}</v-icon>
+                </td>
               </tr>
             </tbody>
           </template>
@@ -97,6 +101,18 @@ export default {
   },
   computed: {},
   methods: {
+    getMagazineTypeIcon(t) {
+      switch (t) {
+        case "PAPER":
+          return "mdi-book-open-variant";
+        case "TAPE":
+          return "mdi-cassette";
+        case "DISK":
+          return "mdi-floppy-variant";
+        default:
+          return "help";
+      }
+    },
     filteredItems(column, columns) {
       const self = this; // Enables us to pass this to the method
       const total = this.magazineItems.length; // How many items
