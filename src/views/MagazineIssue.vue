@@ -87,6 +87,9 @@ export default {
       return imageHelper.DEFAULT_PAPER_SRC;
     },
     getTitlesReferenced() {
+      if (!this.issue.issue.references) {
+        return [];
+      }
       return this.issue.issue.references
         .filter((item) => item.entry_id !== null)
         .sort((a, b) => (a.entry_title > b.entry_title ? 1 : b.entry_title > a.entry_title ? -1 : 0));
@@ -116,7 +119,6 @@ export default {
       .get(dataURL)
       .then((response) => {
         this.issue = response.data;
-        console.log(this.issue);
         this.loading = false;
       })
       .catch((error) => {
