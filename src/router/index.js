@@ -5,6 +5,7 @@ import SearchView from "@/views/SearchView.vue";
 import Meta from "vue-meta";
 import Magazines from "@/views/Magazines.vue";
 import MagazineDetail from "@/views/MagazineDetail.vue";
+import MagazineIsssueDetail from "@/views/MagazineIssue.vue";
 
 Vue.use(VueRouter);
 Vue.use(Meta);
@@ -67,6 +68,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: SearchView,
+  },
+  {
+    path: "/magazines/:name/issues/:issueid",
+    name: "MagazineIssueDetail",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: MagazineIsssueDetail,
   },
   {
     path: "/magazines/:name",

@@ -17,7 +17,12 @@
             <div>
               <v-card-title class="headline">Issue: {{ card.number }}</v-card-title>
 
-              <v-card-subtitle>Year: {{ card.date_year }}, Month: {{ card.date_month }}</v-card-subtitle>
+              <v-card-subtitle>Year: {{ card.date_year }}, Month: {{ card.date_month }} {{ card.id }}</v-card-subtitle>
+              <v-card-actions>
+                <v-btn class="ml-2 mt-5" outlined rounded small :to="`/magazines/${mag.name}/issues/${card.id}`">
+                  Info
+                </v-btn></v-card-actions
+              >
             </div>
 
             <v-avatar class="ma-1" size="200" tile>

@@ -64,7 +64,9 @@
             </thead>
             <tbody>
               <tr v-for="item in filteredItems(2, 2)" :key="item.name">
-                <td>{{ item.name }}</td>
+                <td>
+                  <router-link :to="{ path: '/magazines/' + item.name }">{{ item.name }}</router-link>
+                </td>
                 <td>{{ item.publisher }}</td>
                 <td>{{ item.language }}</td>
                 <td>{{ item.type }}</td>
