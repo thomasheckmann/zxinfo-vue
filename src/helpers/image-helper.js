@@ -60,4 +60,5 @@ module.exports = {
   getCoverImage: getCoverImageForEntry,
   getScreenUrl: getScreenUrl,
   DEFAULT_SRC: "https://zxinfo.dk/media/images/placeholder.png",
+  DEFAULT_PAPER_SRC: "https://zxinfo.dk/media/images/placeholderPaper.png",
 };

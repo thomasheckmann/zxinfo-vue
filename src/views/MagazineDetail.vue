@@ -11,8 +11,8 @@
         </v-toolbar> </v-col
     ></v-row>
     <v-row :align="'start'" :justify="'start'" dense>
-      <v-col v-for="(card, index) in mag.issues" :key="index" xs="12" sm="6" md="4">
-        <v-card dark>
+      <v-col v-for="(card, index) in mag.issues" :key="index" cols="12" sm="6" md="4">
+        <v-card dark class="pa-2">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
               <v-card-title class="headline">Issue: {{ card.number }}</v-card-title>
@@ -24,10 +24,13 @@
                 </v-btn></v-card-actions
               >
             </div>
-
-            <v-avatar class="ma-1" size="200" tile>
-              <v-img :src="getScreenUrl(card.cover_image)"></v-img>
-            </v-avatar>
+            <v-img
+              :lazy-src="getDefaultImageSrc"
+              :aspect-ratio="9 / 16"
+              max-height="300"
+              max-width="200"
+              :src="getScreenUrl(card.cover_image)"
+            ></v-img>
           </div>
         </v-card>
       </v-col>
@@ -52,7 +55,11 @@ export default {
       loading: false,
     };
   },
-  computed: {},
+  computed: {
+    getDefaultImageSrc() {
+      return imageHelper.DEFAULT_PAPER_SRC;
+    },
+  },
   methods: { getScreenUrl: imageHelper.getScreenUrl },
   mounted() {
     this.isLoading = true;

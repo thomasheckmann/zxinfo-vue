@@ -2,7 +2,7 @@
   <v-container v-if="!loading" justify-start class="scroll-y pa-0" fluid>
     <v-row
       ><v-col cols="12" justify="center" class="py-0 ma-0">
-        <v-card dark flat>
+        <v-card dark tile class="pa-2">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
               <v-card-title class="headline">{{ issue.name }}</v-card-title>
@@ -14,9 +14,13 @@
               >
             </div>
 
-            <v-avatar class="ma-1" size="200" tile>
-              <v-img :src="getScreenUrl(issue.issue.cover_image)"></v-img>
-            </v-avatar>
+            <v-img
+              :lazy-src="getDefaultImageSrc"
+              :aspect-ratio="9 / 16"
+              max-height="300"
+              max-width="200"
+              :src="getScreenUrl(issue.issue.cover_image)"
+            ></v-img>
           </div>
         </v-card>
       </v-col> </v-row
@@ -40,7 +44,11 @@ export default {
       loading: true,
     };
   },
-  computed: {},
+  computed: {
+    getDefaultImageSrc() {
+      return imageHelper.DEFAULT_PAPER_SRC;
+    },
+  },
   methods: { getScreenUrl: imageHelper.getScreenUrl },
   mounted() {
     this.isLoading = true;
