@@ -23,8 +23,43 @@
             ></v-img>
           </div>
         </v-card>
-      </v-col> </v-row
-  ></v-container>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  Title
+                </th>
+                <th class="text-left">
+                  Type
+                </th>
+                <th class="text-left">
+                  Page
+                </th>
+                <th class="text-left">
+                  Topic
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, i) in getTitlesReferenced" :key="i">
+                <td>
+                  <router-link :to="{ path: '/details/' + item.entry_id }">{{ item.entry_title }}</router-link>
+                </td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.page }}</td>
+                <td>{{ item.featurename }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-col>
+    </v-row></v-container
+  >
 </template>
 
 <script>
@@ -41,6 +76,7 @@ export default {
   data() {
     return {
       issue: {},
+      titles: [],
       loading: true,
     };
   },
@@ -48,8 +84,15 @@ export default {
     getDefaultImageSrc() {
       return imageHelper.DEFAULT_PAPER_SRC;
     },
+    getTitlesReferenced() {
+      return this.issue.issue.references
+        .filter((item) => item.entry_id !== null)
+        .sort((a, b) => (a.entry_title > b.entry_title ? 1 : b.entry_title > a.entry_title ? -1 : 0));
+    },
   },
-  methods: { getScreenUrl: imageHelper.getScreenUrl },
+  methods: {
+    getScreenUrl: imageHelper.getScreenUrl,
+  },
   mounted() {
     this.isLoading = true;
 
