@@ -116,6 +116,12 @@
       <v-divider></v-divider>
       <v-list-item>
         <v-list-item-content>
+          <v-list-item-subtitle><router-link class="plain" to="/magazines">Magazine Info</router-link></v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item>
+        <v-list-item-content>
           <v-list-item-subtitle
             ><router-link class="plain" to="/animated">Animated Loading Screens</router-link></v-list-item-subtitle
           >
@@ -185,14 +191,13 @@ export default {
       .then((response) => {
         this.metadata = response.data;
         this.isLoading = false;
-        if (this.$isDevelopment) console.log("NavigationMenu.vue - loadMore(): ZXInfo API - DONE!");
       })
       .catch((error) => {
         this.isLoading = false;
         this.errormessage = error.code + ": " + error.message;
       })
       .finally(() => {
-        this.v = false;
+        this.isLoading = false;
       });
   },
 };
