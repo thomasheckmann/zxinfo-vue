@@ -78,6 +78,37 @@
           </v-list-item>
         </v-list>
       </v-expansion-panel-content> </v-expansion-panel
+    ><!-- * MagazineReferences  * -->
+    <v-expansion-panel :hidden="!entry.magazineRefs.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.magazineRefs.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Magazine References (total: {{ entry.magazineRefs.length }})</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-data-table
+          class="pa-0"
+          :items-per-page="-1"
+          :headers="entry.magrefs_headers"
+          :items="entry.magazineRefs"
+          disable-sort
+          hide-default-footer
+          dense
+          flat
+          :mobile-breakpoint="0"
+        >
+          ><template v-slot:item.magazineName="{ item }"
+            ><router-link :to="{ path: '/magazines/' + item.magazineName }">{{ item.magazineName }}</router-link></template
+          >
+          <template v-slot:item.issue="{ item }"
+            ><router-link :to="{ path: '/magazines/' + item.magazineName + '/issues/' + item.issueId }"
+              >{{ item.number }} - {{ item.dateYear }}/{{ item.dateMonth }}</router-link
+            ></template
+          >
+          <template v-slot:item.type="{ item }">
+            {{ item.type }}<span :hidden="!item.featureName"> - {{ item.featureName }}</span></template
+          >
+          <template v-slot:item.typeMed="{ item }"> {{ item.type }}</template></v-data-table
+        >
+      </v-expansion-panel-content> </v-expansion-panel
     ><!-- * Related links  * -->
     <v-expansion-panel :hidden="!entry.relatedlinks.length && !$isDevelopment">
       <v-expansion-panel-header class="px-4 py-0" :class="entry.relatedlinks.length ? 'font-weight-bold' : 'font-weight-light'"

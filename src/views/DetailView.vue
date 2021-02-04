@@ -232,6 +232,7 @@ export default {
       }
 
       entry.reviewAwards = this.GameData._source.reviewAwards;
+      entry.magazineRefs = this.GameData._source.magazineReferences;
 
       entry.themedgroups = [];
       for (var theme in this.GameData._source.themedGroup) {
@@ -424,6 +425,13 @@ export default {
           { text: "Protection scheme", value: "encodingscheme" },
           { text: "Original", value: "origin" },
         ];
+        entry.magrefs_headers = [
+          { text: "Magazine", value: "magazineName" },
+          { text: "Issue", value: "issue" },
+          { text: "Page", value: "page" },
+          { text: "Type", value: "type" },
+          { text: "Score", value: "score" },
+        ];
       } else if (this.$vuetify.breakpoint.smOnly) {
         entry.additionals_headers = [
           { text: "Filename", value: "path" },
@@ -435,12 +443,24 @@ export default {
           { text: "Format", value: "format" },
           { text: "Original", value: "origin" },
         ];
+        entry.magrefs_headers = [
+          { text: "Magazine", value: "magazineName" },
+          { text: "Issue", value: "issue" },
+          { text: "Page", value: "page" },
+          { text: "Type", value: "typeMed" },
+        ];
       } else {
         entry.additionals_headers = [
           { text: "Filename", value: "path" },
           { text: "Link", value: "actions" },
         ];
         entry.downloads.headers = [{ text: "Filename", value: "url" }];
+        entry.magrefs_headers = [
+          { text: "Magazine", value: "magazineName" },
+          { text: "Issue", value: "issue" },
+          { text: "Page", value: "page" },
+          { text: "Type", value: "typeMed" },
+        ];
       }
 
       /*
