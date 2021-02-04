@@ -217,6 +217,27 @@
             </v-list>
           </td>
         </tr>
+        <tr :style="!entry.reviewAwards.length && !$isDevelopment ? 'display: none;' : ''">
+          <td :class="entry.reviewAwards.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">
+            Review awards
+          </td>
+          <td>
+            <v-list flat dense class="pa-0">
+              <v-list-item style="min-height:16px;" class="pa-0 ma-0 auto" v-for="(item, i) in entry.reviewAwards" :key="i">
+                <v-list-item-content class="py-1">
+                  <v-list-item-subtitle
+                    >{{ item.awardName }} -
+                    <router-link :to="{ path: '/magazines/' + item.magazineName }">{{ item.magazineName }}</router-link
+                    >&nbsp;
+                    <router-link :to="{ path: '/magazines/' + item.magazineName + '/issues/' + item.issueId }"
+                      >issue #{{ item.number }} - {{ item.dateYear }}/{{ item.dateMonth }}</router-link
+                    >, page {{ item.page }}</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </td>
+        </tr>
         <tr :style="!entry.allinlays.length && !$isDevelopment ? 'display: none;' : ''">
           <td :class="entry.allinlays.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Inlays</td>
           <td></td>

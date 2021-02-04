@@ -231,6 +231,8 @@ export default {
         entry.awards.push(this.GameData._source.awards[award].text);
       }
 
+      entry.reviewAwards = this.GameData._source.reviewAwards;
+
       entry.themedgroups = [];
       for (var theme in this.GameData._source.themedGroup) {
         entry.themedgroups.push(this.GameData._source.themedGroup[theme].name);
