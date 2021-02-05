@@ -135,7 +135,7 @@ export default {
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
-      this.$router.replace({ path: `/letter/${l}` }, () => {});
+      this.$router.replace({ path: `/letter/${encodeURIComponent(l)}` }, () => {});
       this.loadMore();
     },
   },

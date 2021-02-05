@@ -74,7 +74,7 @@ export default {
         });
     },
     byLetter(l) {
-      this.$router.push({ path: `/letter/${l}` });
+      this.$router.push({ path: `/letter/${encodeURIComponent(l)}` });
     },
   },
   watch: {
