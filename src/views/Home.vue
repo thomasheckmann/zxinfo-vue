@@ -1,23 +1,34 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center">
-      <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
-        <v-card flat>
-          <v-card-text>
-            <div>
-              <SearchInput v-model="searchText" />
-              <div class="text-center">
-                <v-btn elevation="0" small @action="search">ZXDB search</v-btn>&nbsp;
-                <v-btn elevation="0" small @click="random">I'm Feeling Lucky</v-btn>
+  <v-card flat tile height="100%" width="100%">
+    <v-row align="start" justify="center">
+      <v-sheet dark width="100%">
+        <v-slide-group show-arrows>
+          <v-slide-item v-for="n in getLetters" :key="n">
+            <v-btn plain small text tile @click="byLetter(n)">{{ n }} </v-btn></v-slide-item
+          >
+        </v-slide-group>
+      </v-sheet></v-row
+    >
+    <v-container class="fill-height">
+      <v-row align="center" justify="center">
+        <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
+          <v-card flat>
+            <v-card-text>
+              <div>
+                <SearchInput v-model="searchText" />
+                <div class="text-center">
+                  <v-btn elevation="0" small @action="search">ZXDB search</v-btn>&nbsp;
+                  <v-btn elevation="0" small @click="random">I'm Feeling Lucky</v-btn>
+                </div>
+                <p></p>
+                <p class="text-center .caption .font-weight-thin	">ZXDB update 15.01.2021</p>
               </div>
-              <p></p>
-              <p class="text-center .caption .font-weight-thin	">ZXDB update 15.01.2021</p>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row></v-container
+    >
+  </v-card>
 </template>
 <script>
 import SearchInput from "@/components/SearchInput";
@@ -36,6 +47,15 @@ export default {
     };
   },
   components: { SearchInput },
+  computed: {
+    getLetters: function() {
+      var letters = ["#"];
+      for (var i = 65; i < 91; i++) {
+        letters.push(String.fromCharCode(i));
+      }
+      return letters;
+    },
+  },
   methods: {
     search() {
       this.$router.push({ path: `/search/${encodeURIComponent(this.searchText)}` });
@@ -52,6 +72,9 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    byLetter(l) {
+      this.$router.push({ path: `/letter/${l}` });
     },
   },
   watch: {
