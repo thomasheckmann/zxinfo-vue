@@ -187,7 +187,7 @@ export default {
     var dataURL = this.$api_base_url + "/metadata";
     if (this.$isDevelopment) console.log(`NavigationMenu.vue - created(): calling ZXInfo API ${dataURL}`);
     axios
-      .get(dataURL, { timeout: 5000 }, { headers: { "User-Agent": "ZXInfo/3.0" } })
+      .get(dataURL, { timeout: 5000 })
       .then((response) => {
         this.metadata = response.data;
         this.isLoading = false;
