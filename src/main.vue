@@ -549,7 +549,7 @@ export default {
               }
 
               // all shown?
-              if (cards.hits.hits.length !== this.getPageSize || cards.hits.total == this.getPageSize) {
+              if (cards.hits.hits.length !== this.getPageSize || cards.hits.total.value == this.getPageSize) {
                 this.allResults = true;
               } else {
                 this.allResults = false;

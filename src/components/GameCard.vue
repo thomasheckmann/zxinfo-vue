@@ -41,6 +41,7 @@
         ></v-rating>
       </div>
     </v-card-text>
+    <!--
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -52,7 +53,7 @@
       <v-btn icon>
         <v-icon>mdi-share-variant</v-icon>
       </v-btn>
-    </v-card-actions>
+    </v-card-actions>-->
   </v-card>
 </template>
 <script>
