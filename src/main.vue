@@ -303,6 +303,7 @@ export default {
       allResults: false,
       pagesize: this.getPageSize,
       pageindex: 0,
+      titlesonly: false,
       cards: [],
     };
   },
@@ -498,6 +499,7 @@ export default {
         mode: "compact",
         size: this.getPageSize,
         offset: this.pageindex,
+        titlesonly: this.titlesonly,
       };
 
       // add filters
