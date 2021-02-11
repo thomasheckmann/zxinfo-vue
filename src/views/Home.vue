@@ -21,7 +21,7 @@
                   <v-btn elevation="0" small @click="random">I'm Feeling Lucky</v-btn>
                 </div>
                 <p></p>
-                <p class="text-center .caption .font-weight-thin	">ZXDB update 15.01.2021</p>
+                <p class="text-center .caption .font-weight-thin	">ZXDB update 10.02.2021</p>
               </div>
             </v-card-text>
           </v-card>
