@@ -11,15 +11,19 @@
     >
     <v-container class="fill-height pa-0">
       <v-toolbar color="grey" flat dense>
-        <v-icon class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
-          >mdi-monitor-screenshot</v-icon
-        ><v-icon class="pr-1" @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''"
-          >mdi-book-open-outline</v-icon
-        >
         <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
         <span v-else>searching: {{ this.$route.params.query }}</span>
-        <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
-        ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
+        <v-spacer /><v-select
+          :items="machineTypes"
+          dense
+          clearable
+          hide-details
+          single-line
+          dark
+          label="Machinetype"
+          v-model="selectedMachine"
+          @change="reloadPage"
+        ></v-select
         ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
       ></v-toolbar>
       <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar>
@@ -58,6 +62,8 @@ export default {
       imagetype: "screen",
       listtype: "grid",
       errormessage: "",
+      machineTypes: ["ZXSPECTRUM", "ZX81", "PENTAGON"],
+      selectedMachine: null,
     };
   },
   components: {
@@ -92,8 +98,12 @@ export default {
     loadMore: function() {
       this.isLoading = true;
       this.letter = this.$route.params.letter.toLowerCase();
+      if (this.$route.query.machinetype) this.selectedMachine = this.$route.query.machinetype;
       var dataURL =
         this.$api_base_url + `/games/byletter/${this.letter}?mode=compact&size=${this.getPageSize}&offset=${this.pageindex}`;
+      if (this.selectedMachine) {
+        dataURL = dataURL + `&machinetype=${encodeURIComponent(this.selectedMachine)}`;
+      }
       if (this.$isDevelopment) console.log(`ByLetterView.vue - loadMore(): calling ZXInfo API ${dataURL}`);
       axios
         .get(dataURL, { timeout: 500 })
@@ -135,11 +145,37 @@ export default {
       this.allResults = false;
       this.pageindex = 0;
       this.cards = [];
-      this.$router.replace({ path: `/letter/${encodeURIComponent(l)}` }, () => {});
+      var query = {};
+      if (this.selectedMachine) {
+        query = { machinetype: this.selectedMachine };
+      }
+      this.$router.replace({ path: `/letter/${encodeURIComponent(l.toLowerCase())}`, query: query }, () => {});
       this.loadMore();
+    },
+    reloadPage() {
+      if (this.$isDevelopment) console.log(`ByLetterView.vue - reloadPage()`);
+      this.$router.replace(
+        { path: `/letter/${encodeURIComponent(this.letter)}`, query: { machinetype: this.selectedMachine } },
+        () => {}
+      );
+      this.byLetter(this.letter);
     },
   },
   mounted() {
+    if (this.$isDevelopment) console.log(`mounted()`);
+    var dataURL = this.$api_base_url + "/metadata";
+    if (this.$isDevelopment) console.log(`ByLetterView.vue - created(): calling ZXInfo API ${dataURL}`);
+    axios
+      .get(dataURL, { timeout: 5000 })
+      .then((response) => {
+        for (var i = 0; i < response.data.machinetypes.values.length; i++) {
+          this.machineTypes.push(response.data.machinetypes.values[i].value);
+        }
+      })
+      .catch((error) => {
+        this.errormessage = error.code + ": " + error.message;
+      })
+      .finally(() => {});
     this.loadMore();
   },
 };
