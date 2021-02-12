@@ -13,7 +13,7 @@
       <v-list-item-content class="pa-0">
         <v-list-item-title class="headline">{{ entry.title }} </v-list-item-title>
         <v-list-item-subtitle
-          >{{ entry.originalReleaseYear }}
+          >{{ entry.originalYearOfRelease }}
           <span v-for="(orgpub, i) in entry.originalPublishers" :key="i"
             ><router-link :to="{ path: '/publisher/' + encodeURIComponent(orgpub.name) }"
               >{{ orgpub.name }} {{ orgpub.country }}</router-link

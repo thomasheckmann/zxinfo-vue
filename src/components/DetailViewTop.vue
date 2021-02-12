@@ -21,7 +21,7 @@
             <v-list-item two-line class="px-0">
               <v-list-item-content>
                 <v-list-item-subtitle
-                  >{{ entry.originalReleaseYear }}
+                  >{{ entry.originalYearOfRelease }}
                   <span v-for="(orgpub, i) in entry.originalPublishers" :key="i"
                     ><router-link :to="{ path: '/publisher/' + encodeURIComponent(orgpub.name) }">{{ orgpub.name }}</router-link
                     ><span v-if="orgpub.country"> ({{ orgpub.country }})</span>

@@ -31,11 +31,11 @@
             >
           </td>
         </tr>
-        <tr :style="!entry.originalReleaseYear && !$isDevelopment ? 'display: none;' : ''">
-          <td :class="entry.originalReleaseYear ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
+        <tr :style="!entry.originalYearOfRelease && !$isDevelopment ? 'display: none;' : ''">
+          <td :class="entry.originalYearOfRelease ? 'font-weight-bold' : 'font-weight-light'">Original Release Year</td>
           <td valign="top">
-            <router-link :to="{ path: '/search', query: { year: entry.originalReleaseYear } }">{{
-              entry.originalReleaseYear
+            <router-link :to="{ path: '/search', query: { year: entry.originalYearOfRelease } }">{{
+              entry.originalYearOfRelease
             }}</router-link>
           </td>
         </tr>

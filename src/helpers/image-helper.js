@@ -20,23 +20,23 @@ var getCoverImageForEntry = function(gamedata) {
   var entry = {};
 
   entry.screenurl = "/images/placeholder.png";
-  if (gamedata._source.type === "Compilation") {
+  if (gamedata._source.genreType === "Compilation") {
     entry.screenurl = "https://zxinfo.dk/media/images/compilation.png";
 
     /** Try to find Inlay for compilation - in additionals */
     var i = 0;
     var inlays = [];
-    for (; gamedata._source.additionals !== undefined && i < gamedata._source.additionals.length; i++) {
-      var item = gamedata._source.additionals[i];
+    for (; gamedata._source.additionalDownloads !== undefined && i < gamedata._source.additionalDownloads.length; i++) {
+      var item = gamedata._source.additionalDownloads[i];
       if (item.type.indexOf("inlay") != -1 && item.format.startsWith("Picture")) {
         /** Ignore 'Back' */
-        if (item.url.indexOf("Back") == -1) {
+        if (item.path.indexOf("Back") == -1) {
           inlays.push(item);
         }
       }
     }
     if (inlays.length > 0) {
-      entry.screenurl = inlays[0].url.replace("/pub/sinclair/", "/thumbs/");
+      entry.screenurl = inlays[0].path.replace("/pub/sinclair/", "/thumbs/");
     } else if (gamedata._source.screens.length) {
       entry.screenurl = gamedata._source.screens[0].url;
     } else {
@@ -45,7 +45,7 @@ var getCoverImageForEntry = function(gamedata) {
     }
   }
 
-  if (gamedata._source.screens.length && gamedata._source.screens[0].url && gamedata._source.type !== "Compilation") {
+  if (gamedata._source.screens.length && gamedata._source.screens[0].url && gamedata._source.genreType !== "Compilation") {
     entry.screenurl = gamedata._source.screens[0].url;
     entry.screenurl = entry.screenurl.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
     entry.screenurl = "https://zxinfo.dk/media" + entry.screenurl;

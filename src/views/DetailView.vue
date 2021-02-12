@@ -113,7 +113,7 @@ export default {
       entry.zxinfoVersion = this.GameData._source.zxinfoVersion;
       entry.availability = this.GameData._source.availability;
       entry.alsoKnownAs = this.GameData._source.alsoKnownAs;
-      entry.originalReleaseYear = this.GameData._source.originalYearOfRelease;
+      entry.originalYearOfRelease = this.GameData._source.originalYearOfRelease;
 
       entry.originalPublishers = [];
       entry.publisherNotes = [];
