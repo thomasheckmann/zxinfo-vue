@@ -26,7 +26,7 @@
 		<li>Story telling</li>
 		</ul>
 
-		</p><p>Navigate using the carousel.</p></v-card-text><v-card-actions></v-card-actions></v-card></v-col
+		</p><p>Navigate using the carousel.</p><bt/>... or discover other titles <a href="/search?group=F&groupname=Dynamic%20Loading%20Screen">here</a></a></bt></v-card-text><v-card-actions></v-card-actions></v-card></v-col
       >
     </v-row></v-container
   >
