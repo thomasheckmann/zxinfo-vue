@@ -10,6 +10,7 @@ var entry = function(gamedata) {
   entry.id = gamedata._id;
   entry.title = gamedata._source.title;
 
+  entry.isbn = gamedata._source.isbn;
   entry.availability = gamedata._source.availability;
 
   if (gamedata._source.originalYearOfRelease === undefined) {
@@ -18,11 +19,7 @@ var entry = function(gamedata) {
     entry.yearofrelease = gamedata._source.originalYearOfRelease;
   }
 
-  if (gamedata._source.machineType) {
-    entry.machinetype = gamedata._source.machineType;
-  } else {
-    entry.machinetype = "N/A";
-  }
+  entry.machinetype = gamedata._source.machineType;
 
   entry.originalPublisher = [];
   for (var publisher in gamedata._source.publishers) {
@@ -35,7 +32,6 @@ var entry = function(gamedata) {
   }
 
   entry.genretype = gamedata._source.genreType;
-  entry.genre = "-/-";
   if (gamedata._source.genreType && gamedata._source.genreSubType) {
     entry.genre = gamedata._source.genreType + "/" + gamedata._source.genreSubType;
   } else if (gamedata._source.genreType && !gamedata._source.genreSubType) {

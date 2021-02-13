@@ -19,12 +19,15 @@
       ></v-card-subtitle
     >
     <v-card-text class="text--primary">
-      <div>
+      <div v-if="entry.machinetype">
         <router-link :to="{ path: '/search', query: { machinetype: entry.machinetype } }">{{ entry.machinetype }}</router-link>
       </div>
-      <div class="d-inline-block text-truncate" style="max-width: 100%;">
+      <div v-if="!entry.machinetype"><br /></div>
+      <div v-if="entry.isbn">ISBN: {{ entry.isbn }}</div>
+      <div v-if="entry.genretype" class="d-inline-block text-truncate" style="max-width: 100%;">
         <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genre }}</router-link>
       </div>
+      <div v-if="!entry.genretype"><br /></div>
       <div>
         <v-rating
           v-model="entry.score.score"

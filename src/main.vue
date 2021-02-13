@@ -496,10 +496,9 @@ export default {
 
       var p = {
         query: searchText,
-        mode: "compact",
+        mode: "tiny",
         size: this.getPageSize,
         offset: this.pageindex,
-        titlesonly: this.titlesonly,
       };
 
       // add filters
