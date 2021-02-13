@@ -2,7 +2,6 @@
   <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="!isLoading">
     <DetailViewTopSmall v-if="$vuetify.breakpoint.xsOnly" v-bind:entry="entry"></DetailViewTopSmall>
     <DetailViewTop v-if="$vuetify.breakpoint.smAndUp" v-bind:entry="entry"></DetailViewTop>
-
     <v-divider></v-divider>
     <BasicInfoView v-bind:entry="entry"></BasicInfoView>
     <v-slide-group v-model="entry.allinlays" class="py-2 ma-0" :show-arrows="true" :center-active="true">
@@ -24,6 +23,13 @@
     <RelationsInfoView v-bind:entry="entry"></RelationsInfoView>
     <BookInfoView v-bind:entry="entry"></BookInfoView>
     <LinksInfoView v-bind:entry="entry"></LinksInfoView>
+
+    <v-slide-group show-arrows class="pa-4">
+      <v-slide-item v-for="(card, n) in cards" :key="n">
+        <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
+      </v-slide-item>
+    </v-slide-group>
+    <v-divider></v-divider>
   </v-card>
 </template>
 <script>
@@ -40,6 +46,8 @@ import CompilationInfoView from "@/components/ZXInfo/compilationInfo";
 import RelationsInfoView from "@/components/ZXInfo/relationsInfo";
 import BookInfoView from "@/components/ZXInfo/bookInfo";
 import LinksInfoView from "@/components/ZXInfo/linksInfo";
+
+import GameCard from "@/components/GameCardSmall";
 
 //Vue.use(VueMeta, {
 //  refreshOnceOnNavigation: true,
@@ -61,6 +69,8 @@ export default {
     return {
       isLoading: true,
       GameData: Object,
+      cards: [],
+      imagetype: "screen",
       BasicInfo: [],
     };
   },
@@ -91,9 +101,28 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+      this.getMoreLikeThis();
     },
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
+    getMoreLikeThis() {
+      this.cards = [];
+      // v3/games/morelikethis/483?mode=tiny&size=10
+      var dataURL = this.$api_base_url + "/games/morelikethis/" + this.$route.params.entryid + "?mode=tiny&size=10";
+      if (this.$isDevelopment) console.log(`DetailView.vue - getMoreLikeThis(): calling ZXInfo API ${dataURL}`);
+      axios
+        .get(dataURL)
+        .then((response) => {
+          for (var ii = 0; ii < response.data.hits.hits.length; ii++) {
+            this.cards.push(response.data.hits.hits[ii]);
+          }
+        })
+        .catch((error) => {
+          this.cards = []; // TODO: Handle NOT found better
+          console.log(error);
+        })
+        .finally(() => {});
+    },
   },
   computed: {
     // cleaned version of JSON
@@ -544,6 +573,7 @@ export default {
     RelationsInfoView,
     BookInfoView,
     LinksInfoView,
+    GameCard,
   },
   watch: {
     // reload page when linking to new entry
