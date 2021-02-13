@@ -3,11 +3,7 @@
     <v-row :align="'start'" :justify="'start'" dense>
       <v-col v-for="(card, index) in cards" :key="index" :xl="getXL" :lg="getLG" :md="getMD" :sm="getSM" :xs="getXS">
         <v-responsive :aspect-ratio="1 / 1">
-          <GameCard
-            v-bind:GameData="card"
-            v-bind:imagetype="imagetype"
-            :id="index / getPageSize == pageindex - 1 ? pageindex : ''"
-          ></GameCard>
+          <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
         </v-responsive>
       </v-col>
     </v-row>
