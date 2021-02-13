@@ -1,15 +1,17 @@
 <template>
   <v-card flat tile height="100%" width="100%">
-    <v-row align="start" justify="center">
-      <v-sheet dark width="100%">
-        <v-slide-group show-arrows>
-          <v-slide-item v-for="n in getLetters" :key="n">
-            <v-btn plain small text tile @click="byLetter(n)">{{ n }} </v-btn></v-slide-item
-          >
-        </v-slide-group>
-      </v-sheet></v-row
+    <v-container fluid>
+      <v-row align="start" justify="center">
+        <v-sheet dark width="100%">
+          <v-slide-group show-arrows>
+            <v-slide-item v-for="n in getLetters" :key="n">
+              <v-btn plain small text tile @click="byLetter(n)">{{ n }} </v-btn></v-slide-item
+            >
+          </v-slide-group>
+        </v-sheet></v-row
+      ></v-container
     >
-    <v-container class="fill-height">
+    <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col :xl="8" :lg="8" :md="8" :sm="8" :xs="12">
           <v-card flat>

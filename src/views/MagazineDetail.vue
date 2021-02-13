@@ -11,8 +11,8 @@
           <v-spacer />
         </v-toolbar> </v-col
     ></v-row>
-    <v-row :align="'start'" :justify="'start'" dense>
-      <v-col v-for="(card, index) in mag.issues" :key="index" cols="12" sm="6" md="4">
+    <v-row :align="'start'" :justify="'start'">
+      <v-col v-for="(card, index) in mag.issues" :key="index" cols="12" sm="6" md="4" class="pa-1">
         <v-card dark class="pa-2">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>

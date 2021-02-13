@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="!loading" justify-start class="scroll-y pa-0" fluid>
     <v-row
-      ><v-col cols="12" justify="center" class="py-0 ma-0">
+      ><v-col cols="12" justify="center" class="py-3 ma-0">
         <v-card dark tile class="pa-2">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
