@@ -80,18 +80,84 @@
       <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
     </v-app-bar>
 
-    <v-main>
+    <!-- Navigation drawer - filters -->
+    <v-navigation-drawer app temporary right v-model="filterdrawer" width="340">
+      <template>
+        <v-card>
+          <v-toolbar color="teal" dark>
+            <v-toolbar-title>Filtering options</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="resetfilters">
+              <v-icon>mdi-restore</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-list dense>
+            <v-list-group :prepend-icon="group.icon" no-action v-for="(group, key) in activeFacets" :key="key">
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>{{ group.title }} {{ group.items.length }} option(s)</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item v-for="subItem in group.items" :key="subItem.key">
+                <v-list-item-action class="ma-0">
+                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key.toString()"></v-checkbox>
+                </v-list-item-action>
+                <v-list-item-content class="py-0 pl-4">
+                  <v-list-item-title v-text="subItem.key"></v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action class="ma-0">
+                  <v-list-item-action-text v-text="subItem.doc_count"></v-list-item-action-text>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+          <v-divider></v-divider>
+          <v-row align="center" justify="center">
+            <v-col class="text-center" cols="4">
+              <div class="my-2">
+                <v-btn @click="searchFilters()" color="primary">FILTER</v-btn>
+              </div>
+            </v-col>
+            <v-col class="text-center" cols="6">
+              <div class="my-2">
+                <v-btn @click="filterdrawer = !filterdrawer">CLOSE</v-btn>
+              </div>
+            </v-col>
+          </v-row>
+          <v-system-bar color="teal" window dark></v-system-bar>
+        </v-card>
+      </template>
+    </v-navigation-drawer>
+
+    <v-main
+      ><!-- v-container (fluid) -> v-row -> v-vol -->
+      <router-view
+        :facets="facets"
+        :queryparameters="queryparameters"
+        :pagesize="this.getPageSize"
+        :pageindex="pageindex"
+        :cards="cards"
+        :allResults="allResults"
+        :searchNumberOfResults="searchNumberOfResults"
+        :searchTimeOf="searchTimeOf"
+        :isLoading="isLoading"
+        @loadMore="loadMore"
+        @loadPage="loadPage"
+        @replaceURL="replaceURL"
+        class="view"
+      ></router-view
+    ></v-main>
+    <v-footer app padless class="caption .font-weight-thin">
       <v-container fluid>
-        <v-row>
-          <v-col v-for="n in 24" :key="n" cols="12" sm="6" md="4" lg="3" class="pa-2">
-            <v-card height="200"
-              ><v-card-title>{{ n }}</v-card-title></v-card
-            >
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main></v-app
-  >
+        <v-row justify="space-between" align="center" class="px-4">
+          <span>&copy; 2021 info@zxinfo.dk</span>
+          <span class="text-center"><a href="https://api.zxinfo.dk/v3/">Public API</a></span
+          ><span><a href="https://github.com/thomasheckmann/zxinfo-vue">GitHub</a></span>
+        </v-row></v-container
+      >
+    </v-footer>
+  </v-app>
 </template>
 <script>
 import navigationmenu from "@/components/NavigationMenu";

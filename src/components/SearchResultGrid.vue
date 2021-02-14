@@ -1,10 +1,9 @@
 <template>
-  <v-container justify-start class="scroll-y pa-0">
-    <v-row :align="'start'" :justify="'start'" dense>
-      <v-col v-for="(card, index) in cards" :key="index" :xl="getXL" :lg="getLG" :md="getMD" :sm="getSM" :xs="getXS">
-        <v-responsive :aspect-ratio="1 / 1">
-          <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
-        </v-responsive>
+  <!--<v-container justify-start class="scroll-y pa-0">-->
+  <v-main class="py-6 px-0">
+    <v-row :align="'start'" :justify="'start'">
+      <v-col v-for="(card, index) in cards" :key="index" cols="12" sm="6" md="4" lg="3" class="px-1">
+        <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
@@ -14,7 +13,8 @@
         </div>
       </v-col>
     </v-row>
-  </v-container>
+    <!--  </v-container>-->
+  </v-main>
 </template>
 <script>
 import GameCard from "@/components/GameCard";

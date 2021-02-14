@@ -1,44 +1,33 @@
 <template>
-  <v-card flat class="mx-auto" max-width="100%">
-    <v-container fluid>
-      <v-row align="start" justify="center">
-        <v-sheet dark width="100%">
-          <v-slide-group show-arrows>
-            <v-slide-item v-for="n in getLetters" :key="n">
-              <v-btn selected plain small text tile @click="byLetter(n)">{{ n }} </v-btn></v-slide-item
-            >
-          </v-slide-group>
-        </v-sheet></v-row
-      ></v-container
-    >
-    <v-container class="fill-height pa-0" fluid>
-      <v-toolbar color="grey" flat dense>
-        <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
-        <span v-else>searching: {{ this.$route.params.query }}</span>
-        <v-spacer /><v-select
-          :items="machineTypes"
-          dense
-          clearable
-          hide-details
-          single-line
-          dark
-          label="Machinetype"
-          v-model="selectedMachine"
-          @change="reloadPage"
-        ></v-select
-        ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
-      ></v-toolbar>
-      <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar>
-      <SearchResultGrid
-        v-bind:imagetype="imagetype"
-        v-bind:cards="cards"
-        v-bind:allResults="allResults"
-        v-bind:getPageSize="this.getPageSize"
-        v-bind:pageindex="pageindex"
-        v-on:loadMore="loadMore"
-      />
-    </v-container>
-  </v-card>
+  <v-container justify-start class="scroll-y pa-3" fluid>
+    <v-row>
+      <v-col cols="12" class="pa-0">
+        <v-toolbar color="grey" flat dense>
+          <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
+          <span v-else>searching: {{ this.$route.params.query }}</span>
+          <v-spacer /><v-select
+            :items="machineTypes"
+            dense
+            clearable
+            hide-details
+            single-line
+            dark
+            label="Machinetype"
+            v-model="selectedMachine"
+            @change="reloadPage"
+          ></v-select
+          ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
+        ></v-toolbar>
+        <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar></v-col
+      > </v-row
+    ><SearchResultGrid
+      v-bind:imagetype="imagetype"
+      v-bind:cards="cards"
+      v-bind:allResults="allResults"
+      v-bind:getPageSize="this.getPageSize"
+      v-bind:pageindex="pageindex"
+      v-on:loadMore="loadMore"
+  /></v-container>
 </template>
 <script>
 import axios from "axios";
