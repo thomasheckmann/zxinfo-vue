@@ -1,16 +1,83 @@
 <template>
   <v-app id="inspire">
+    <keep-alive>
+      <navigationmenu v-model="drawer"></navigationmenu>
+    </keep-alive>
+    <!-- FAB button for scroll to top -->
+    <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary" @click="toTop">
+      <v-icon>keyboard_arrow_up</v-icon>
+    </v-btn>
+
     <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-
-      <v-toolbar-title>Application</v-toolbar-title>
+      <template v-if="!$vuetify.breakpoint.xs || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
+        <v-toolbar-title>
+          <router-link to="/"> <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
+        ></v-toolbar-title>
+        <v-spacer></v-spacer>
+      </template>
       <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
 
-      <v-spacer></v-spacer>
+      <!-- search bar -->
+      <v-toolbar v-if="showSearchBar" flat class="py-4" color="black" min-width="75%">
+        <v-combobox
+          @change="showinfo"
+          @keypress="showAutoselectMenu"
+          @keyup.enter="submitSearch"
+          :menu-props="{ value: autoselectMenu }"
+          v-model="completeSelected"
+          :items="completeOptions"
+          :loading="isLoadingOptions"
+          :search-input.sync="searchTerm"
+          hide-no-data
+          no-filter
+          item-text="text"
+          item-value="text"
+          :label="labelText"
+          :prepend-inner-icon="'mdi-magnify'"
+          @click:prepend-inner="submitSearch"
+          @click:append-outer="filterdrawer = !filterdrawer"
+          :append-outer-icon="isEntrySearch ? 'mdi-filter-variant' : ''"
+          clearable
+          return-object
+          dense
+          :error="errormessage !== ''"
+          :error-messages="errormessage"
+          full-width
+          solo
+        >
+          <template v-slot:item="{ item }">
+            <div v-if="isEntrySearch || isDetailPage">
+              <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+              ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')" left
+                >mdi-bank</v-icon
+              >
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')" left
+                >mdi-account</v-icon
+              >
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')" left
+                >mdi-account-multiple</v-icon
+              >
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''" left
+                >mdi-map-marker-question</v-icon
+              >
+              <span v-html="highlight(item.text)"></span>
+            </div>
+            <div v-if="isPublisherPage || isAuthorPage">
+              <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon
+              ><v-icon v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon
+              ><v-icon v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon
+              ><v-icon v-if="item.labeltype == ''" left>mdi-map-marker-question</v-icon>
+              <span v-html="highlight(item.text)"></span>
+            </div>
+          </template>
+        </v-combobox>
+      </v-toolbar>
 
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-spacer />
+      <v-icon>{{ getContenttypeIcon }}</v-icon>
+      <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
     </v-app-bar>
 
     <v-main>
