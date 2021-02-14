@@ -8,4 +8,5 @@ module.exports = {
     plugins: [new BundleAnalyzerPlugin()],
   },*/
   transpileDependencies: ["vuetify"],
+  lintOnSave: false,
 };

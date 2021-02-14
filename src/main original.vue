@@ -1,30 +1,164 @@
 <template>
   <v-app id="inspire">
+    <keep-alive>
+      <navigationmenu v-model="drawer"></navigationmenu>
+    </keep-alive>
+    <!-- FAB button for scroll to top -->
+    <v-btn v-scroll="onScroll" v-show="fab" fab dark fixed bottom right color="primary" @click="toTop">
+      <v-icon>keyboard_arrow_up</v-icon>
+    </v-btn>
+
+    <!-- top app bar -->
     <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-
-      <v-toolbar-title>Application</v-toolbar-title>
+      <template v-if="!$vuetify.breakpoint.xs || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
+        <v-toolbar-title>
+          <router-link to="/"> <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
+        ></v-toolbar-title>
+        <v-spacer></v-spacer>
+      </template>
       <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
+      <!-- search bar -->
+      <v-toolbar v-if="showSearchBar" flat class="py-4" color="black" min-width="75%">
+        <v-combobox
+          @change="showinfo"
+          @keypress="showAutoselectMenu"
+          @keyup.enter="submitSearch"
+          :menu-props="{ value: autoselectMenu }"
+          v-model="completeSelected"
+          :items="completeOptions"
+          :loading="isLoadingOptions"
+          :search-input.sync="searchTerm"
+          hide-no-data
+          no-filter
+          item-text="text"
+          item-value="text"
+          :label="labelText"
+          :prepend-inner-icon="'mdi-magnify'"
+          @click:prepend-inner="submitSearch"
+          @click:append-outer="filterdrawer = !filterdrawer"
+          :append-outer-icon="isEntrySearch ? 'mdi-filter-variant' : ''"
+          clearable
+          return-object
+          dense
+          :error="errormessage !== ''"
+          :error-messages="errormessage"
+          full-width
+          solo
+        >
+          <template v-slot:item="{ item }">
+            <div v-if="isEntrySearch || isDetailPage">
+              <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
+              ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')" left
+                >mdi-bank</v-icon
+              >
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')" left
+                >mdi-account</v-icon
+              >
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')" left
+                >mdi-account-multiple</v-icon
+              >
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''" left
+                >mdi-map-marker-question</v-icon
+              >
+              <span v-html="highlight(item.text)"></span>
+            </div>
+            <div v-if="isPublisherPage || isAuthorPage">
+              <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon
+              ><v-icon v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon
+              ><v-icon v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon
+              ><v-icon v-if="item.labeltype == ''" left>mdi-map-marker-question</v-icon>
+              <span v-html="highlight(item.text)"></span>
+            </div>
+          </template>
+        </v-combobox>
+      </v-toolbar>
 
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-spacer />
+      <v-icon>{{ getContenttypeIcon }}</v-icon>
+      <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
     </v-app-bar>
 
+    <!-- Navigation drawer - filters -->
+    <v-navigation-drawer app temporary right v-model="filterdrawer" width="340">
+      <template>
+        <v-card>
+          <v-toolbar color="teal" dark>
+            <v-toolbar-title>Filtering options</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="resetfilters">
+              <v-icon>mdi-restore</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-list dense>
+            <v-list-group :prepend-icon="group.icon" no-action v-for="(group, key) in activeFacets" :key="key">
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>{{ group.title }} {{ group.items.length }} option(s)</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item v-for="subItem in group.items" :key="subItem.key">
+                <v-list-item-action class="ma-0">
+                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key.toString()"></v-checkbox>
+                </v-list-item-action>
+                <v-list-item-content class="py-0 pl-4">
+                  <v-list-item-title v-text="subItem.key"></v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action class="ma-0">
+                  <v-list-item-action-text v-text="subItem.doc_count"></v-list-item-action-text>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+          <v-divider></v-divider>
+          <v-row align="center" justify="center">
+            <v-col class="text-center" cols="4">
+              <div class="my-2">
+                <v-btn @click="searchFilters()" color="primary">FILTER</v-btn>
+              </div>
+            </v-col>
+            <v-col class="text-center" cols="6">
+              <div class="my-2">
+                <v-btn @click="filterdrawer = !filterdrawer">CLOSE</v-btn>
+              </div>
+            </v-col>
+          </v-row>
+          <v-system-bar color="teal" window dark></v-system-bar>
+        </v-card>
+      </template>
+    </v-navigation-drawer>
+
+    <!-- PAGE CONTENT -->
     <v-main>
+      <router-view
+        :facets="facets"
+        :queryparameters="queryparameters"
+        :pagesize="this.getPageSize"
+        :pageindex="pageindex"
+        :cards="cards"
+        :allResults="allResults"
+        :searchNumberOfResults="searchNumberOfResults"
+        :searchTimeOf="searchTimeOf"
+        :isLoading="isLoading"
+        @loadMore="loadMore"
+        @loadPage="loadPage"
+        @replaceURL="replaceURL"
+        class="view"
+      ></router-view
+    ></v-main>
+
+    <v-footer app padless class="caption .font-weight-thin">
       <v-container fluid>
-        <v-row>
-          <v-col v-for="n in 24" :key="n" cols="12" sm="6" md="4" lg="3" class="pa-2">
-            <v-card height="200"
-              ><v-card-title>{{ n }}</v-card-title></v-card
-            >
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main></v-app
-  >
+        <v-row justify="space-between" align="center" class="px-4">
+          <span>&copy; 2021 info@zxinfo.dk</span>
+          <span class="text-center"><a href="https://api.zxinfo.dk/v3/">Public API</a></span
+          ><span><a href="https://github.com/thomasheckmann/zxinfo-vue">GitHub</a></span>
+        </v-row></v-container
+      >
+    </v-footer>
+  </v-app>
 </template>
 <script>
 import navigationmenu from "@/components/NavigationMenu";
