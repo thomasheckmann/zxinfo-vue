@@ -1,5 +1,14 @@
 <template>
   <v-container justify-start class="scroll-y pa-3" fluid>
+    <v-row align="start" justify="center">
+      <v-sheet dark width="100%">
+        <v-slide-group show-arrows>
+          <v-slide-item v-for="n in getLetters" :key="n">
+            <v-btn selected plain small text tile @click="byLetter(n)">{{ n }} </v-btn></v-slide-item
+          >
+        </v-slide-group>
+      </v-sheet></v-row
+    >
     <v-row>
       <v-col cols="12" class="pa-0">
         <v-toolbar color="grey" flat dense>
