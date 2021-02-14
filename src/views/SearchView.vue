@@ -1,32 +1,71 @@
 <template>
   <v-container justify-start class="scroll-y pa-3" fluid>
+    <!-- chip section for filters -->
+    <v-row align="start" justify="center">
+      <v-sheet dark width="100%" class="pa-2">
+        <v-chip
+          v-for="(item, id) in activeFacetsForChips"
+          :key="id"
+          small
+          outlined
+          label
+          close
+          @click:close="uncheckFilter(item.group, item.value)"
+        >
+          <v-icon left small>{{ item.icon }}</v-icon> {{ item.value }}</v-chip
+        >
+        <v-chip v-if="queryparameters.groupname.value" small outlined label close @click:close="uncheckGroup()" color="green">
+          <v-icon left small>mouse</v-icon> {{ queryparameters.groupname.value }}</v-chip
+        >
+        <v-chip
+          v-if="queryparameters.contenttype.value"
+          small
+          outlined
+          label
+          close
+          @click:close="uncheckContenttype()"
+          color="green"
+        >
+          <v-icon left small>mouse</v-icon> {{ queryparameters.contenttype.value }}</v-chip
+        >
+      </v-sheet></v-row
+    >
+
     <v-row>
       <v-col cols="12" class="pa-0">
         <v-toolbar color="grey" flat dense>
+          <v-icon class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
+            >mdi-monitor-screenshot</v-icon
+          ><v-icon class="pr-1" @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''"
+            >mdi-book-open-outline</v-icon
+          >
           <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
           <span v-else>searching: {{ this.$route.params.query }}</span>
-          <v-spacer /><v-select
-            :items="machineTypes"
-            dense
-            clearable
-            hide-details
-            single-line
-            dark
-            label="Machinetype"
-            v-model="selectedMachine"
-            @change="reloadPage"
-          ></v-select
+          <v-spacer /><v-icon @click="listtype = 'grid'" :color="listtype == 'grid' ? 'white' : ''">apps</v-icon
+          ><v-icon @click="listtype = 'list'" :color="listtype == 'list' ? 'white' : ''">menu</v-icon
           ><v-progress-linear :active="isLoading" :indeterminate="isLoading" absolute bottom></v-progress-linear
         ></v-toolbar>
-        <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar></v-col
-      > </v-row
-    ><SearchResultGrid
+        <v-system-bar v-if="errormessage" color="red">{{ errormessage }}</v-system-bar>
+      </v-col>
+    </v-row>
+    <!-- SEARCH RESULT -->
+    <SearchResultGrid
+      v-if="listtype == 'grid'"
       v-bind:imagetype="imagetype"
       v-bind:cards="cards"
       v-bind:allResults="allResults"
-      v-bind:getPageSize="this.getPageSize"
+      v-bind:getPageSize="pagesize"
       v-bind:pageindex="pageindex"
-      v-on:loadMore="loadMore"
+      v-on:loadMore="loadMore"/>
+    <SearchResultList
+      v-if="listtype == 'list'"
+      v-bind:imagetype="imagetype"
+      v-bind:cards="cards"
+      v-bind:allResults="allResults"
+      v-bind:getPageSize="pagesize"
+      v-bind:pageindex="pageindex"
+      v-bind:searchNumberOfResults="searchNumberOfResults"
+      v-on:loadPage="loadPage"
   /></v-container>
 </template>
 <script>

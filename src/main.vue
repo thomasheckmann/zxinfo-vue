@@ -10,7 +10,9 @@
 
     <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <template v-if="!$vuetify.breakpoint.xs || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
+      <template
+        v-if="!$vuetify.breakpoint.xs || this.isByLetter || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage"
+      >
         <v-toolbar-title>
           <router-link to="/"> <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
         ></v-toolbar-title>
@@ -626,6 +628,9 @@ export default {
     },
     isHome() {
       return this.$route.name == "Home";
+    },
+    isByLetter() {
+      return this.$route.name == "ByLetterView";
     },
     isEntrySearch() {
       return this.$route.name == "EntrySearch";
