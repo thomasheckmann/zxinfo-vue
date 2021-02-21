@@ -63,7 +63,7 @@
             <v-img
               class="black--text align-end"
               max-width="320"
-              :src="$api_base_url + '/scr/files/' + r.ovr.filename + '?t=' + new Date().getTime()"
+              :src="$api_base_url + '/scr/files/' + encodeURIComponent(r.ovr.filename) + '?t=' + new Date().getTime()"
             ></v-img
             ><v-card-subtitle>{{ r.ovr.filename }}</v-card-subtitle>
             <v-card-text class="caption"
@@ -71,7 +71,7 @@
               Use to adjust offsetx and offsety.
             </v-card-text>
             <v-card-actions>
-              <v-btn icon :href="$api_base_url + '/scr/files/' + r.ovr.filename">
+              <v-btn icon :href="$api_base_url + '/scr/files/' + encodeURIComponent(r.ovr.filename)">
                 <v-icon>mdi-download</v-icon>
               </v-btn></v-card-actions
             ></v-card
@@ -90,7 +90,7 @@
               >ASCII version of S81 file. Use to check correct offset in order to match characters.</v-card-text
             >
             <v-card-actions>
-              <v-btn icon :href="$api_base_url + '/scr/files/' + r.txt.filename">
+              <v-btn icon :href="$api_base_url + '/scr/files/' + encodeURIComponent(r.txt.filename)">
                 <v-icon>mdi-download</v-icon>
               </v-btn></v-card-actions
             ></v-card
@@ -102,16 +102,16 @@
             <v-card-text>
               <ul>
                 <li>
-                  <a :href="$api_base_url + '/scr/files/' + r.png.filename">{{ r.png.filename }}</a>
+                  <a :href="$api_base_url + '/scr/files/' + encodeURIComponent(r.png.filename)">{{ r.png.filename }}</a>
                 </li>
                 <li>
-                  <a :href="$api_base_url + '/scr/files/' + r.s81.filename">{{ r.s81.filename }}</a>
+                  <a :href="$api_base_url + '/scr/files/' + encodeURIComponent(r.s81.filename)">{{ r.s81.filename }}</a>
                 </li>
                 <li>
-                  <a :href="$api_base_url + '/scr/files/' + r.scr.filename">{{ r.scr.filename }}</a>
+                  <a :href="$api_base_url + '/scr/files/' + encodeURIComponent(r.scr.filename)">{{ r.scr.filename }}</a>
                 </li>
                 <li>
-                  <a :href="$api_base_url + '/scr/files/' + r.txt.filename">{{ r.txt.filename }}</a>
+                  <a :href="$api_base_url + '/scr/files/' + encodeURIComponent(r.txt.filename)">{{ r.txt.filename }}</a>
                 </li>
               </ul>
             </v-card-text></v-card
