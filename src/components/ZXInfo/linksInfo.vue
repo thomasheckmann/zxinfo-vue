@@ -8,15 +8,15 @@
       <v-expansion-panel-content>
         <v-container class="py-0">
           <v-row justify="start" align="center">
-            <v-btn
-              class="ma-1"
-              v-for="(link, i) in entry.youtubelinks"
-              :key="i"
-              @click="openUrl(link.url)"
-              :disabled="link.url == null"
-              small
-              >{{ link.siteName }}<v-icon small right>mdi-link</v-icon></v-btn
-            >
+            <div v-for="(link, i) in entry.youtubelinks" :key="i">
+              <youtube
+                host="https://www.youtube-nocookie.com"
+                :mute="true"
+                player-height="200"
+                player-width="320"
+                :video-id="$youtube.getIdFromURL(link.url)"
+              ></youtube>
+            </div>
           </v-row>
         </v-container>
       </v-expansion-panel-content> </v-expansion-panel
@@ -153,6 +153,11 @@
   >
 </template>
 <script>
+import Vue from "vue";
+import VueYouTubeEmbed from "vue-youtube-embed";
+
+Vue.use(VueYouTubeEmbed);
+
 export default {
   name: "LinksInfoView",
   props: ["entry"],
