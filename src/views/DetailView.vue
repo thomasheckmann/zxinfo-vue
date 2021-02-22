@@ -5,15 +5,32 @@
     <v-divider></v-divider>
     <BasicInfoView v-bind:entry="entry"></BasicInfoView>
     <v-slide-group v-model="entry.allinlays" class="py-2 ma-0" :show-arrows="true" :center-active="true">
-      <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{ active, toggle }">
-        <v-card :color="active ? 'grey lighten-5' : 'grey lighten-1'" class="ma-4" width="250" height="250" @click="toggle">
-          <v-img :src="inlay" class="white--text align-end">
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-              </v-row> </template
-          ></v-img>
-        </v-card>
+      <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{}">
+        <div class="text-center">
+          <v-dialog v-model="dialog[n]" max-width="80%">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="red lighten-2" small dark v-bind="attrs" v-on="on">
+                SHOW
+              </v-btn>
+            </template>
+            <v-card>
+              <v-img :src="inlay" class="white--text align-end">
+                <template v-slot:placeholder>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+                  </v-row> </template
+              ></v-img>
+            </v-card>
+          </v-dialog>
+          <v-card :color="'grey lighten-5'" class="ma-4" width="250" height="250">
+            <v-img :src="inlay" class="white--text align-end">
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+                </v-row> </template
+            ></v-img>
+          </v-card>
+        </div>
       </v-slide-item>
     </v-slide-group>
 
@@ -72,6 +89,7 @@ export default {
       cards: [],
       imagetype: "screen",
       BasicInfo: [],
+      dialog: [],
     };
   },
   mounted() {
