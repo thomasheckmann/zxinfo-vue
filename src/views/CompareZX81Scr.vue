@@ -1,6 +1,6 @@
 <template>
-  <v-container v-if="!loading" class="py-2">
-    <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom></v-progress-linear>
+  <v-container class="py-2">
+    <v-progress-linear v-if="loading" indeterminate color="blue darken-2"></v-progress-linear>
     <v-row
       v-for="(item, index) in items"
       :key="index"
@@ -10,7 +10,9 @@
       ><v-col cols="12"
         ><v-system-bar color="black white--text">
           <span class="font-weight-black d-inline-block text-truncate" style="white-space: normal;"
-            >{{ item._id }} -{{ item._source.fulltitle }}</span
+            >[{{ item._id }}] - {{ item._source.title }}
+            <span v-if="item._source.publishers">/ {{ item._source.publishers[0].name }}</span>
+            ({{ item._source.genre }})</span
           >
           <v-spacer></v-spacer><span class="overline">{{ index }}/{{ items.length }}</span></v-system-bar
         ></v-col
@@ -54,15 +56,20 @@ export default {
   },
   mounted() {
     if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
+    this.loading = true;
+    /*
+    this.interval = setInterval(() => {
+      this.value = this.progress;
+      console.log(this.value);
+    }, 200);*/
     axios
-      .get(
-        "https://api.zxinfo.dk/api/zxinfo/v2/search?sort=title_asc&mode=tiny&contenttype=SOFTWARE&size=2000&offset=0&machinetype=ZX81%2064K&machinetype=ZX81%2032K&machinetype=ZX81%202K&machinetype=ZX81%201K&machinetype=ZX81%2016K"
-      )
+      .get("https://api.zxinfo.dk/v3/search?sort=title_asc&mode=tiny&contenttype=SOFTWARE&size=2000&offset=0&machinetype=ZX81")
       .then((response) => {
         var cards = response.data;
         // append to cards
         if (cards.hits.hits) {
           for (var ii = 0; ii < cards.hits.hits.length; ii++) {
+            this.progress = ii;
             if (cards.hits.hits[ii]._source.screens.length > 0) {
               this.items.push(cards.hits.hits[ii]);
             }
@@ -76,9 +83,7 @@ export default {
         this.loading = false;
         console.log(error);
       })
-      .finally(() => {
-        this.loading = false;
-      });
+      .finally(() => {});
   },
 };
 </script>
