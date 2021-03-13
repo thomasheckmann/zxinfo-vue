@@ -2,17 +2,17 @@
   <v-container justify-start class="ma-0 pa-0" fluid>
     <v-row align="start">
       <v-col cols="6" class="ma-0 py-4 px-4">
-        <v-sheet tile>
-          <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
-            <v-carousel-item v-for="(item, i) in entry.screens" :key="i" :src="getScreenUrl(item.url)" :eager="true">
-              <v-row class="fill-height" align="end" justify="center">
-                <v-system-bar v-if="item.title" lights-out dark width="100%"
-                  ><span class="white--text">{{ item.title }}</span></v-system-bar
-                >
-              </v-row>
-            </v-carousel-item>
-          </v-carousel>
-        </v-sheet>
+        <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
+          <v-carousel-item v-for="(item, i) in entry.screens" :key="i"
+            ><v-sheet height="100%" red>
+              <ImageContainer class="pa-0" v-bind:src="getScreenUrl(item.url)"></ImageContainer>
+              <v-system-bar v-if="item.title" lights-out dark width="100%"
+                ><v-spacer></v-spacer><span class="white--text">{{ item.title }}</span
+                ><v-spacer></v-spacer
+              ></v-system-bar>
+            </v-sheet>
+          </v-carousel-item>
+        </v-carousel>
       </v-col>
       <v-col cols="6">
         <v-card flat class="my-0"
@@ -57,6 +57,7 @@
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
+import ImageContainer from "@/components/ImageContainer";
 
 export default {
   name: "DetailViewTop",
@@ -65,7 +66,7 @@ export default {
     getScreenUrl: imageHelper.getScreenUrl,
     getCoverImage: imageHelper.getCoverImage,
   },
-  components: {},
+  components: { ImageContainer },
 };
 </script>
 <style scoped>

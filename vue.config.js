@@ -8,7 +8,7 @@ module.exports = {
     plugins: [new BundleAnalyzerPlugin()],
   },*/
   transpileDependencies: ["vuetify"],
-  lintOnSave: false,
+  lintOnSave: true,
 pluginOptions: {
     compression:{
       brotli: {
