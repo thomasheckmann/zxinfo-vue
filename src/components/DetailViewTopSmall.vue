@@ -1,12 +1,14 @@
 <template>
   <v-sheet tile>
     <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
-      <v-carousel-item v-for="(item, i) in allscreens" :key="i" :src="getScreenUrl(item.url)" :eager="true">
-        <v-row class="fill-height" align="end" justify="center">
+      <v-carousel-item v-for="(item, i) in entry.screens" :key="i"
+        ><v-sheet height="100%" red>
+          <ImageContainer class="pa-0" v-bind:src="getScreenUrl(item.url)"></ImageContainer>
           <v-system-bar v-if="item.title" lights-out dark width="100%"
-            ><span class="white--text">{{ item.title }}</span></v-system-bar
-          >
-        </v-row>
+            ><v-spacer></v-spacer><span class="white--text">{{ item.title }}</span
+            ><v-spacer></v-spacer
+          ></v-system-bar>
+        </v-sheet>
       </v-carousel-item>
     </v-carousel>
     <v-list-item two-line>
@@ -44,6 +46,7 @@
 </template>
 <script>
 import imageHelper from "@/helpers/image-helper";
+import ImageContainer from "@/components/ImageContainer";
 
 export default {
   name: "DetailViewTopSmall",
@@ -51,7 +54,7 @@ export default {
   methods: {
     getScreenUrl: imageHelper.getScreenUrl,
   },
-  components: {},
+  components: { ImageContainer },
   computed: {
     // calculate page size, so each "page" are filled out based on breakpoint
     // TODO: recalculate on resize window.
