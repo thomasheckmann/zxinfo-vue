@@ -5,7 +5,7 @@
         <v-carousel :continuous="false" :show-arrows="true" height="100%" hide-delimiters>
           <v-carousel-item v-for="(item, i) in entry.screens" :key="i"
             ><v-sheet height="100%" red>
-              <ImageContainer class="pa-0" v-bind:src="getScreenUrl(item.url)"></ImageContainer>
+              <ImageContainer class="pa-0" v-bind:item="item"></ImageContainer>
               <v-system-bar v-if="item.title" lights-out dark width="100%"
                 ><v-spacer></v-spacer><span class="white--text">{{ item.title }}</span
                 ><v-spacer></v-spacer
@@ -63,7 +63,6 @@ export default {
   name: "DetailViewTop",
   props: ["entry"],
   methods: {
-    getScreenUrl: imageHelper.getScreenUrl,
     getCoverImage: imageHelper.getCoverImage,
   },
   components: { ImageContainer },
