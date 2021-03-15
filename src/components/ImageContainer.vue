@@ -90,7 +90,7 @@ export default {
       this.datapos = 0;
       this.cw = c.width;
       this.ch = c.height;
-      console.log(`width: ${this.cw}, height: ${this.ch}`);
+      if (this.$isDevelopment) console.log(`width: ${this.cw}, height: ${this.ch}`);
       this.canvas.fillStyle = "lightgrey";
       this.canvas.fillRect(0, 0, c.width, c.height);
       for (var y = 0; y < 192; y++) {
@@ -150,7 +150,7 @@ export default {
         this.datapos++;
       } else {
         this.active = false;
-        console.log("drawNext() - forced stopped");
+        if (this.$isDevelopment) console.log("drawNext() - forced stopped");
       }
       if (this.active) {
         if (this.fastload) {
@@ -195,22 +195,22 @@ export default {
     }
   },
   beforeCreate() {
-    console.log("beforeCreate");
+    if (this.$isDevelopment) console.log("ImageContainer - beforeCreate()");
   },
   created() {
-    console.log("created");
+    if (this.$isDevelopment) console.log("ImageContainer - created()");
   },
   beforeMount() {
-    console.log("beforeMount");
+    if (this.$isDevelopment) console.log("ImageContainer - beforeMount()");
   },
   beforeUpdate() {
-    console.log("beforeUpdate");
+    if (this.$isDevelopment) console.log("ImageContainer - beforeUpdate()");
   },
   updated() {
-    console.log("updated");
+    if (this.$isDevelopment) console.log("ImageContainer - updated()");
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
+    if (this.$isDevelopment) console.log("ImageContainer - beforeDestroy()");
   },
 };
 </script>
