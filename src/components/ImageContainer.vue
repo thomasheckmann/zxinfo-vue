@@ -61,8 +61,9 @@ export default {
       isScrFile: false,
       datapos: 0,
       pixmap: [], // full color version 192x256 pixels (with attr)
-      tiktok: 0, // timer?
       fastload: false,
+      delay: 10, // 500ms
+      started: null,
     };
   },
   computed: {
@@ -99,15 +100,17 @@ export default {
       }
 
       this.active = true;
-      this.tiktok = 0;
+      this.delay = 0;
       this.fastload = false;
-      this.$nextTick(() => {
+      this.running = setInterval(this.drawNextStep, this.delay);
+      /*
+		this.$nextTick(() => {
         this.drawNextStep();
-      });
+	  });
+	  */
       // setTimeout(this.drawNextStep, 500);
     },
     drawNextStep() {
-      this.tiktok++;
       if (this.active && this.datapos < 6144) {
         // draw pixels
         const adr = 0x4000 + this.datapos;
@@ -129,7 +132,7 @@ export default {
           this.pixmap[y][x * 8 + b] = pixel;
         }
         this.datapos++;
-      } else if (this.datapos > 6143 && this.datapos < 6912) {
+      } else if (this.active && this.datapos > 6143 && this.datapos < 6912) {
         const attrpos = this.datapos - 6144;
         const attrData = this.attrData[attrpos];
         const y = Math.trunc(attrpos / 32); // 0-23
@@ -151,6 +154,7 @@ export default {
         this.datapos++;
       } else {
         this.active = false;
+        clearInterval(this.running);
         if (this.$isDevelopment) console.log("drawNext() - forced stopped");
       }
       if (this.active) {
@@ -159,7 +163,7 @@ export default {
             this.drawNextStep();
           });
         } else {
-          setTimeout(this.drawNextStep, 0);
+          //setTimeout(function() {}, 1);
         }
       }
     },
