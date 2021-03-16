@@ -91,7 +91,8 @@ export default {
       this.cw = c.width;
       this.ch = c.height;
       if (this.$isDevelopment) console.log(`width: ${this.cw}, height: ${this.ch}`);
-      this.canvas.fillStyle = "lightgrey";
+      // clear screen
+      this.canvas.fillStyle = colors[7];
       this.canvas.fillRect(0, 0, c.width, c.height);
       for (var y = 0; y < 192; y++) {
         this.pixmap[y] = [];

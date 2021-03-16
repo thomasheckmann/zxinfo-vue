@@ -81,12 +81,12 @@ export default {
   },
   watch: {
     searchText(v) {
-      console.log("watch: " + v);
+      if (this.$isDevelopment) console.log("watch: " + v);
       if (v === Object(v)) {
-        console.log("Got object: " + v.text);
+        if (this.$isDevelopment) console.log("Got object: " + v.text);
         this.searchText = v.text;
       } else {
-        console.log("plain value: " + v);
+        if (this.$isDevelopment) console.log("plain value: " + v);
       }
       this.search();
     },
