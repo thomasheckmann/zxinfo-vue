@@ -41,7 +41,7 @@
           flat
           :mobile-breakpoint="0"
           ><template v-slot:item.title="{ item }">
-            <router-link v-if="item.entry_id" :to="'/details/' + item.id">{{ item.title }}</router-link>
+            <router-link v-if="item.entry_id" :to="'/details/' + item.id">{{ item.title }} ({{ item.variation }})</router-link>
             <span v-else>{{ item.title }}</span> </template
           ><template v-slot:item.publisher="{ item }">
             <span v-for="(orgpub, i) in item.publishers" :key="i"
