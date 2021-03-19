@@ -20,63 +20,6 @@
       </template>
       <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
 
-      <!-- search bar -->
-      <v-toolbar v-if="showSearchBar" flat class="py-4" color="black" min-width="75%">
-        <v-combobox
-          @change="showinfo"
-          @keypress="showAutoselectMenu"
-          @keyup.enter="submitSearch"
-          :menu-props="{ value: autoselectMenu }"
-          v-model="completeSelected"
-          :items="completeOptions"
-          :loading="isLoadingOptions"
-          :search-input.sync="searchTerm"
-          hide-no-data
-          no-filter
-          item-text="text"
-          item-value="text"
-          :label="labelText"
-          :prepend-inner-icon="'mdi-magnify'"
-          @click:prepend-inner="submitSearch"
-          @click:append-outer="filterdrawer = !filterdrawer"
-          :append-outer-icon="isEntrySearch ? 'mdi-filter-variant' : ''"
-          clearable
-          return-object
-          dense
-          :error="errormessage !== ''"
-          :error-messages="errormessage"
-          full-width
-          solo
-        >
-          <template v-slot:item="{ item }">
-            <div v-if="isEntrySearch || isDetailPage">
-              <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
-              ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')" left
-                >mdi-bank</v-icon
-              >
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')" left
-                >mdi-account</v-icon
-              >
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')" left
-                >mdi-account-multiple</v-icon
-              >
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''" left
-                >mdi-map-marker-question</v-icon
-              >
-              <span v-html="highlight(item.text)"></span>
-            </div>
-            <div v-if="isPublisherPage || isAuthorPage">
-              <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon
-              ><v-icon v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon
-              ><v-icon v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon
-              ><v-icon v-if="item.labeltype == ''" left>mdi-map-marker-question</v-icon>
-              <span v-html="highlight(item.text)"></span>
-            </div>
-          </template>
-        </v-combobox>
-      </v-toolbar>
-
       <v-spacer />
       <v-icon>{{ getContenttypeIcon }}</v-icon>
       <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
