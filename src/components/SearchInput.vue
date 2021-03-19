@@ -11,8 +11,6 @@
     item-text="text"
     item-value="text"
     label="What is your favorite game, publisher or author?"
-    :prepend-inner-icon="'mdi-magnify'"
-    @click:prepend-inner="search"
     @click:append-outer="$emit('filter', (filterdrawer = !filterdrawer))"
     :append-outer-icon="filter ? 'mdi-filter-variant' : ''"
     clearable
