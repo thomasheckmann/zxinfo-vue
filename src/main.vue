@@ -9,12 +9,13 @@
     </v-btn>
 
     <v-app-bar app clipped-left dark color="black">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon title="MENU" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <template
         v-if="!$vuetify.breakpoint.xs || this.isByLetter || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage"
       >
         <v-toolbar-title>
-          <router-link to="/"> <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
+          <router-link title="HOME" to="/">
+            <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
         ></v-toolbar-title>
         <v-spacer></v-spacer>
       </template>
