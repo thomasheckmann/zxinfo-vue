@@ -82,56 +82,6 @@
       <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
     </v-app-bar>
 
-    <!-- Navigation drawer - filters -->
-    <v-navigation-drawer app temporary right v-model="filterdrawer" width="340">
-      <template>
-        <v-card>
-          <v-toolbar color="teal" dark>
-            <v-toolbar-title>Filtering options</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="resetfilters">
-              <v-icon>mdi-restore</v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-list dense>
-            <v-list-group :prepend-icon="group.icon" no-action v-for="(group, key) in activeFacets" :key="key">
-              <template v-slot:activator>
-                <v-list-item-content>
-                  <v-list-item-title>{{ group.title }} {{ group.items.length }} option(s)</v-list-item-title>
-                </v-list-item-content>
-              </template>
-              <v-list-item v-for="subItem in group.items" :key="subItem.key">
-                <v-list-item-action class="ma-0">
-                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key.toString()"></v-checkbox>
-                </v-list-item-action>
-                <v-list-item-content class="py-0 pl-4">
-                  <v-list-item-title v-text="subItem.key"></v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action class="ma-0">
-                  <v-list-item-action-text v-text="subItem.doc_count"></v-list-item-action-text>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list-group>
-          </v-list>
-          <v-divider></v-divider>
-          <v-row align="center" justify="center">
-            <v-col class="text-center" cols="4">
-              <div class="my-2">
-                <v-btn @click="searchFilters()" color="primary">FILTER</v-btn>
-              </div>
-            </v-col>
-            <v-col class="text-center" cols="6">
-              <div class="my-2">
-                <v-btn @click="filterdrawer = !filterdrawer">CLOSE</v-btn>
-              </div>
-            </v-col>
-          </v-row>
-          <v-system-bar color="teal" window dark></v-system-bar>
-        </v-card>
-      </template>
-    </v-navigation-drawer>
-
     <v-main
       ><!-- v-container (fluid) -> v-row -> v-vol -->
       <router-view
@@ -166,7 +116,7 @@ import navigationmenu from "@/components/NavigationMenu";
 import axios from "axios";
 
 // QUeryBuilder Helper
-var buildQuery = function(data) {
+var buildQuery = function (data) {
   // If the data is already a string, return it as-is
   if (typeof data === "string") return data;
 
@@ -459,7 +409,7 @@ export default {
       this.pageindex = p;
       this.loadMore();
     },
-    loadMore: function() {
+    loadMore: function () {
       if (this.$isDevelopment) console.log("main.vue - loadMore()");
       this.isLoading = true;
       this.allResults = true;
@@ -596,7 +546,7 @@ export default {
   },
   computed: {
     // Only return non-empty facets
-    activeFacets: function() {
+    activeFacets: function () {
       var active = {};
       for (var agg in this.facets) {
         if (this.facets[agg].items.length) {
