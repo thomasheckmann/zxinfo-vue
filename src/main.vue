@@ -22,24 +22,7 @@
       <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
     </v-app-bar>
 
-    <v-main
-      ><!-- v-container (fluid) -> v-row -> v-vol -->
-      <router-view
-        :facets="facets"
-        :queryparameters="queryparameters"
-        :pagesize="this.getPageSize"
-        :pageindex="pageindex"
-        :cards="cards"
-        :allResults="allResults"
-        :searchNumberOfResults="searchNumberOfResults"
-        :searchTimeOf="searchTimeOf"
-        :isLoading="isLoading"
-        @loadMore="loadMore"
-        @loadPage="loadPage"
-        @replaceURL="replaceURL"
-        class="view"
-      ></router-view
-    ></v-main>
+    <v-main></v-main>
     <v-footer app padless class="caption .font-weight-thin">
       <v-container fluid>
         <v-row justify="space-between" align="center" class="px-4">
