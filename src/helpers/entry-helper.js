@@ -42,7 +42,6 @@ var entry = function(gamedata) {
   entry.score.score = gamedata._source.score.score;
   entry.score.votes = gamedata._source.score.votes;
   entry.coverimage = this.getCoverImage(gamedata);
-
   // look for inlay
   var inlays = []; // contains inlay, if found from Type
   var allInlays = []; // contains all matching type or inlay in filename

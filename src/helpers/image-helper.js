@@ -73,7 +73,7 @@ var getCoverImageForEntry = function(gamedata) {
     entry.screenurl = entry.screenurl.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");
     entry.screenurl = "https://zxinfo.dk/media" + entry.screenurl;
   } else {
-    entry.screenurl = "https://zxinfo.dk/media" + entry.screenurl;
+    entry.screenurl = getScreenUrl(entry.screenurl);
   }
 
   return entry.screenurl;
