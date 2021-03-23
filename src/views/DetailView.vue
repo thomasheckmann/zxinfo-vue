@@ -42,7 +42,7 @@
     <LinksInfoView v-bind:entry="entry"></LinksInfoView>
 
     <v-slide-group show-arrows class="pa-4">
-      <v-slide-item v-for="(card, n) in cards" :key="n">
+      <v-slide-item v-for="(card, n) in relatedCards" :key="n">
         <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
       </v-slide-item>
     </v-slide-group>
@@ -86,7 +86,7 @@ export default {
     return {
       isLoading: true,
       GameData: Object,
-      cards: [],
+      relatedCards: [],
       imagetype: "screen",
       BasicInfo: [],
       dialog: [],
@@ -124,7 +124,7 @@ export default {
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
     getMoreLikeThis() {
-      this.cards = [];
+      this.relatedCards = [];
       // v3/games/morelikethis/483?mode=tiny&size=10
       var dataURL = this.$api_base_url + "/games/morelikethis/" + this.$route.params.entryid + "?mode=tiny&size=10";
       if (this.$isDevelopment) console.log(`DetailView.vue - getMoreLikeThis(): calling ZXInfo API ${dataURL}`);
@@ -132,11 +132,11 @@ export default {
         .get(dataURL)
         .then((response) => {
           for (var ii = 0; ii < response.data.hits.hits.length; ii++) {
-            this.cards.push(response.data.hits.hits[ii]);
+            this.relatedCards.push(response.data.hits.hits[ii]);
           }
         })
         .catch((error) => {
-          this.cards = []; // TODO: Handle NOT found better
+          this.relatedCards = []; // TODO: Handle NOT found better
           console.log(error);
         })
         .finally(() => {});
@@ -151,8 +151,25 @@ export default {
     entry() {
       let entry = {};
       entry.screens = this.GameData._source.screens;
-      if (entry.screens.length == 0) {
+      if (entry.screens.length == 0 && this.GameData._source.genreType !== "Hardware") {
+        if (this.$isDevelopment) {
+          console.log(`DetailView - entry(): NOT Hardware - setting default image`);
+        }
         entry.screens.push({ url: "/images/placeholder.png" });
+      }
+
+      // HW thumbnail is part of "screens"
+      if (entry.screens.length == 0 && this.GameData._source.genreType === "Hardware") {
+        if (this.$isDevelopment) {
+          console.log(`DetailView - entry(): setting default Hardware image`);
+        }
+        for (var addIdx = 0; addIdx < this.GameData._source.additionalDownloads.length; addIdx++) {
+          var hwItem = this.GameData._source.additionalDownloads[addIdx];
+          if (hwItem.type === "Hardware picture" && hwItem.format === "Picture (JPG)") {
+            if (this.$isDevelopment) console.log(`DetailView - entry(): ${addIdx} - FOUND HW Image (${hwItem.path})`);
+            entry.screens.push({ url: hwItem.path });
+          }
+        }
       }
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.title;
@@ -510,19 +527,6 @@ export default {
         ];
       }
 
-      /*
-		entry.inspirationFor = [];
-      entry.modifiedBy = [];
-      for (var modby in this.GameData._source.modified_by) {
-        var modbyitem = this.GameData._source.modified_by[modby];
-        modbyitem.machinetype = this.GameData._source.modified_by[modby].machinetype;
-        if (this.GameData._source.modified_by[modby].is_mod) {
-          entry.modifiedBy.push(modbyitem);
-        } else {
-          entry.inspirationFor.push(modbyitem);
-        }
-      }
-*/
       entry.tosec = this.GameData._source.tosec;
       entry.relatedlinks = this.GameData._source.relatedLinks;
 
@@ -544,7 +548,7 @@ export default {
       entry.score.score = this.GameData._source.score.score;
       entry.score.votes = this.GameData._source.score.votes;
 
-      entry.coverimage = this.getCoverImage(this.GameData);
+      // entry.coverimage = this.getCoverImage(this.GameData);
 
       entry.additionals = [];
       for (var aidx in this.GameData._source.additionalDownloads) {

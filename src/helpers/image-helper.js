@@ -45,6 +45,29 @@ var getCoverImageForEntry = function(gamedata) {
     }
   }
 
+  if (gamedata._source.genreType === "Hardware") {
+    if (gamedata._source.screens.length && gamedata._source.screens[0].url) {
+      console.log(`image-helper - getScreenUrl(): HW using existing image: ${gamedata._source.screens[0].url}`);
+    } else if (gamedata._source.additionalDownloads) {
+      console.log(`image-helper - getScreenUrl(): HW looking for hardware picture`);
+      entry.screenurl = null;
+      for (var addIdx = 0; addIdx < gamedata._source.additionalDownloads.length; addIdx++) {
+        var hwItem = gamedata._source.additionalDownloads[addIdx];
+        if (this.$isDevelopment) console.log(`image-helper - getScreenUrl(): ${addIdx} - ` + JSON.stringify(hwItem));
+        if (hwItem.type === "Hardware picture" && hwItem.format === "Picture (JPG)" && !entry.screenurl) {
+          entry.screenurl = hwItem.path;
+          if (this.$isDevelopment)
+            console.log(
+              `image-helper - getScreenUrl(): ${addIdx} - FOUND HW Image (${hwItem.path}), entry.screenurl: ${entry.screenurl}`
+            );
+        }
+      }
+      if (!entry.screenurl) {
+        entry.screenurl = "/images/placeholder.png";
+      }
+    }
+  }
+
   if (gamedata._source.screens.length && gamedata._source.screens[0].url && gamedata._source.genreType !== "Compilation") {
     entry.screenurl = gamedata._source.screens[0].url;
     entry.screenurl = entry.screenurl.replace("/pub/sinclair/books-pics", "/thumbs/books-pics");

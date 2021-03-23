@@ -4,7 +4,7 @@
  */
 var entry = function(gamedata) {
   if (this.$isDevelopment) {
-    console.log(`entry-helper.js - entry(): ${gamedata}`);
+    console.log(`entry-helper.js - entry(): ${gamedata._id}`);
   }
   let entry = {};
   entry.id = gamedata._id;
