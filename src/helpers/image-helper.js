@@ -47,9 +47,10 @@ var getCoverImageForEntry = function(gamedata) {
 
   if (gamedata._source.genreType === "Hardware") {
     if (gamedata._source.screens.length && gamedata._source.screens[0].url) {
-      console.log(`image-helper - getScreenUrl(): HW using existing image: ${gamedata._source.screens[0].url}`);
+      if (this.$isDevelopment)
+        console.log(`image-helper - getScreenUrl(): HW using existing image: ${gamedata._source.screens[0].url}`);
     } else if (gamedata._source.additionalDownloads) {
-      console.log(`image-helper - getScreenUrl(): HW looking for hardware picture`);
+      if (this.$isDevelopment) console.log(`image-helper - getScreenUrl(): HW looking for hardware picture`);
       entry.screenurl = null;
       for (var addIdx = 0; addIdx < gamedata._source.additionalDownloads.length; addIdx++) {
         var hwItem = gamedata._source.additionalDownloads[addIdx];
