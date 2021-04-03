@@ -44,7 +44,8 @@
           ></v-col
         >
         <v-divider vertical></v-divider>
-        <v-col>
+        <v-col
+          >{{ UIComponents[selectedItem] }}
           <v-scroll-y-transition mode="out-in"
             ><div>
               <component v-bind:is="UIComponents[selectedItem]" v-model="blocks[selectedItem]" :key="selectedItem"></component>
@@ -99,12 +100,11 @@ export default {
       const tzxTape = tape.readTape(this.data);
       tzxTape.blocks.forEach((block) => {
         const blockName = block.constructor.name;
-        console.log(block);
+        if (block instanceof tape.StandardSpeedDataBlock) {
+          this.UIComponents.push(TextDescription);
+          this.blocks.push(block);
+        }
         switch (blockName) {
-          case "TextDescription":
-            this.UIComponents.push(TextDescription);
-            this.blocks.push(block);
-            break;
           case "PureTone":
             this.UIComponents.push(PureTone);
             this.blocks.push(block);

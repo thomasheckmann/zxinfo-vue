@@ -209,4 +209,5 @@ function readTape(buffer) {
 module.exports = {
   readTape: readTape,
   TZXObject: TZXObject,
+  StandardSpeedDataBlock: StandardSpeedDataBlock,
 };
