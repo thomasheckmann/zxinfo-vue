@@ -44,8 +44,7 @@
           ></v-col
         >
         <v-divider vertical></v-divider>
-        <v-col
-          >{{ UIComponents[selectedItem] }}
+        <v-col>
           <v-scroll-y-transition mode="out-in"
             ><div>
               <component v-bind:is="UIComponents[selectedItem]" v-model="blocks[selectedItem]" :key="selectedItem"></component>
@@ -99,52 +98,38 @@ export default {
       this.blocks = [];
       const tzxTape = tape.readTape(this.data);
       tzxTape.blocks.forEach((block) => {
-        const blockName = block.constructor.name;
-        if (block instanceof tape.StandardSpeedDataBlock) {
+        if (block instanceof tape.TextDescription) {
           this.UIComponents.push(TextDescription);
           this.blocks.push(block);
-        }
-        switch (blockName) {
-          case "PureTone":
-            this.UIComponents.push(PureTone);
-            this.blocks.push(block);
-            break;
-          case "PureDataBlock":
-            this.UIComponents.push(PureDataBlock);
-            this.blocks.push(block);
-            break;
-          case "PulseSequence":
-            this.UIComponents.push(PulseSequence);
-            this.blocks.push(block);
-            break;
-          case "GroupStart":
-            this.UIComponents.push(GroupStart);
-            this.blocks.push(block);
-            break;
-          case "PauseStopTape":
-            this.UIComponents.push(PauseStopTape);
-            this.blocks.push(block);
-            break;
-          case "GroupEnd":
-            this.UIComponents.push(GroupEnd);
-            this.blocks.push(block);
-            break;
-          case "LoopStart":
-            this.UIComponents.push(LoopStart);
-            this.blocks.push(block);
-            break;
-          case "LoopEnd":
-            this.UIComponents.push(LoopEnd);
-            this.blocks.push(block);
-            break;
-          case "StandardSpeedDataBlock":
-            this.UIComponents.push(StandardSpeedDataBlock);
-            this.blocks.push(block);
-            break;
-          default:
-            console.log("UNKNOWN block: " + block.constructor.name);
-
-            break;
+        } else if (block instanceof tape.PureTone) {
+          this.UIComponents.push(PureTone);
+          this.blocks.push(block);
+        } else if (block instanceof tape.PureDataBlock) {
+          this.UIComponents.push(PureDataBlock);
+          this.blocks.push(block);
+        } else if (block instanceof tape.PulseSequence) {
+          this.UIComponents.push(PulseSequence);
+          this.blocks.push(block);
+        } else if (block instanceof tape.GroupStart) {
+          this.UIComponents.push(GroupStart);
+          this.blocks.push(block);
+        } else if (block instanceof tape.PauseStopTape) {
+          this.UIComponents.push(PauseStopTape);
+          this.blocks.push(block);
+        } else if (block instanceof tape.GroupEnd) {
+          this.UIComponents.push(GroupEnd);
+          this.blocks.push(block);
+        } else if (block instanceof tape.LoopStart) {
+          this.UIComponents.push(LoopStart);
+          this.blocks.push(block);
+        } else if (block instanceof tape.LoopEnd) {
+          this.UIComponents.push(LoopEnd);
+          this.blocks.push(block);
+        } else if (block instanceof tape.StandardSpeedDataBlock) {
+          this.UIComponents.push(StandardSpeedDataBlock);
+          this.blocks.push(block);
+        } else {
+          console.log(`UNKNOWN block: ${block}`);
         }
       });
     },
