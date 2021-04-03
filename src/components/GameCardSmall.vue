@@ -43,13 +43,6 @@ export default {
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
     entryData: entry.entryData,
-    /*
-search() {
-      console.log("GameCard: search()");
-      if (this.searchterm) {
-        this.$emit("input", this.searchterm);
-      }
-    },*/
   },
   components: { ImageContainer },
   computed: {

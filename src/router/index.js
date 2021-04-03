@@ -1,8 +1,8 @@
 import Vue from "vue";
+import Meta from "vue-meta";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import SearchView from "@/views/SearchView.vue";
-import Meta from "vue-meta";
 import Magazines from "@/views/Magazines.vue";
 import MagazineDetail from "@/views/MagazineDetail.vue";
 import MagazineIsssueDetail from "@/views/MagazineIssue.vue";
@@ -126,6 +126,11 @@ const routes = [
     path: "/scr",
     name: "SCRPage",
     component: () => import(/* webpackChunkName: "about" */ "@/views/SCRView.vue"),
+  },
+  {
+    path: "/tapebrowser",
+    name: "TapeBrowserPage",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/TapeBrowser.vue"),
   },
   {
     path: "/testpage",
