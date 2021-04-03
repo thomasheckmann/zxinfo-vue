@@ -99,6 +99,7 @@ export default {
       const tzxTape = tape.readTape(this.data);
       tzxTape.blocks.forEach((block) => {
         const blockName = block.constructor.name;
+        console.log(block);
         switch (blockName) {
           case "TextDescription":
             this.UIComponents.push(TextDescription);
