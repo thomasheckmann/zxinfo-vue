@@ -47,6 +47,21 @@ function PureDataBlock(len, data) {
   this.data = data.slice(0x0a, 0x0a + datalen);
   this.text = `0-bit length: ${this.zeroLen}, 1-bit length: ${this.oneLen}, last byte: ${this.lastByte}, Pause: ${this.pause}`;
 }
+function GeneralizedDataBlock(len, data) {
+  this.id = 0x19;
+  this.blockName = "Generalized Data Block";
+  this.length = len;
+  this.pause = getWord(data[0x04], data[0x05]);
+  this.totp = getDWord(data[0x06], data[0x07], data[0x08], data[0x09]);
+  this.npp = data[0x0a];
+  this.asp = data[0x0b];
+  this.totd = getDWord(data[0x0c], data[0x0d], data[0x0e], data[0x0f]);
+  this.npd = data[0x10];
+  this.asd = data[0x11];
+
+  this.text = `totp:${this.totp}, npp:${this.npp}, asp:${this.asp}, totd:${this.totd}, npd:${this.npd}, asd:${this.asd}, Pause: ${this.pause}`;
+  this.data = data;
+}
 
 function PauseStopTape(len, pause) {
   this.id = 0x20;
@@ -92,14 +107,40 @@ function TextDescription(len, data) {
 function ArchiveInfo(len, data) {
   this.id = 0x32;
   this.blockName = "Archive info";
-  this.text = String.fromCharCode.apply(null, data);
+  this.noStrings = data[0];
+  this.text = `No. of strings: ${this.noStrings}`;
   this.length = len;
-  this.data = String.fromCharCode.apply(null, data);
+  this.data = [];
+  this.stringTypes = new Map();
+  this.stringTypes.set(0x00, "Full title");
+  this.stringTypes.set(0x01, "Software house/publisher");
+  this.stringTypes.set(0x02, "Author(s)");
+  this.stringTypes.set(0x03, "Year of publication");
+  this.stringTypes.set(0x04, "Language");
+  this.stringTypes.set(0x05, "Game/utility type");
+  this.stringTypes.set(0x06, "Price");
+  this.stringTypes.set(0x07, "Protection scheme/loader");
+  this.stringTypes.set(0x08, "Origin");
+  this.stringTypes.set(0xff, "Comment(s)");
+
+  data = data.slice(1, data.length);
+  for (var i = 0; i < this.noStrings; i++) {
+    const stringType = data[0];
+    const stringLen = data[1];
+    const stringText = String.fromCharCode.apply(null, data.slice(2, 2 + stringLen));
+    this.data.push({ typeId: stringType, type: this.stringTypes.get(stringType), text: stringText });
+    data = data.slice(2 + stringLen, data.length);
+  }
 }
 
 function getWord(low, high) {
   return high * 256 + low;
 }
+
+function getDWord(n1, n2, n3, n4) {
+  return n4 * 16777216 + n3 * 65556 + n2 * 256 + n1;
+}
+
 function getNWord(low, med, high) {
   return (high << 16) + (med << 8) + low;
 }
@@ -150,6 +191,12 @@ function readTape(buffer) {
       case 0x14: // ID 14 - Pure Data Block
         length = getNWord(data[i + 7], data[i + 8], data[i + 9]) + 10;
         block = new PureDataBlock(length, data.slice(i, i + length));
+        tzx.blocks.push(block);
+        i += length;
+        break;
+      case 0x19: // ID 19 - Generalized Data Block
+        length = getDWord(data[i], data[i + 1], data[i + 2], data[i + 3]) + 4;
+        block = new GeneralizedDataBlock(length, data.slice(i, i + length));
         tzx.blocks.push(block);
         i += length;
         break;
@@ -213,6 +260,7 @@ module.exports = {
   PureTone: PureTone,
   PulseSequence: PulseSequence,
   PureDataBlock: PureDataBlock,
+  GeneralizedDataBlock: GeneralizedDataBlock,
   PauseStopTape: PauseStopTape,
   GroupStart: GroupStart,
   GroupEnd: GroupEnd,

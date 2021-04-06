@@ -31,7 +31,7 @@
         </v-col>
 
         <v-divider vertical></v-divider>
-        <v-col cols="5" class="pa-0"
+        <v-col cols="4" class="pa-0"
           ><v-list dense max-height="500px" class="overflow-y-auto"
             ><v-list-item-group v-model="selectedItem" color="primary"
               ><v-list-item v-for="(item, i) in blocks" :key="i">
@@ -63,16 +63,18 @@ import axios from "axios";
 import GameCard from "@/components/GameCardSmall";
 import tape from "@/helpers/tapebrowser";
 
-import TextDescription from "@/components/TZXComponents/TextDescription";
 import StandardSpeedDataBlock from "@/components/TZXComponents/StandardSpeedDataBlock";
+import PureTone from "@/components/TZXComponents/PureTone";
+import PulseSequence from "@/components/TZXComponents/PulseSequence";
+import PureDataBlock from "@/components/TZXComponents/PureDataBlock";
+import GeneralizedDataBlock from "@/components/TZXComponents/GeneralizedDataBlock";
+import PauseStopTape from "@/components/TZXComponents/PauseStopTape";
 import GroupStart from "@/components/TZXComponents/GroupStart";
 import GroupEnd from "@/components/TZXComponents/GroupEnd";
 import LoopStart from "@/components/TZXComponents/LoopStart";
 import LoopEnd from "@/components/TZXComponents/LoopEnd";
-import PureTone from "@/components/TZXComponents/PureTone";
-import PulseSequence from "@/components/TZXComponents/PulseSequence";
-import PureDataBlock from "@/components/TZXComponents/PureDataBlock";
-import PauseStopTape from "@/components/TZXComponents/PauseStopTape";
+import TextDescription from "@/components/TZXComponents/TextDescription";
+import ArchiveInfo from "@/components/TZXComponents/ArchiveInfo";
 
 export default {
   name: "TapeBrowser",
@@ -98,23 +100,26 @@ export default {
       this.blocks = [];
       const tzxTape = tape.readTape(this.data);
       tzxTape.blocks.forEach((block) => {
-        if (block instanceof tape.TextDescription) {
-          this.UIComponents.push(TextDescription);
+        if (block instanceof tape.StandardSpeedDataBlock) {
+          this.UIComponents.push(StandardSpeedDataBlock);
           this.blocks.push(block);
         } else if (block instanceof tape.PureTone) {
           this.UIComponents.push(PureTone);
           this.blocks.push(block);
-        } else if (block instanceof tape.PureDataBlock) {
-          this.UIComponents.push(PureDataBlock);
-          this.blocks.push(block);
         } else if (block instanceof tape.PulseSequence) {
           this.UIComponents.push(PulseSequence);
           this.blocks.push(block);
-        } else if (block instanceof tape.GroupStart) {
-          this.UIComponents.push(GroupStart);
+        } else if (block instanceof tape.PureDataBlock) {
+          this.UIComponents.push(PureDataBlock);
+          this.blocks.push(block);
+        } else if (block instanceof tape.GeneralizedDataBlock) {
+          this.UIComponents.push(GeneralizedDataBlock);
           this.blocks.push(block);
         } else if (block instanceof tape.PauseStopTape) {
           this.UIComponents.push(PauseStopTape);
+          this.blocks.push(block);
+        } else if (block instanceof tape.GroupStart) {
+          this.UIComponents.push(GroupStart);
           this.blocks.push(block);
         } else if (block instanceof tape.GroupEnd) {
           this.UIComponents.push(GroupEnd);
@@ -125,11 +130,14 @@ export default {
         } else if (block instanceof tape.LoopEnd) {
           this.UIComponents.push(LoopEnd);
           this.blocks.push(block);
-        } else if (block instanceof tape.StandardSpeedDataBlock) {
-          this.UIComponents.push(StandardSpeedDataBlock);
+        } else if (block instanceof tape.TextDescription) {
+          this.UIComponents.push(TextDescription);
+          this.blocks.push(block);
+        } else if (block instanceof tape.ArchiveInfo) {
+          this.UIComponents.push(ArchiveInfo);
           this.blocks.push(block);
         } else {
-          console.log(`UNKNOWN block: ${block}`);
+          console.log(`UNKNOWN block: ${JSON.stringify(block)}`);
         }
       });
     },

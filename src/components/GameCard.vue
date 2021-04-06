@@ -44,19 +44,6 @@
         ></v-rating>
       </div>
     </v-card-text>
-    <!--
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-bookmark</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-actions>-->
   </v-card>
 </template>
 <script>
@@ -71,13 +58,6 @@ export default {
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
     entryData: entry.entryData,
-    /*
-search() {
-      console.log("GameCard: search()");
-      if (this.searchterm) {
-        this.$emit("input", this.searchterm);
-      }
-    },*/
   },
   components: { ImageContainer },
   computed: {
