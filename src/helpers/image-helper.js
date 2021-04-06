@@ -48,11 +48,11 @@ var getCoverImageForHardware = function(gamedata) {
     // console.log(`image-helper - getScreenUrl(): HW using existing image: ${gamedata._source.screens[0].url}`);
     screenurl = gamedata._source.screens[0].url;
   } else if (gamedata._source.additionalDownloads) {
-    console.log(`image-helper - getScreenUrl(): HW looking for hardware picture`);
+    // console.log(`image-helper - getScreenUrl(): HW looking for hardware picture`);
     screenurl = null;
     for (var addIdx = 0; addIdx < gamedata._source.additionalDownloads.length; addIdx++) {
       var hwItem = gamedata._source.additionalDownloads[addIdx];
-      if (this.$isDevelopment) console.log(`image-helper - getScreenUrl(): ${addIdx} - ` + JSON.stringify(hwItem));
+      // if (this.$isDevelopment) console.log(`image-helper - getScreenUrl(): ${addIdx} - ` + JSON.stringify(hwItem));
       if (hwItem.type === "Hardware picture" && hwItem.format === "Picture (JPG)" && screenurl) {
         screenurl = hwItem.path;
         // console.log(`image-helper - getScreenUrl(): ${addIdx} - FOUND HW Image (${hwItem.path}), entry.screenurl: ${screenurl}`);
