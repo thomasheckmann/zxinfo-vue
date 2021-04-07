@@ -607,11 +607,6 @@ export default {
 };
 </script>
 <style>
-/* disable hover effect on table */
-.v-data-table /deep/ tbody /deep/ tr:hover:not(.v-data-table__expanded__content) {
-  background: #ffffff !important;
-}
-
 /* remove padding from expansion-panel-content */
 .v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
   padding: 4px;

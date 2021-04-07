@@ -259,3 +259,10 @@ export default {
   computed: {},
 };
 </script>
+<style lang="scss">
+tbody {
+  tr:hover {
+    background-color: transparent !important;
+  }
+}
+</style>
