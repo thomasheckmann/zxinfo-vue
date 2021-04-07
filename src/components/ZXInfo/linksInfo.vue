@@ -160,16 +160,12 @@
 <script>
 import Vue from "vue";
 import VueYouTubeEmbed from "vue-youtube-embed";
-import LongPress from "vue-directive-long-press";
 
 Vue.use(VueYouTubeEmbed);
 
 export default {
   name: "LinksInfoView",
   props: ["entry"],
-  directives: {
-    "long-press": LongPress,
-  },
   methods: {
     openUrl: function(url) {
       window.open(url);
@@ -185,9 +181,6 @@ export default {
         url = "https://spectrumcomputing.co.uk/zxdb/sinclair/" + url;
       }
       window.open(url);
-    },
-    onLongPressStop: function(e) {
-      console.log(e);
     },
   },
   components: {},
