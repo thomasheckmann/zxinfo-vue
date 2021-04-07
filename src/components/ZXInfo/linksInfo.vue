@@ -36,8 +36,8 @@
           flat
           :mobile-breakpoint="0"
         >
-          <template v-slot:item.url="{ item }"
-            ><div v-long-press="1000" @long-press-start="openDownloadUrl(item.url)">{{ item.url }}</div></template
+          <template v-slot:item.url="{ item }">
+            <div @dblclick="openDownloadUrl(item.url)">{{ item.url }}</div></template
           >
 
           <template v-slot:item.origin="{ item }">
