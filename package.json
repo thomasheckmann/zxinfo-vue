@@ -17,6 +17,7 @@
     "update": "^0.7.4",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.4",
+    "vue-directive-long-press": "^1.1.0",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.4.8",
     "vue-youtube-embed": "^2.2.2",

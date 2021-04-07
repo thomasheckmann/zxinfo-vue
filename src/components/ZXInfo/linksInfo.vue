@@ -35,7 +35,12 @@
           dense
           flat
           :mobile-breakpoint="0"
-          ><template v-slot:item.origin="{ item }">
+        >
+          <template v-slot:item.url="{ item }"
+            ><div v-long-press="1000" @long-press-stop="openUrl(item.url)">{{ item.url }}</div></template
+          >
+
+          <template v-slot:item.origin="{ item }">
             <v-simple-checkbox disabled v-bind:value="item.origin == 'Original release (O)'"></v-simple-checkbox> </template
         ></v-data-table>
       </v-expansion-panel-content> </v-expansion-panel
@@ -155,15 +160,22 @@
 <script>
 import Vue from "vue";
 import VueYouTubeEmbed from "vue-youtube-embed";
+import LongPress from "vue-directive-long-press";
 
 Vue.use(VueYouTubeEmbed);
 
 export default {
   name: "LinksInfoView",
   props: ["entry"],
+  directives: {
+    "long-press": LongPress,
+  },
   methods: {
     openUrl: function(url) {
       window.open(url);
+    },
+    onLongPressStop: function(e) {
+      console.log(e);
     },
   },
   components: {},
