@@ -91,7 +91,7 @@ export default {
       this.datapos = 0;
       this.cw = c.width;
       this.ch = c.height;
-      if (this.$isDevelopment) console.log(`width: ${this.cw}, height: ${this.ch}`);
+      if (this.$isDevelopment) console.log(`ImageContainer - loadScreen(): width: ${this.cw}, height: ${this.ch}`);
       // clear screen
       this.canvas.fillStyle = colors[7];
       this.canvas.fillRect(0, 0, c.width, c.height);

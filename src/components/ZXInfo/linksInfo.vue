@@ -37,7 +37,7 @@
           :mobile-breakpoint="0"
         >
           <template v-slot:item.url="{ item }"
-            ><div v-long-press="1000" @long-press-stop="openUrl(item.url)">{{ item.url }}</div></template
+            ><div v-long-press="1000" @long-press-start="openDownloadUrl(item.url)">{{ item.url }}</div></template
           >
 
           <template v-slot:item.origin="{ item }">
@@ -172,6 +172,18 @@ export default {
   },
   methods: {
     openUrl: function(url) {
+      window.open(url);
+    },
+    openDownloadUrl: function(url) {
+      if (url.startsWith("/pub/sinclair")) {
+        url = url.replace("/pub/sinclair/", "");
+        url =
+          "https://archive.org/download/World_of_Spectrum_June_2017_Mirror/World%20of%20Spectrum%20June%202017%20Mirror.zip/World%20of%20Spectrum%20June%202017%20Mirror/sinclair/" +
+          url;
+      } else if (url.startsWith("/zxdb")) {
+        url = url.replace("/zxdb/sinclair/", "");
+        url = "https://spectrumcomputing.co.uk/zxdb/sinclair/" + url;
+      }
       window.open(url);
     },
     onLongPressStop: function(e) {
