@@ -23,11 +23,18 @@
 
     <!-- TZX Details -->
 
-    <v-card v-if="entry" max-width="100%" flat>
+    <v-card v-if="data" max-width="100%" flat>
       <v-card-title class="black--text headline"> TZX Content </v-card-title
       ><v-row class="pa-0 ma-0" justify="space-between" align="start">
         <v-col cols="3" class="pa-0">
           <GameCard v-if="entry" v-bind:GameData="entry" v-bind:imagetype="imagetype"></GameCard>
+          <v-card v-if="!entry" outlined>
+            <ImageContainer
+              v-bind:entry="{ coverimage: 'https://zxinfo.dk/media/images/placeholder.png' }"
+              v-bind:imagetype="imagetype"
+            ></ImageContainer>
+            <v-card-title class="d-inline-block text-truncate" style="max-width: 100%;"> Not found in ZXDB</v-card-title></v-card
+          >
         </v-col>
 
         <v-divider vertical></v-divider>
@@ -61,6 +68,8 @@ import crypto from "crypto";
 import axios from "axios";
 
 import GameCard from "@/components/GameCardSmall";
+import ImageContainer from "@/components/Image";
+
 import tape from "@/helpers/tapebrowser";
 
 import StandardSpeedDataBlock from "@/components/TZXComponents/StandardSpeedDataBlock";
@@ -92,7 +101,7 @@ export default {
     };
   },
   computed: {},
-  components: { GameCard },
+  components: { GameCard, ImageContainer },
   methods: {
     loadTape() {
       this.selectedItem = null;
@@ -149,7 +158,7 @@ export default {
         .get(dataURL)
         .then((response) => {
           this.entry = response.data;
-          this.loadTape();
+          s;
         })
         .catch((error) => {
           if (error.response) this.entry = null; // TODO: Handle NOT found better
@@ -174,6 +183,7 @@ export default {
         shasum.update(new Uint8Array(this.data));
       };
       reader.onloadend = () => {
+        this.loadTape();
         this.sha512 = shasum.digest("hex");
 
         var dataURL = this.$api_base_url + `/filecheck/${this.sha512}`;
@@ -190,9 +200,6 @@ export default {
             } else {
               this.message = error.code + ": " + error.message;
             }
-          })
-          .finally(() => {
-            //this.isLoading = false;
           });
       };
     },
