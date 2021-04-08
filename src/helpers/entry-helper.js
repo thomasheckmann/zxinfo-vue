@@ -42,6 +42,7 @@ var entry = function(gamedata) {
   entry.score.score = gamedata._source.score.score;
   entry.score.votes = gamedata._source.score.votes;
   entry.coverimage = this.getCoverImage(gamedata);
+
   // look for inlay
   var inlays = []; // contains inlay, if found from Type
   var allInlays = []; // contains all matching type or inlay in filename
@@ -49,24 +50,24 @@ var entry = function(gamedata) {
     let item = gamedata._source.additionalDownloads[idx];
     if (["Cassette inlay", "Cassette inlay - Front"].includes(item.type)) {
       inlays.push(item);
+      if (this.$isDevelopment) console.log(`entry-helper.js - inlays: ${JSON.stringify(item)}`);
     }
     if (item.type.toLowerCase().indexOf("inlay") !== -1 || item.path.toLowerCase().indexOf("inlay") !== -1) {
       allInlays.push(item);
     }
   }
-  inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
-  allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
+  inlays.sort((a, b) => (a.path < b.path ? 1 : -1));
+  allInlays.sort((a, b) => (a.path > b.path ? 1 : -1));
 
   entry.inlayimage = this.getDefaultImageSrc;
   if (inlays.length > 0) {
-    entry.inlayimage = this.getScreenUrl(inlays[0].url);
-    //console.log(gamedata._id + " - Inlay: " + inlays[0].url + " => " + entry.inlayimage);
+    entry.inlayimage = this.getScreenUrl(inlays[0].path);
   } else if (allInlays.length > 0) {
-    entry.inlayimage = this.getScreenUrl(allInlays[0].url);
+    entry.inlayimage = this.getScreenUrl(allInlays[0].path);
   }
   entry.allinlays = [];
   for (idx = 0; idx < allInlays.length; idx++) {
-    entry.allinlays.push(this.getScreenUrl(allInlays[idx].url));
+    entry.allinlays.push(this.getScreenUrl(allInlays[idx].path));
   }
 
   return entry;

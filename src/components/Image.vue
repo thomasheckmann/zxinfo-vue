@@ -3,7 +3,7 @@
     :src="imagetype == 'screen' ? entry.coverimage : entry.inlayimage"
     class="white--text align-end"
     :lazy-src="getDefaultImageSrc"
-    :aspect-ratio="imagetype == 'screen' ? 1.33 : 2.0"
+    :aspect-ratio="imagetype == 'screen' ? 1.33 : 1.33"
   >
     <template v-slot:placeholder>
       <v-row class="fill-height ma-0" align="center" justify="center">
