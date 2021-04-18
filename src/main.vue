@@ -499,6 +499,7 @@ export default {
       var p = {
         query: searchText,
         mode: "tiny",
+        includeagg: "true",
         size: this.getPageSize,
         offset: this.pageindex,
       };
