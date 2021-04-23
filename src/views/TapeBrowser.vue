@@ -38,7 +38,7 @@
         </v-col>
 
         <v-divider vertical></v-divider>
-        <v-col cols="4" class="pa-0"
+        <v-col cols="4" class="pa-1"
           ><v-list dense max-height="500px" class="overflow-y-auto"
             ><v-list-item-group v-model="selectedItem" color="primary"
               ><v-list-item v-for="(item, i) in blocks" :key="i">
@@ -158,7 +158,6 @@ export default {
         .get(dataURL)
         .then((response) => {
           this.entry = response.data;
-          s;
         })
         .catch((error) => {
           if (error.response) this.entry = null; // TODO: Handle NOT found better
