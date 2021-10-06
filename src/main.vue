@@ -274,6 +274,7 @@ export default {
           selected: [],
           paramname: "multiplayermode",
         },
+        /**
         originalpublication: {
           aggName: "aggOriginalPublication",
           icon: "mdi-rocket",
@@ -281,7 +282,7 @@ export default {
           items: [],
           selected: [],
           paramname: "originalpublication",
-        },
+        }, */
         language: {
           aggName: "aggLanguage",
           icon: "mdi-message",
