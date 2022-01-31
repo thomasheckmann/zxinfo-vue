@@ -30,7 +30,7 @@ import SearchResultGrid from "@/components/SearchResultGrid";
 import newEntries from "@/news.json";
 
 export default {
-  name: "TestPage",
+  name: "WhatIsNew",
   metaInfo() {
     return {
       title: "ZXInfo - The open source ZXDB frontend",

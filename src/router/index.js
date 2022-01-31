@@ -133,6 +133,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "@/views/TapeBrowser.vue"),
   },
   {
+    path: "/whatsnew",
+    name: "WhatIsNew",
+    component: () => import(/* webpackChunkName: "about" */ "@/views/NewEntries.vue"),
+  },
+  {
     path: "/testpage",
     name: "testpage",
     component: () => import(/* webpackChunkName: "about" */ "@/views/TestPage.vue"),
