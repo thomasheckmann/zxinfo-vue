@@ -23,7 +23,8 @@
                   <v-btn elevation="0" small @click="random">I'm Feeling Lucky</v-btn>
                 </div>
                 <p></p>
-                <p class="text-center .caption .font-weight-thin"><a class="plain" href="/whatsnew">ZXDB update 25.01.2022</a></p>
+                <p class="text-center .caption .font-weight-thin"><router-link :to="{ path: '/whatsnew'}">ZXDB update 25.01.2022</router-link>
+                  </p>
               </div>
             </v-card-text>
           </v-card>

@@ -85,6 +85,7 @@ export default {
       this.loadentry(element.id);
     });
     this.isLoading = false;
+    // this.cards.sort((a, b) => a.title > b.title ? 1 : -1);
   },
 };
 </script>
