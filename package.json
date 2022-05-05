@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "ansi_up": "^5.0.1",
-    "axios": "^0.21.4",
+    "axios": "^0.27.2",
     "vue": "^2.6.14",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.3",
     "vue-youtube-embed": "^2.2.2",
-    "vuetify": "^2.6.1"
+    "vuetify": "^2.6.5"
   },
   "devDependencies": {
     "@vue/cli-service": "^4.5.15",
@@ -23,8 +23,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "sass": "1.32.12",
     "sass-loader": "^8.0.2",
-    "vue-cli-plugin-compression": "^1.1.5",
-    "vue-cli-plugin-vuetify": "^2.4.5",
+    "vue-cli-plugin-compression": "^1.2.0",
+    "vue-cli-plugin-vuetify": "^2.4.8",
     "vue-template-compiler": "^2.6.14",
     "vuetify-loader": "^1.7.3",
     "webpack-bundle-analyzer": "^3.7.0"
