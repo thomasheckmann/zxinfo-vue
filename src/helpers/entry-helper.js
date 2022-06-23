@@ -24,10 +24,7 @@ var entry = function(gamedata) {
   entry.originalPublisher = [];
   for (var publisher in gamedata._source.publishers) {
     var originalPublisher = gamedata._source.publishers[publisher].name;
-    var originalPublisherCountry = "";
-    if (gamedata._source.publishers[publisher].country !== undefined) {
-      originalPublisherCountry = "(" + gamedata._source.publishers[publisher].country + ")";
-    }
+    var originalPublisherCountry = gamedata._source.publishers[publisher].country ;
     entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
   }
 

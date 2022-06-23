@@ -13,7 +13,7 @@
       >&nbsp;
       <span v-for="(orgpub, i) in entry.originalPublisher" :key="i"
         ><router-link :to="{ path: '/publisher/' + encodeURIComponent(orgpub.name) }"
-          >{{ orgpub.name }} {{ orgpub.country }}</router-link
+          >{{ orgpub.name }}<span v-if="orgpub.country"> ({{ orgpub.country }})</span></router-link
         >
         <span v-if="i != Object.keys(entry.originalPublisher).length - 1">/ </span></span
       ></v-card-subtitle
