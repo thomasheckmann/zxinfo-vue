@@ -22,7 +22,10 @@
             <span v-for="(asTitle, i) in item.releaseTitles" :key="i"
               >{{ asTitle }} <span v-if="i != Object.keys(item.releaseTitles).length - 1">/ </span></span
             >
-          </template></v-data-table
+          </template><template v-slot:item.releasePrice="{ item }">
+            <span v-if="item.releasePrice && !item.releasePrice.prefix">{{item.releasePrice.amount}} {{item.releasePrice.currency}}</span> 
+            <span v-if="item.releasePrice && item.releasePrice.prefix">{{item.releasePrice.currency}}{{item.releasePrice.amount}}</span></template
+          ></v-data-table
         >
       </v-expansion-panel-content> </v-expansion-panel
     ><!-- * AVAILABLE FORMATS * -->

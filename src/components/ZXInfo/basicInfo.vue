@@ -64,7 +64,8 @@
         </tr>
         <tr :style="!entry.originalPriceAmount && !$isDevelopment ? 'display: none;' : ''">
           <td :class="entry.originalPriceAmount ? 'font-weight-bold' : 'font-weight-light'">Original Price</td>
-          <td>{{ entry.originalPriceAmount }} {{ entry.originalPriceCurrency }}</td>
+          <td><span v-if="entry.originalPricePrefix">{{ entry.originalPriceCurrency }}{{ entry.originalPriceAmount }}</span>
+          <span v-if="!entry.originalPricePrefix">{{ entry.originalPriceAmount }} {{ entry.originalPriceCurrency }}</span></td>
         </tr>
         <tr :style="!entry.authors.length && !$isDevelopment ? 'display: none;' : ''">
           <td :class="entry.authors.length ? 'font-weight-bold' : 'font-weight-light'" valign="top">Author(s)</td>

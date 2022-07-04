@@ -258,9 +258,11 @@ export default {
       if (this.GameData._source.originalPrice) {
         entry.originalPriceAmount = this.GameData._source.originalPrice.amount;
         entry.originalPriceCurrency = this.GameData._source.originalPrice.currency;
+        entry.originalPricePrefix = this.GameData._source.originalPrice.prefix;
       } else {
         entry.originalPriceAmount = null;
         entry.originalPriceCurrency = null;
+        entry.originalPricePrefix = null;
       }
 
       entry.hardwareBlurb = this.GameData._source.hardwareBlurb;
