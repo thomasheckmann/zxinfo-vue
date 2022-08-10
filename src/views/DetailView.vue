@@ -18,8 +18,9 @@
                 <template v-slot:placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
                     <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                  </v-row> </template
-              ></v-img>
+                  </v-row>
+                </template>
+              </v-img>
             </v-card>
           </v-dialog>
           <v-card :color="'grey lighten-5'" class="ma-4" width="250" height="250">
@@ -27,8 +28,9 @@
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
                   <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                </v-row> </template
-            ></v-img>
+                </v-row>
+              </template>
+            </v-img>
           </v-card>
         </div>
       </v-slide-item>
@@ -97,7 +99,7 @@ export default {
     this.loadentry();
   },
   methods: {
-    openUrl: function(url) {
+    openUrl: function (url) {
       window.open(url);
     },
     loadentry() {
@@ -123,6 +125,7 @@ export default {
     },
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
+
     getMoreLikeThis() {
       this.relatedCards = [];
       // v3/games/morelikethis/483?mode=tiny&size=10
@@ -139,14 +142,14 @@ export default {
           this.relatedCards = []; // TODO: Handle NOT found better
           console.log(error);
         })
-        .finally(() => {});
+        .finally(() => { });
     },
   },
   computed: {
     // cleaned version of JSON
 
     /*
-		ENTRY DETAILS
+    ENTRY DETAILS
      */
     entry() {
       let entry = {};
@@ -572,7 +575,7 @@ export default {
         }
       }
       inlays.sort((a, b) => (a.url < b.url ? 1 : -1));
-      allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
+      //allInlays.sort((a, b) => (a.url > b.url ? 1 : -1));
 
       entry.inlayimage = this.getDefaultImageSrc;
       if (inlays.length > 0) {
@@ -610,7 +613,7 @@ export default {
 </script>
 <style>
 /* remove padding from expansion-panel-content */
-.v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
+.v-expansion-panel-content>>>.v-expansion-panel-content__wrap {
   padding: 4px;
 }
 
