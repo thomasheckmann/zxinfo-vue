@@ -14,7 +14,7 @@
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.3",
     "vue-youtube-embed": "^2.2.2",
-    "vuetify": "^2.6.5"
+    "vuetify": "^2.6.7"
   },
   "devDependencies": {
     "@vue/cli-service": "^4.5.15",
