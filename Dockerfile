@@ -1,10 +1,12 @@
-FROM node:14.1.0-alpine as build-stage
+FROM node:18.11-alpine as build-stage
+ENV NODE_OPTIONS=--openssl-legacy-provider
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY ./ .
+COPY . .
 RUN npm run build
 
+# Production stage
 FROM nginx as production-stage
 RUN mkdir /app
 COPY --from=build-stage /app/dist /app
