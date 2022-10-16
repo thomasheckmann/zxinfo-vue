@@ -10,11 +10,11 @@
   "dependencies": {
     "ansi_up": "^5.0.1",
     "axios": "^0.27.2",
-    "vue": "^2.6.14",
+    "vue": "^2.7.13",
     "vue-meta": "^2.4.0",
-    "vue-router": "^3.5.3",
+    "vue-router": "^3.6.5",
     "vue-youtube-embed": "^2.2.2",
-    "vuetify": "^2.6.10"
+    "vuetify": "^2.6.11"
   },
   "devDependencies": {
     "@vue/cli-service": "^4.5.15",
@@ -25,8 +25,8 @@
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-compression": "^1.2.0",
     "vue-cli-plugin-vuetify": "^2.4.8",
-    "vue-template-compiler": "^2.6.14",
-    "vuetify-loader": "^1.7.3",
+    "vue-template-compiler": "^2.7.13",
+    "vuetify-loader": "^1.9.2",
     "webpack-bundle-analyzer": "^3.7.0"
   },
   "eslintConfig": {
