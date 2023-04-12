@@ -34,9 +34,9 @@
     <v-row>
       <v-col cols="12" class="pa-0">
         <v-toolbar color="grey" flat dense>
-          <v-icon class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
+          <v-icon aria-label="show screenshot" aria-hidden="false" class="pr-1" @click="imagetype = 'screen'" :color="imagetype == 'screen' ? 'white' : ''"
             >mdi-monitor-screenshot</v-icon
-          ><v-icon class="pr-1" @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''"
+          ><v-icon aria-label="show inlay" aria-hidden="false" class="pr-1" @click="imagetype = 'inlay'" :color="imagetype == 'inlay' ? 'white' : ''"
             >mdi-book-open-outline</v-icon
           >
           <span v-if="!isLoading"> {{ searchNumberOfResults }} results ({{ searchTimeOf }}ms)</span>
