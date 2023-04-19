@@ -1,13 +1,30 @@
 <template>
   <div>
-    <v-container class="ma-1 pa-0" fluid>
+    <v-container class="ma-1 pa-1" fluid>
       <v-row no-gutters>
         <!-- column 1, upload form -->
-        <v-col>
+        <v-col cols="6">
+          <!-- PoC - drag'n'drop -->
           <v-card class="pa-2" flat tile>
             <v-card-text>
-              Upload form, suported file formats: <strong>.bmp, .s81, .scr</strong>
-              <v-row no-gutters><v-file-input show-size label="File input" @change="selectFile"></v-file-input> </v-row>
+              <v-col cols="12">
+                <v-card
+                  width="450px"
+                  @drop.prevent="onDrop($event)"
+                  @dragover.prevent="dragover = true"
+                  @dragenter.prevent="dragover = true"
+                  @dragleave.prevent="dragover = false"
+                  :class="{ 'grey lighten-2': dragover }"
+                >
+                  <v-row class="d-flex flex-column ma-2" dense align="center" justify="center">
+                    <v-icon :class="[dragover ? 'mt-2, mb-6' : 'mt-5']" size="60"> mdi-cloud-upload </v-icon>
+                    <p>Drop your file here for quick convert</p>
+                    <p>- or click below to select it</p>
+                  </v-row>
+                </v-card>
+              </v-col>
+
+              <v-row no-gutters><v-file-input show-size label="File input" :value="currentFile" @change="selectFile"></v-file-input> </v-row>
               <v-row no-gutters>
                 <v-col v-if="message" cols="12">
                   <v-alert v-if="message" border="left" color="blue-grey" dark> {{ message }} </v-alert>
@@ -25,7 +42,7 @@
           >
         </v-col>
         <!-- column 2, intro OR links to downloads -->
-        <v-col>
+        <v-col cols="6">
           <v-card v-if="!r" class="pa-2" flat tile>
             <v-card-title>ZX81 Screen Converter</v-card-title>
             <v-card-text
@@ -127,8 +144,17 @@ import AnsiUp from "ansi_up";
 
 export default {
   name: "zx81-convert-scr",
+  props: {
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
+      // drag'n'drop
+      dragover: false,
+      //
       currentFile: undefined,
       progress: 0,
       message: "",
@@ -154,6 +180,31 @@ export default {
     },
   },
   methods: {
+    onDrop(e) {
+      this.dragover = false;
+
+      if (this.currentFile) {
+        this.currentFile = undefined;
+      }
+
+      if (!this.multiple && e.dataTransfer.files.length > 1) {
+        if (this.$isDevelopment) {
+          console.log(`onDrop() - ${e}`);
+          console.log(e);
+        }
+        this.message = "Only one file can be uploaded at a time..";
+        this.currentFile = undefined;
+      } else {
+        if (this.$isDevelopment) {
+          console.log(`onDrop()`);
+          console.log(e.dataTransfer.files);
+        }
+
+        // Array.from(e.dataTransfer.files).forEach((element) => this.uploadedFiles.push(element));
+        this.selectFile(e.dataTransfer.files[0]);
+        if (this.currentFile) this.upload();
+      }
+    },
     upload() {
       if (!this.currentFile) {
         this.message = "Please select a file!";
@@ -182,7 +233,13 @@ export default {
           this.currentFile = undefined;
         });
     },
+    // file : File object
     selectFile(file) {
+      if (this.$isDevelopment) {
+        console.log(`selectFile()`);
+        console.log(file);
+      }
+
       const allowedTypes = ["bmp", "png", "s81", "scr"];
 
       this.message = "";
