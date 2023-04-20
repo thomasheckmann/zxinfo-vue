@@ -14,9 +14,8 @@
         v-if="!$vuetify.breakpoint.xs || this.isByLetter || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage"
       >
         <v-toolbar-title>
-          <router-link title="HOME" to="/">
-            <v-img src="@/assets/ZXInfo-logo-no-rainbow.png" max-height="30"></v-img> </router-link
-        ></v-toolbar-title>
+          <router-link title="HOME" to="/" class="text-decoration-none text-h4 font-weight-black white--text">ZXInfo</router-link>
+          </v-toolbar-title>
         <v-spacer></v-spacer>
       </template>
       <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
@@ -80,7 +79,7 @@
 
       <v-spacer />
       <v-icon>{{ getContenttypeIcon }}</v-icon>
-      <v-img src="@/assets/rainbow.png" max-width="48"></v-img>
+      <v-img src="@/assets/rainbow2.jpg" max-width="48"></v-img>
     </v-app-bar>
 
     <!-- Navigation drawer - filters -->
