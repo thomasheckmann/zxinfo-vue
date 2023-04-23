@@ -50,6 +50,8 @@
                 Take as input a screen dump file and converts to different formats. Allowed input formats:
                 <ul>
                   <li>.bmp as produced by various emulators (e.g. EightyOne and SZ81)</li>
+                  <li>.gif as produced by various emulators (e.g. ZXSP-0.8.33-beta)</li>
+                  <li>.jpg as produced by various emulators (ZX81 on macOS)</li>
                   <li>.s81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
                   <li>.scr Widely used screen format used for ZX Spectrum (ZX81 hi-res)</li>
                 </ul>
@@ -240,7 +242,7 @@ export default {
         console.log(file);
       }
 
-      const allowedTypes = ["bmp", "png", "s81", "scr"];
+      const allowedTypes = ["bmp", "png", "gif", "jpg", "s81", "scr"];
 
       this.message = "";
       this.progress = 0;
@@ -259,7 +261,7 @@ export default {
         this.message = "Invalid file type: " + file.type;
         this.currentFile = undefined;
       }
-      if (extension === "bmp" || extension === "png") {
+      if (extension === "bmp" || extension === "png" || extension === "gif") {
         this.input_is_image = true;
       } else {
         this.input_is_image = false;
