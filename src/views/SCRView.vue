@@ -261,7 +261,7 @@ export default {
         this.message = "Invalid file type: " + file.type;
         this.currentFile = undefined;
       }
-      if (extension === "bmp" || extension === "png" || extension === "gif") {
+      if (extension === "bmp" || extension === "png" || extension === "gif"|| extension === "jpg") {
         this.input_is_image = true;
       } else {
         this.input_is_image = false;
