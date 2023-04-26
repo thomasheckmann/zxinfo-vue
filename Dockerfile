@@ -1,5 +1,4 @@
-FROM node:18.11-alpine as build-stage
-ENV NODE_OPTIONS=--openssl-legacy-provider
+FROM node:16-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
