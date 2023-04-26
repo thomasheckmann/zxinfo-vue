@@ -452,6 +452,8 @@ var getScreens = function (gamedata) {
     console.log(`getScreens() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
   }
 
+  var screens = [];
+
   switch (gamedata._source.contentType) {
     case "SOFTWARE":
       screens = getScreensForSoftware(gamedata);
