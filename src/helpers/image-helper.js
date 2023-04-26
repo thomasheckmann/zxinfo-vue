@@ -1,5 +1,10 @@
 var isDevelopment = false;
 
+/**
+ * Maps path to resource on zxinfo or archive.org
+ * @param {*} path
+ * @returns
+ */
 var getScreenUrl = function (path) {
   if (!path) return this.DEFAULT_SRC;
 
@@ -187,7 +192,7 @@ var getCoverImageForBook = function (gamedata) {
     console.log(`getCoverImageForBook() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
   }
 
-  // Look for Hw picture in "AdditionalDownloads"
+  // Look for Book cover picture in "AdditionalDownloads"
   const coverImg = gamedata._source.additionalDownloads
     .filter((item) => item.type === "Book cover" && item.format.startsWith("Picture"))
     .sort((a, b) => (a.path.toLowerCase() < b.path.toLowerCase() ? 1 : -1));
@@ -227,6 +232,181 @@ var getCoverImageForSoftware = function (gamedata) {
   return screenurl;
 };
 
+var getScreensForSoftware = function (gamedata) {
+  if (isDevelopment) {
+    console.log(`getScreensForSoftware() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
+  }
+
+  if (gamedata._source.genreType === "Compilation") {
+    return getScreensForCompilation(gamedata);
+  }
+
+  var screens = [];
+  const loadingSCR = gamedata._source.screens.filter((item) => item.type === "Loading screen" && item.scrUrl).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  const openingSCR = gamedata._source.screens.filter((item) => item.type === "Opening screen" && item.scrUrl).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  const runningSCR = gamedata._source.screens.filter((item) => item.type === "Running screen" && item.scrUrl).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+
+  if (isDevelopment) {
+    console.log(`getScreensForSoftware() - loadingScr: ${loadingSCR.length}`);
+    console.log(`getScreensForSoftware() - openingScr: ${openingSCR.length}`);
+    console.log(`getScreensForSoftware() - runningScr: ${runningSCR.length}`);
+  }
+  // add Images (BMP, GIF, JPG, PNG)
+  const imgFormats = ["Picture (BMP)", "Picture (GIF)", "Picture (JPG)", "Picture (PNG)"];
+  const loadingIMG = gamedata._source.screens
+    .filter((item) => item.type === "Loading screen" && imgFormats.indexOf(item.format) >= 0)
+    .sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  const openingIMG = gamedata._source.screens
+    .filter((item) => item.type === "Opening screen" && imgFormats.indexOf(item.format) >= 0)
+    .sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  const runningIMG = gamedata._source.screens
+    .filter((item) => item.type === "Running screen" && imgFormats.indexOf(item.format) >= 0)
+    .sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  if (isDevelopment) {
+    console.log(`getScreensForSoftware() - loadingImg: ${loadingIMG.length}`);
+    console.log(`getScreensForSoftware() - openingImg: ${openingIMG.length}`);
+    console.log(`getScreensForSoftware() - runningImg: ${runningIMG.length}`);
+  }
+
+  // push them to screens
+  loadingSCR.forEach((item) => {
+    screens.push(item);
+  });
+  openingSCR.forEach((item) => {
+    screens.push(item);
+  });
+  runningSCR.forEach((item) => {
+    screens.push(item);
+  });
+  // push them to screens
+  loadingIMG.forEach((item) => {
+    screens.push(item);
+  });
+  openingIMG.forEach((item) => {
+    screens.push(item);
+  });
+  runningIMG.forEach((item) => {
+    screens.push(item);
+  });
+
+  if (screens.length === 0) screens.push({ url: "/images/placeholder.png" });
+  return screens;
+};
+
+/**
+ * First image without title (mostly animated GIF), load-scr, open-scr, run-scr
+ * @param {*} gamedata
+ * @returns
+ */
+var getScreensForCompilation = function (gamedata) {
+  var screens = [];
+  if (isDevelopment) {
+    console.log(`getScreensForCompilation() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
+  }
+
+  // find one with title = null, usual an animated GIF with all entries
+  const screenWithoutTitle = gamedata._source.screens.filter((item) => item.title === null).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  if (isDevelopment) {
+    console.log(`getScreensForCompilation() - screenWithoutTitle: ${screenWithoutTitle.length}`);
+  }
+
+  // push them to screens
+  screenWithoutTitle.forEach((item) => {
+    screens.push({ ...item, url: item.url });
+  });
+
+  // get all loading, open and running
+  const loadingSCR = gamedata._source.screens.filter((item) => item.type === "Loading screen" && item.scrUrl).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  const openingSCR = gamedata._source.screens.filter((item) => item.type === "Opening screen" && item.scrUrl).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+  const runningSCR = gamedata._source.screens.filter((item) => item.type === "Running screen" && item.scrUrl).sort((a, b) => (a.url.toLowerCase() > b.url.toLowerCase() ? 1 : -1));
+
+  if (isDevelopment) {
+    console.log(`getScreensForCompilation() - loadingScr: ${loadingSCR.length}`);
+    console.log(`getScreensForCompilation() - openingScr: ${openingSCR.length}`);
+    console.log(`getScreensForCompilation() - runningScr: ${runningSCR.length}`);
+  }
+  // push them to screens
+  loadingSCR.forEach((item) => {
+    screens.push(item);
+  });
+  openingSCR.forEach((item) => {
+    screens.push(item);
+  });
+  runningSCR.forEach((item) => {
+    screens.push(item);
+  });
+
+  // get all Inlay - Front from additionalDownloads
+  const inlayImg = gamedata._source.additionalDownloads
+    .filter((item) => item.type === "Inlay - Front" && item.format.startsWith("Picture"))
+    .sort((a, b) => (a.path.toLowerCase() > b.path.toLowerCase() ? 1 : -1));
+  if (isDevelopment) {
+    console.log(`getScreensForCompilation() - inlayImg: ${inlayImg.length}`);
+  }
+  inlayImg.forEach((item) => {
+    screens.push({ ...item, url: item.path.replace("/pub/sinclair/", "/thumbs/"), title: "Inlay - Front" });
+  });
+
+  if (screens.length === 0) screens.push({ url: "/images/compilation.png" });
+  return screens;
+};
+
+var getScreensForBook = function (gamedata) {
+  if (isDevelopment) {
+    console.log(`getScreensForBook() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
+  }
+
+  var screens = [];
+
+  // Look for Book cover picture in "AdditionalDownloads"
+  const coverImg = gamedata._source.additionalDownloads
+    .filter((item) => item.type === "Book cover" && item.format.startsWith("Picture"))
+    .sort((a, b) => (a.path.toLowerCase() < b.path.toLowerCase() ? 1 : -1));
+  if (isDevelopment) {
+    console.log(`getScreensForBook() - coverImg: ${coverImg.length}`);
+  }
+  coverImg.forEach((item) => {
+    screens.push({ ...item, url: item.path, title: "Book cover" });
+  });
+
+  if (screens.length === 0) screens.push({ url: "/images/placeholder.png" });
+  return screens;
+};
+
+var getScreensForHardware = function (gamedata) {
+  if (isDevelopment) {
+    console.log(`getScreensForHardware() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
+  }
+
+  var screens = [];
+
+  // Look for Hw picture in "AdditionalDownloads"
+  const hardwareImg = gamedata._source.additionalDownloads
+    .filter((item) => item.type === "Hardware picture" && item.format.startsWith("Picture"))
+    .sort((a, b) => (a.path.toLowerCase() > b.path.toLowerCase() ? 1 : -1));
+  if (isDevelopment) {
+    console.log(`getScreensForHardware() - hardwareImg: ${hardwareImg.length}`);
+  }
+
+  hardwareImg.forEach((item) => {
+    screens.push({ ...item, url: item.path });
+  });
+
+  if (screens.length === 0) screens.push({ url: "/images/placeholder.png" });
+  return screens;
+};
+
+/**
+ * *********************************************************************************
+ * EXPORTED FUNCTIONS
+ * *********************************************************************************
+ */
+
+/**
+ * Find cover image for entry, including suitable fallback images
+ * @param {*} gamedata
+ * @returns
+ */
 var getCoverImageForEntry = function (gamedata) {
   isDevelopment = this.$isDevelopment;
   if (this.$isDevelopment) {
@@ -254,32 +434,46 @@ var getCoverImageForEntry = function (gamedata) {
       break;
   }
 
-  // if (gamedata._source.genreType === "Compilation") {
-  //   entry.screenurl = getCoverImageForCompilation(gamedata);
-  //   return getScreenUrl(entry.screenurl);
-  // } else if (gamedata._source.genreType === "Hardware") {
-  //   entry.screenurl = getCoverImageForHardware(gamedata);
-  //   return getScreenUrl(entry.screenurl);
-  // }
-
-  // // search for "Loading screen in "screens" section, pick first one found
-
-  // var found;
-  // gamedata._source.screens.forEach(function (item) {
-  //   if (item.type === "Loading screen" && item.format.startsWith("Picture") && !found) {
-  //     found = item.url;
-  //   }
-  // });
-
-  // if (!found) found = "/images/placeholder.png";
   if (!entry.screenurl) entry.screenurl = "/images/placeholder.png";
 
   return getScreenUrl(entry.screenurl);
 };
 
+/**
+ * Get array of screens used by detail page for caroussel, with suitable fallback images
+ *
+ * @param {*} gamedata
+ */
+var getScreens = function (gamedata) {
+  isDevelopment = this.$isDevelopment;
+
+  if (isDevelopment) {
+    console.log(`getScreens() - ID: ${gamedata._id} - ${gamedata._source.title}`);
+    console.log(`getScreens() - Type: ${gamedata._source.contentType}(${gamedata._source.genreType})`);
+  }
+
+  switch (gamedata._source.contentType) {
+    case "SOFTWARE":
+      screens = getScreensForSoftware(gamedata);
+      break;
+    case "HARDWARE":
+      screens = getScreensForHardware(gamedata);
+      break;
+    case "BOOK":
+      screens = getScreensForBook(gamedata);
+      break;
+
+    default:
+      break;
+  }
+
+  return screens;
+};
+
 module.exports = {
   getCoverImage: getCoverImageForEntry,
   getScreenUrl: getScreenUrl,
+  getScreens: getScreens,
   DEFAULT_SRC: "https://zxinfo.dk/media/images/placeholder.png",
   DEFAULT_PAPER_SRC: "https://zxinfo.dk/media/images/placeholderPaper.png",
 };

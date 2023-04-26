@@ -9,9 +9,7 @@
         <div class="text-center">
           <v-dialog v-model="dialog[n]" max-width="80%">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="red lighten-2" small dark v-bind="attrs" v-on="on">
-                SHOW
-              </v-btn>
+              <v-btn color="red lighten-2" small dark v-bind="attrs" v-on="on"> SHOW </v-btn>
             </template>
             <v-card>
               <v-img :src="inlay" class="white--text align-end">
@@ -121,10 +119,11 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
-      this.getMoreLikeThis();
+      this.getMoreLikeThis();  // TODO REMOVE
     },
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
+    getScreens: imageHelper.getScreens,
 
     getMoreLikeThis() {
       this.relatedCards = [];
@@ -142,7 +141,7 @@ export default {
           this.relatedCards = []; // TODO: Handle NOT found better
           console.log(error);
         })
-        .finally(() => { });
+        .finally(() => {});
     },
   },
   computed: {
@@ -153,27 +152,9 @@ export default {
      */
     entry() {
       let entry = {};
-      entry.screens = this.GameData._source.screens;
-      if (entry.screens.length == 0 && this.GameData._source.genreType !== "Hardware") {
-        if (this.$isDevelopment) {
-          console.log(`DetailView - entry(): NOT Hardware - setting default image`);
-        }
-        entry.screens.push({ url: "/images/placeholder.png" });
-      }
 
-      // HW thumbnail is part of "screens"
-      if (entry.screens.length == 0 && this.GameData._source.genreType === "Hardware") {
-        if (this.$isDevelopment) {
-          console.log(`DetailView - entry(): setting default Hardware image`);
-        }
-        for (var addIdx = 0; addIdx < this.GameData._source.additionalDownloads.length; addIdx++) {
-          var hwItem = this.GameData._source.additionalDownloads[addIdx];
-          if (hwItem.type === "Hardware picture" && hwItem.format === "Picture (JPG)") {
-            if (this.$isDevelopment) console.log(`DetailView - entry(): ${addIdx} - FOUND HW Image (${hwItem.path})`);
-            entry.screens.push({ url: hwItem.path });
-          }
-        }
-      }
+      entry.screens = this.getScreens(this.GameData);
+
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.title;
       entry.contentType = this.GameData._source.contentType;
@@ -269,9 +250,7 @@ export default {
       }
 
       entry.hardwareBlurb = this.GameData._source.hardwareBlurb;
-      entry.knownErrors = this.GameData._source.knownErrors
-        ? this.GameData._source.knownErrors.replace(/\^/g, "\n").replace(/#/g, "<br/>")
-        : null;
+      entry.knownErrors = this.GameData._source.knownErrors ? this.GameData._source.knownErrors.replace(/\^/g, "\n").replace(/#/g, "<br/>") : null;
       entry.comments = this.GameData._source.remarks;
       // replace {Professional Adventure Writer - User Overlays|Kelsoft|0010899}
       // 0006857
@@ -287,10 +266,7 @@ export default {
           let embedded = curMatch[1];
           let result = embedded.match(/\{(.+)\|(.*)\|([0-9]+)\}/) || [];
           if (result[0]) {
-            entry.comments = entry.comments.replace(
-              result[0],
-              "<a href='/details/" + result[3] + "'>" + result[1] + "</a> (" + result[2] + ")"
-            );
+            entry.comments = entry.comments.replace(result[0], "<a href='/details/" + result[3] + "'>" + result[1] + "</a> (" + result[2] + ")");
           }
         }
       }
@@ -613,7 +589,7 @@ export default {
 </script>
 <style>
 /* remove padding from expansion-panel-content */
-.v-expansion-panel-content>>>.v-expansion-panel-content__wrap {
+.v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
   padding: 4px;
 }
 
