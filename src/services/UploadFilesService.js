@@ -2,7 +2,7 @@
 import axios from "axios";
 
 class UploadFilesService {
-  upload(file, api_base_url, offsetx, offsety, onUploadProgress) {
+  upload(file, api_base_url, offsetx, offsety, zx80, onUploadProgress) {
     let formData = new FormData();
 
     formData.append("file", file);
@@ -13,7 +13,7 @@ class UploadFilesService {
         "Content-type": "application/json",
       },
     });
-    return http.post(`/upload?ox=${offsetx}&oy=${offsety}`, formData, {
+    return http.post(`/upload?ox=${offsetx}&oy=${offsety}&zx80=${zx80}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
