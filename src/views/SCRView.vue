@@ -246,7 +246,7 @@ export default {
         console.log(file);
       }
 
-      const allowedTypes = ["bmp", "png", "gif", "jpg", "s81", "scr"];
+      const allowedTypes = ["bmp", "png", "gif", "jpg", "s81", "s80", "scr"];
 
       this.message = "";
       this.progress = 0;
