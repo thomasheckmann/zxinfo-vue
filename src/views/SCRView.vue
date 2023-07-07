@@ -29,9 +29,10 @@
                 <v-col v-if="message" cols="12">
                   <v-alert v-if="message" border="left" color="blue-grey" dark> {{ message }} </v-alert>
                 </v-col>
-                <v-col class="px-2" cols="12" md="4"><v-text-field v-if="input_is_image" label="Offset X" outlined v-model="offsetx" dense></v-text-field> </v-col
-                ><v-col class="px-2" cols="12" md="4"><v-text-field v-if="input_is_image" label="Offset Y" outlined v-model="offsety" dense></v-text-field></v-col
-                ><v-col class="px-2 my-2" cols="12" md="4"
+                <v-col class="px-2" cols="3" md="4"><v-text-field v-if="input_is_image" label="Offset X" outlined v-model="offsetx" dense></v-text-field> </v-col
+                ><v-col class="px-2" cols="3" md="4"><v-text-field v-if="input_is_image" label="Offset Y" outlined v-model="offsety" dense></v-text-field></v-col
+                ><v-col class="px-2 align-items-center justify-content-center" cols="3" md="4"><v-checkbox  v-if="input_is_image" dense v-model="zx80" :label="`ZX80: ${zx80.toString()}`"></v-checkbox></v-col
+                ><v-col class="px-2 my-2" cols="3" md="4"
                   ><v-btn width="100%" :disabled="!this.currentFile" dark small @click="upload">
                     Upload
                     <v-icon right dark>mdi-cloud-upload</v-icon>
@@ -44,20 +45,22 @@
         <!-- column 2, intro OR links to downloads -->
         <v-col cols="6">
           <v-card v-if="!r" class="pa-2" flat tile>
-            <v-card-title>ZX81 Screen Converter</v-card-title>
+            <v-card-title>ZX81/80 Screen Converter</v-card-title>
             <v-card-text
               ><div>
                 Take as input a screen dump file and converts to different formats. Allowed input formats:
                 <ul>
                   <li>.bmp as produced by various emulators (e.g. EightyOne and SZ81)</li>
                   <li>.gif as produced by various emulators (e.g. ZXSP-0.8.33-beta)</li>
-                  <li>.jpg as produced by various emulators (ZX81 on macOS)</li>
+                  <li>.jpg as produced by various emulators (e.g. ZX81 on iOS/macOS)</li>
                   <li>.s81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
+                  <li>(*).s80 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX80 charset)</li>
                   <li>.scr Widely used screen format used for ZX Spectrum (ZX81 hi-res)</li>
                 </ul>
                 Creates the following output for downloads:
                 <ul>
                   <li>.s81 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX81 charset)</li>
+                  <li>(*).s80 for standard non-hires ZX81 screens (a sequence of 768 character codes from the ZX80 charset)</li>
                   <li>.scr for hires screens with regular size (in ZX Spectrum display format)</li>
                   <li>.png for big screens, that goes beyond the 256x192 size</li>
                   <li>.txt for printing in console - mostly for fun (ANSI control codes to implement inverse print)</li>
@@ -165,6 +168,7 @@ export default {
       input_is_image: false,
       offsetx: -1,
       offsety: -1,
+      zx80: false,
     };
   },
   computed: {
@@ -216,7 +220,7 @@ export default {
       this.message = "";
       this.r = undefined;
 
-      UploadService.upload(this.currentFile, this.$api_base_url, this.offsetx, this.offsety, (event) => {
+      UploadService.upload(this.currentFile, this.$api_base_url, this.offsetx, this.offsety, this.zx80, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
         .then((response) => {
@@ -242,13 +246,14 @@ export default {
         console.log(file);
       }
 
-      const allowedTypes = ["bmp", "png", "gif", "jpg", "s81", "scr"];
+      const allowedTypes = ["bmp", "png", "gif", "jpg", "s81", "s80", "scr"];
 
       this.message = "";
       this.progress = 0;
       this.currentFile = file;
       this.offsetx = -1;
       this.offsety = -1;
+      this.zx80 = false;
 
       if (!file) return;
       var extension = file.name.substring(file.name.lastIndexOf(".") + 1).toLowerCase();
@@ -261,7 +266,7 @@ export default {
         this.message = "Invalid file type: " + file.type;
         this.currentFile = undefined;
       }
-      if (extension === "bmp" || extension === "png" || extension === "gif"|| extension === "jpg") {
+      if (extension === "bmp" || extension === "png" || extension === "gif" || extension === "jpg") {
         this.input_is_image = true;
       } else {
         this.input_is_image = false;
