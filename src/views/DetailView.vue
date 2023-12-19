@@ -157,6 +157,7 @@ export default {
 
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.title;
+      entry.xrated = this.GameData._source.xrated;
       entry.contentType = this.GameData._source.contentType;
       entry.zxinfoVersion = this.GameData._source.zxinfoVersion;
       entry.availability = this.GameData._source.availability;
