@@ -222,6 +222,7 @@ export default {
         contenttype: { name: "contenttype", value: "" },
         xrated: { name: "xrated", value: "" },
         mia: { name: "mia", value: "" },
+        originalpublication: { name: "originalpublication", value: "" },
       },
       facets: {
         // key = name in agg output, paramname = parameter name for search
