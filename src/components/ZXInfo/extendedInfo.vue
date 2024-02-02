@@ -44,27 +44,31 @@
         >
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <!-- * Series  * -->
-    <v-expansion-panel :hidden="!entry.series.length && !$isDevelopment">
-      <v-expansion-panel-header class="px-4 py-0" :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
-        >Series</v-expansion-panel-header
+    <!-- * Competitions * -->
+    <v-expansion-panel :hidden="!entry.competitions.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.competitions.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Competitions</v-expansion-panel-header
       >
       <v-expansion-panel-content>
-        <v-data-table
-          class="pa-0"
-          :headers="entry.item_short_headers"
-          :items="entry.series"
-          disable-sort
-          dense
-          flat
-          :mobile-breakpoint="0"
-          ><template v-slot:item.title="{ item }">
-            <router-link :to="'/details/' + item.entry_id">{{ item.title }}</router-link> </template
-          ><template v-slot:item.publisher="{ item }">
-            <span v-for="(orgpub, i) in item.publishers" :key="i"
-              >{{ orgpub.name }} <span v-if="i != Object.keys(item.publishers).length - 1">/ </span></span
-            >
-          </template></v-data-table
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-list flat dense class="pa-0">
+              <v-list-item
+                style="min-height:16px;"
+                class="pa-0 ma-0 auto"
+                v-for="(competition, i) in entry.competitions"
+                :key="i"
+              >
+                <v-list-item-content class="py-1">
+                  <v-list-item-subtitle style="white-space: normal;"
+                    ><router-link :to="{ path: '/search', query: { group: 'C', groupname: competition } }">{{
+                      competition
+                    }}</router-link></v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-row></v-container
         >
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -107,29 +111,6 @@
               outlined
               label
               @click="$router.push({ path: '/search', query: { group: 'F', groupname: feature } })"
-            >
-              {{ feature }} <v-icon small right>mdi-link</v-icon>
-            </v-chip>
-          </v-row></v-container
-        >
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    <!-- * ZX81 GFX FEATURES * -->
-    <v-expansion-panel :hidden="!entry.featuresZX81.length && !$isDevelopment">
-      <v-expansion-panel-header class="px-4 py-0" :class="entry.featuresZX81.length ? 'font-weight-bold' : 'font-weight-light'"
-        >ZX81 Enhanced Graphics</v-expansion-panel-header
-      >
-      <v-expansion-panel-content>
-        <v-container class="py-0">
-          <v-row justify="start" align="center">
-            <v-chip
-              v-for="(feature, i) in entry.featuresZX81"
-              :key="i"
-              class="ma-1"
-              small
-              outlined
-              label
-              @click="$router.push({ path: '/search', query: { group: 'Z', groupname: feature } })"
             >
               {{ feature }} <v-icon small right>mdi-link</v-icon>
             </v-chip>
@@ -252,54 +233,27 @@
         >
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <!-- * Cross Platform Tool * -->
-    <v-expansion-panel :hidden="!entry.crossPlatform.length && !$isDevelopment">
-      <v-expansion-panel-header class="px-4 py-0" :class="entry.crossPlatform.length ? 'font-weight-bold' : 'font-weight-light'"
-        >Cross Platform Tool</v-expansion-panel-header
+    <!-- * Series  * -->
+    <v-expansion-panel :hidden="!entry.series.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.series.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Series</v-expansion-panel-header
       >
       <v-expansion-panel-content>
-        <v-container class="py-0">
-          <v-row justify="start" align="center">
-            <v-chip
-              v-for="(feature, i) in entry.crossPlatform"
-              :key="i"
-              class="ma-1"
-              small
-              outlined
-              label
-              @click="$router.push({ path: '/search', query: { group: 'X', groupname: feature } })"
+        <v-data-table
+          class="pa-0"
+          :headers="entry.item_short_headers"
+          :items="entry.series"
+          disable-sort
+          dense
+          flat
+          :mobile-breakpoint="0"
+          ><template v-slot:item.title="{ item }">
+            <router-link :to="'/details/' + item.entry_id">{{ item.title }}</router-link> </template
+          ><template v-slot:item.publisher="{ item }">
+            <span v-for="(orgpub, i) in item.publishers" :key="i"
+              >{{ orgpub.name }} <span v-if="i != Object.keys(item.publishers).length - 1">/ </span></span
             >
-              {{ feature }} <v-icon small right>mdi-link</v-icon>
-            </v-chip>
-          </v-row></v-container
-        >
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    <!-- * Competitions * -->
-    <v-expansion-panel :hidden="!entry.competitions.length && !$isDevelopment">
-      <v-expansion-panel-header class="px-4 py-0" :class="entry.competitions.length ? 'font-weight-bold' : 'font-weight-light'"
-        >Competitions</v-expansion-panel-header
-      >
-      <v-expansion-panel-content>
-        <v-container class="py-0">
-          <v-row justify="start" align="center">
-            <v-list flat dense class="pa-0">
-              <v-list-item
-                style="min-height:16px;"
-                class="pa-0 ma-0 auto"
-                v-for="(competition, i) in entry.competitions"
-                :key="i"
-              >
-                <v-list-item-content class="py-1">
-                  <v-list-item-subtitle style="white-space: normal;"
-                    ><router-link :to="{ path: '/search', query: { group: 'C', groupname: competition } }">{{
-                      competition
-                    }}</router-link></v-list-item-subtitle
-                  >
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-row></v-container
+          </template></v-data-table
         >
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -344,6 +298,52 @@
               @click="$router.push({ path: '/search', query: { group: 'U', groupname: theme } })"
             >
               {{ theme }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Cross Platform Tool * -->
+    <v-expansion-panel :hidden="!entry.crossPlatform.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.crossPlatform.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Cross Platform Tool</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.crossPlatform"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'X', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * ZX81 GFX FEATURES * -->
+    <v-expansion-panel :hidden="!entry.featuresZX81.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.featuresZX81.length ? 'font-weight-bold' : 'font-weight-light'"
+        >ZX81 Enhanced Graphics</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.featuresZX81"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'Z', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
             </v-chip>
           </v-row></v-container
         >
