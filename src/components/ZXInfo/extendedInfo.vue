@@ -68,6 +68,29 @@
         >
       </v-expansion-panel-content>
     </v-expansion-panel>
+    <!-- * DEMO PARTY * -->
+    <v-expansion-panel :hidden="!entry.demoParty.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.demoParty.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Demo Party</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.demoParty"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'D', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
     <!-- * FEATURES * -->
     <v-expansion-panel :hidden="!entry.features.length && !$isDevelopment">
       <v-expansion-panel-header class="px-4 py-0" :class="entry.features.length ? 'font-weight-bold' : 'font-weight-light'"
@@ -84,6 +107,167 @@
               outlined
               label
               @click="$router.push({ path: '/search', query: { group: 'F', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * ZX81 GFX FEATURES * -->
+    <v-expansion-panel :hidden="!entry.featuresZX81.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.featuresZX81.length ? 'font-weight-bold' : 'font-weight-light'"
+        >ZX81 Enhanced Graphics</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.featuresZX81"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'Z', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Graphical View * -->
+    <v-expansion-panel :hidden="!entry.graphicalView.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.graphicalView.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Graphical Views</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.graphicalView"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'G', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Native Programming Language * -->
+    <v-expansion-panel :hidden="!entry.programmingLanguage.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.programmingLanguage.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Native Programming Language</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.programmingLanguage"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'L', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Screen Movement * -->
+    <v-expansion-panel :hidden="!entry.screenMovement.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.screenMovement.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Screen Movement</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.screenMovement"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'M', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Sport * -->
+    <v-expansion-panel :hidden="!entry.sport.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.sport.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Sport</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.sport"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'P', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Copyright * -->
+    <v-expansion-panel :hidden="!entry.copyright.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.copyright.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Copyright status</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.copyright"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'R', groupname: feature } })"
+            >
+              {{ feature }} <v-icon small right>mdi-link</v-icon>
+            </v-chip>
+          </v-row></v-container
+        >
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <!-- * Cross Platform Tool * -->
+    <v-expansion-panel :hidden="!entry.crossPlatform.length && !$isDevelopment">
+      <v-expansion-panel-header class="px-4 py-0" :class="entry.crossPlatform.length ? 'font-weight-bold' : 'font-weight-light'"
+        >Cross Platform Tool</v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <v-container class="py-0">
+          <v-row justify="start" align="center">
+            <v-chip
+              v-for="(feature, i) in entry.crossPlatform"
+              :key="i"
+              class="ma-1"
+              small
+              outlined
+              label
+              @click="$router.push({ path: '/search', query: { group: 'X', groupname: feature } })"
             >
               {{ feature }} <v-icon small right>mdi-link</v-icon>
             </v-chip>
