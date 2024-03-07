@@ -9,6 +9,7 @@ var entry = function(gamedata) {
   let entry = {};
   entry.id = gamedata._id;
   entry.title = gamedata._source.title;
+  entry.xrated = gamedata._source.xrated;
 
   entry.isbn = gamedata._source.isbn;
   entry.availability = gamedata._source.availability;

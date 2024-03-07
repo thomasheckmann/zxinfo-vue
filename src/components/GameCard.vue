@@ -5,7 +5,7 @@
       <ImageContainer v-bind:entry="entry" v-bind:imagetype="imagetype"></ImageContainer>
     </router-link>
     <v-card-title class="d-inline-block text-truncate" style="max-width: 100%;"
-      ><v-badge v-if="entry.availability == 'MIA'" color="pink" dot> {{ entry.title }} </v-badge>
+      ><v-badge v-if="entry.availability == 'MIA'" color="pink" dot> {{ entry.title }}</v-badge>
       <span v-else>{{ entry.title }}</span></v-card-title
     >
     <v-card-subtitle class="pb-0 text-truncate" style="max-width: 100%;"

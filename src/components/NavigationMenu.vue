@@ -101,6 +101,16 @@
         </v-list-item>
       </v-list-group>
       <!-- FEATURES -->
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-subtitle><router-link class="plain" to="/search/?availability=MIA">MIA</router-link></v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-subtitle><router-link class="plain" to="/search/?xrated=1">X-Rated</router-link></v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
       <v-divider></v-divider>
       <v-list-item>
         <v-list-item-content>

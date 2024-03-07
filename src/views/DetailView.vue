@@ -203,6 +203,7 @@ export default {
 
       entry.id = this.GameData._id;
       entry.title = this.GameData._source.title;
+      entry.xrated = this.GameData._source.xrated;
       entry.contentType = this.GameData._source.contentType;
       entry.zxinfoVersion = this.GameData._source.zxinfoVersion;
       entry.availability = this.GameData._source.availability;
@@ -325,14 +326,49 @@ export default {
       entry.reviewAwards = this.GameData._source.reviewAwards;
       entry.magazineRefs = this.GameData._source.magazineReferences;
 
-      entry.themedgroups = [];
-      for (var theme in this.GameData._source.themedGroup) {
-        entry.themedgroups.push(this.GameData._source.themedGroup[theme].name);
+      entry.demoParty = [];
+      for (var feature in this.GameData._source.demoParty) {
+        entry.demoParty.push(this.GameData._source.demoParty[feature].name);
       }
 
       entry.features = [];
       for (var feature in this.GameData._source.features) {
         entry.features.push(this.GameData._source.features[feature].name);
+      }
+      
+      entry.graphicalView = [];
+      for (var feature in this.GameData._source.graphicalView) {
+        entry.graphicalView.push(this.GameData._source.graphicalView[feature].name);
+      }
+
+      entry.programmingLanguage = [];
+      for (var feature in this.GameData._source.programmingLanguage) {
+        entry.programmingLanguage.push(this.GameData._source.programmingLanguage[feature].name);
+      }
+
+      entry.screenMovement = [];
+      for (var feature in this.GameData._source.screenMovement) {
+        entry.screenMovement.push(this.GameData._source.screenMovement[feature].name);
+      }
+
+      entry.sport = [];
+      for (var feature in this.GameData._source.sport) {
+        entry.sport.push(this.GameData._source.sport[feature].name);
+      }
+
+      entry.copyright = [];
+      for (var feature in this.GameData._source.copyright) {
+        entry.copyright.push(this.GameData._source.copyright[feature].name);
+      }
+
+      entry.featuresZX81 = [];
+      for (var feature in this.GameData._source.featuresZX81) {
+        entry.featuresZX81.push(this.GameData._source.featuresZX81[feature].name);
+      }
+
+      entry.crossPlatform = [];
+      for (var feature in this.GameData._source.crossPlatform) {
+        entry.crossPlatform.push(this.GameData._source.crossPlatform[feature].name);
       }
 
       entry.competitions = [];
@@ -344,6 +380,12 @@ export default {
       for (var group in this.GameData._source.unsortedGroup) {
         entry.unsortedgroups.push(this.GameData._source.unsortedGroup[group].name);
       }
+
+      entry.themedgroups = [];
+      for (var theme in this.GameData._source.themedGroup) {
+        entry.themedgroups.push(this.GameData._source.themedGroup[theme].name);
+      }
+
 
       /* RELATIONS */
       entry.authoredWith = this.GameData._source.authoredWith;
