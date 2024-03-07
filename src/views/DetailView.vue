@@ -1,17 +1,42 @@
 <template>
-  <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="!isLoading">
-    <DetailViewTopSmall v-if="$vuetify.breakpoint.xsOnly" v-bind:entry="entry"></DetailViewTopSmall>
-    <DetailViewTop v-if="$vuetify.breakpoint.smAndUp" v-bind:entry="entry"></DetailViewTop>
-    <v-divider></v-divider>
-    <BasicInfoView v-bind:entry="entry"></BasicInfoView>
-    <v-slide-group v-model="entry.allinlays" class="py-2 ma-0" :show-arrows="true" :center-active="true">
-      <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{}">
-        <div class="text-center">
-          <v-dialog v-model="dialog[n]" max-width="80%">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="red lighten-2" small dark v-bind="attrs" v-on="on"> SHOW </v-btn>
-            </template>
-            <v-card>
+  <div>
+    <div v-if="!isLoading && entry == null">
+      <v-container justify-start class="ma-0 pa-0" fluid>
+        <v-row align="start"
+          ><v-col cols="10" class="ma-0 py-4 px-4 text-center">
+            ID: <strong>{{ $route.params.entryid }} </strong> not found, sorry :( <br />But here are some suggestions to check out :-)
+          </v-col></v-row
+        >
+        <v-row :align="'start'" :justify="'center'">
+          <v-col v-for="(card, index) in randomCards" :key="index" cols="12" sm="6" md="4" lg="3" class="px-1">
+            <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="!isLoading && entry !== null">
+      <DetailViewTopSmall v-if="$vuetify.breakpoint.xsOnly" v-bind:entry="entry"></DetailViewTopSmall>
+      <DetailViewTop v-if="$vuetify.breakpoint.smAndUp" v-bind:entry="entry"></DetailViewTop>
+      <v-divider></v-divider>
+      <BasicInfoView v-bind:entry="entry"></BasicInfoView>
+      <v-slide-group v-model="entry.allinlays" class="py-2 ma-0" :show-arrows="true" :center-active="true">
+        <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{}">
+          <div class="text-center">
+            <v-dialog v-model="dialog[n]" max-width="80%">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="red lighten-2" small dark v-bind="attrs" v-on="on"> SHOW </v-btn>
+              </template>
+              <v-card>
+                <v-img :src="inlay" class="white--text align-end">
+                  <template v-slot:placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-card>
+            </v-dialog>
+            <v-card :color="'grey lighten-5'" class="ma-4" width="250" height="250">
               <v-img :src="inlay" class="white--text align-end">
                 <template v-slot:placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
@@ -20,34 +45,25 @@
                 </template>
               </v-img>
             </v-card>
-          </v-dialog>
-          <v-card :color="'grey lighten-5'" class="ma-4" width="250" height="250">
-            <v-img :src="inlay" class="white--text align-end">
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="black lighten-5"></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-          </v-card>
-        </div>
-      </v-slide-item>
-    </v-slide-group>
+          </div>
+        </v-slide-item>
+      </v-slide-group>
 
-    <ReleasesView v-bind:entry="entry"></ReleasesView>
-    <ExtendedInfoView v-bind:entry="entry"></ExtendedInfoView>
-    <CompilationInfoView v-bind:entry="entry"></CompilationInfoView>
-    <RelationsInfoView v-bind:entry="entry"></RelationsInfoView>
-    <BookInfoView v-bind:entry="entry"></BookInfoView>
-    <LinksInfoView v-bind:entry="entry"></LinksInfoView>
+      <ReleasesView v-bind:entry="entry"></ReleasesView>
+      <ExtendedInfoView v-bind:entry="entry"></ExtendedInfoView>
+      <CompilationInfoView v-bind:entry="entry"></CompilationInfoView>
+      <RelationsInfoView v-bind:entry="entry"></RelationsInfoView>
+      <BookInfoView v-bind:entry="entry"></BookInfoView>
+      <LinksInfoView v-bind:entry="entry"></LinksInfoView>
 
-    <v-slide-group show-arrows class="pa-4">
-      <v-slide-item v-for="(card, n) in relatedCards" :key="n">
-        <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
-      </v-slide-item>
-    </v-slide-group>
-    <v-divider></v-divider>
-  </v-card>
+      <v-slide-group show-arrows class="pa-4">
+        <v-slide-item v-for="(card, n) in relatedCards" :key="n">
+          <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
+        </v-slide-item>
+      </v-slide-group>
+      <v-divider></v-divider>
+    </v-card>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -75,9 +91,14 @@ export default {
   metaInfo() {
     if (this.$isDevelopment) console.log("DetailView - metaInfo()");
 
-    if (!this.isLoading) {
+    if (!this.isLoading && this.entry !== null) {
       return {
         title: this.entry.title,
+        titleTemplate: "%s | ZXInfo",
+      };
+    } else {
+      return {
+        title: "NOT FOUND",
         titleTemplate: "%s | ZXInfo",
       };
     }
@@ -87,6 +108,7 @@ export default {
       isLoading: true,
       GameData: Object,
       relatedCards: [],
+      randomCards: [],
       imagetype: "screen",
       BasicInfo: [],
       dialog: [],
@@ -109,25 +131,26 @@ export default {
         .get(dataURL)
         .then((response) => {
           this.GameData = response.data;
+          this.getMoreLikeThis();
           this.isLoading = false;
         })
         .catch((error) => {
           this.isLoading = false;
           this.GameData = null; // TODO: Handle NOT found better
-          console.log(error);
+          this.getRandom2();
+          this.isLoading = false;
         })
         .finally(() => {
           this.isLoading = false;
         });
-      this.getMoreLikeThis();  // TODO REMOVE
     },
     getCoverImage: imageHelper.getCoverImage,
     getScreenUrl: imageHelper.getScreenUrl,
     getScreens: imageHelper.getScreens,
 
+    // getMoreLikeThis, displayed on detail page
     getMoreLikeThis() {
       this.relatedCards = [];
-      // v3/games/morelikethis/483?mode=tiny&size=10
       var dataURL = this.$api_base_url + "/games/morelikethis/" + this.$route.params.entryid + "?mode=tiny&size=10";
       if (this.$isDevelopment) console.log(`DetailView.vue - getMoreLikeThis(): calling ZXInfo API ${dataURL}`);
       axios
@@ -143,6 +166,25 @@ export default {
         })
         .finally(() => {});
     },
+
+    // getRandom2, displayed when entry not found (basically to avoid empty page)
+    getRandom2() {
+      this.randomCards = [];
+      var dataURL = this.$api_base_url + "/games/random/2?mode=tiny";
+      if (this.$isDevelopment) console.log(`DetailView.vue - getRandom2(): calling ZXInfo API ${dataURL}`);
+      axios
+        .get(dataURL)
+        .then((response) => {
+          for (var ii = 0; ii < response.data.hits.hits.length; ii++) {
+            this.randomCards.push(response.data.hits.hits[ii]);
+          }
+        })
+        .catch((error) => {
+          this.randomCards = [];
+          console.log(error);
+        })
+        .finally(() => {});
+    },
   },
   computed: {
     // cleaned version of JSON
@@ -151,6 +193,10 @@ export default {
     ENTRY DETAILS
      */
     entry() {
+      if (!this.isLoading && this.GameData === null) {
+        return null;
+      }
+
       let entry = {};
 
       entry.screens = this.getScreens(this.GameData);

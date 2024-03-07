@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined width="256" class="ma-4">
+  <v-card outlined width="256" class="ma-4" v-if="this.GameData !== null">
     <router-link :to="'/details/' + entry.id">
       <!-- image -->
       <ImageContainer v-bind:entry="entry" v-bind:imagetype="imagetype"></ImageContainer>
