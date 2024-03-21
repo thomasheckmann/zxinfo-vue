@@ -2,11 +2,10 @@
   <div>
     <div v-if="!isLoading && entry == null">
       <v-container justify-start class="ma-0 pa-0" fluid>
-        <v-row align="start"
-          ><v-col cols="10" class="ma-0 py-4 px-4 text-center">
-            ID: <strong>{{ $route.params.entryid }} </strong> not found, sorry :( <br />But here are some suggestions to check out :-)
-          </v-col></v-row
-        >
+        <v-row align="start"><v-col cols="10" class="ma-0 py-4 px-4 text-center">
+            ID: <strong>{{ $route.params.entryid }} </strong> not found, sorry :( <br />But here are some suggestions to
+            check out :-)
+          </v-col></v-row>
         <v-row :align="'start'" :justify="'center'">
           <v-col v-for="(card, index) in randomCards" :key="index" cols="12" sm="6" md="4" lg="3" class="px-1">
             <GameCard v-bind:GameData="card" v-bind:imagetype="imagetype"></GameCard>
@@ -14,13 +13,14 @@
         </v-row>
       </v-container>
     </div>
-    <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'" v-if="!isLoading && entry !== null">
+    <v-card class="mx-auto" :max-width="$vuetify.breakpoint.xsOnly ? '100%' : '80%'"
+      v-if="!isLoading && entry !== null">
       <DetailViewTopSmall v-if="$vuetify.breakpoint.xsOnly" v-bind:entry="entry"></DetailViewTopSmall>
       <DetailViewTop v-if="$vuetify.breakpoint.smAndUp" v-bind:entry="entry"></DetailViewTop>
       <v-divider></v-divider>
       <BasicInfoView v-bind:entry="entry"></BasicInfoView>
       <v-slide-group v-model="entry.allinlays" class="py-2 ma-0" :show-arrows="true" :center-active="true">
-        <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{}">
+        <v-slide-item v-for="(inlay, n) in entry.allinlays" :key="n" v-slot:default="{ }">
           <div class="text-center">
             <v-dialog v-model="dialog[n]" max-width="80%">
               <template v-slot:activator="{ on, attrs }">
@@ -125,7 +125,8 @@ export default {
     loadentry() {
       this.isLoading = true;
 
-      var dataURL = this.$api_base_url + "/games/" + this.$route.params.entryid + "?mode=full";
+      // var dataURL = this.$api_base_url + "/entries/" + this.$route.params.entryid + "?mode=full";
+      const dataURL = `${this.$api_base_url}/entries/${this.$route.params.entryid}?mode=full`;
       if (this.$isDevelopment) console.log(`DetailView.vue - loadentry(): calling ZXInfo API ${dataURL}`);
       axios
         .get(dataURL)
@@ -151,7 +152,8 @@ export default {
     // getMoreLikeThis, displayed on detail page
     getMoreLikeThis() {
       this.relatedCards = [];
-      var dataURL = this.$api_base_url + "/games/morelikethis/" + this.$route.params.entryid + "?mode=tiny&size=10";
+      // var dataURL = this.$api_base_url + "/entries/morelikethis/" + this.$route.params.entryid + "?mode=tiny&size=10";
+      const dataURL = `${this.$api_base_url}/entries/morelikethis/${this.$route.params.entryid}?mode=tiny&size=10`;
       if (this.$isDevelopment) console.log(`DetailView.vue - getMoreLikeThis(): calling ZXInfo API ${dataURL}`);
       axios
         .get(dataURL)
@@ -164,13 +166,13 @@ export default {
           this.relatedCards = []; // TODO: Handle NOT found better
           console.log(error);
         })
-        .finally(() => {});
+        .finally(() => { });
     },
 
     // getRandom2, displayed when entry not found (basically to avoid empty page)
     getRandom2() {
       this.randomCards = [];
-      var dataURL = this.$api_base_url + "/games/random/2?mode=tiny";
+      const dataURL = `${this.$api_base_url}/entries/random/2?mode=tiny`;
       if (this.$isDevelopment) console.log(`DetailView.vue - getRandom2(): calling ZXInfo API ${dataURL}`);
       axios
         .get(dataURL)
@@ -183,7 +185,7 @@ export default {
           this.randomCards = [];
           console.log(error);
         })
-        .finally(() => {});
+        .finally(() => { });
     },
   },
   computed: {
@@ -271,9 +273,14 @@ export default {
       entry.machineType = this.GameData._source.machineType;
       entry.isbn = this.GameData._source.isbn;
 
-      entry.genre = this.GameData._source.genre;
-      entry.genreType = this.GameData._source.genreType;
-      entry.genreSubType = this.GameData._source.genreSubType;
+      entry.genretypeCombined = this.GameData._source.genreType;
+      if (this.GameData._source.genreType && this.GameData._source.genreSubType) {
+        entry.genretypeCombined = this.GameData._source.genreType + "/" + this.GameData._source.genreSubType;
+      } else if (this.GameData._source.genreType && !this.GameData._source.genreSubType) {
+        entry.genretypeCombined = this.GameData._source.genreType;
+      }
+      entry.genretype = this.GameData._source.genreType;
+      entry.genresubtype = this.GameData._source.genreSubType;
 
       entry.maximumPlayers = this.GameData._source.numberOfPlayers;
       entry.multiTurnMode = this.GameData._source.multiplayerMode;
@@ -335,7 +342,7 @@ export default {
       for (var feature in this.GameData._source.features) {
         entry.features.push(this.GameData._source.features[feature].name);
       }
-      
+
       entry.graphicalView = [];
       for (var feature in this.GameData._source.graphicalView) {
         entry.graphicalView.push(this.GameData._source.graphicalView[feature].name);
@@ -677,7 +684,7 @@ export default {
 </script>
 <style>
 /* remove padding from expansion-panel-content */
-.v-expansion-panel-content >>> .v-expansion-panel-content__wrap {
+.v-expansion-panel-content>>>.v-expansion-panel-content__wrap {
   padding: 4px;
 }
 

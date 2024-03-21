@@ -2,7 +2,7 @@
  * cleaned version of JSON - used in overview (using search compact view)
  * @param {*} gamedata
  */
-var entry = function(gamedata) {
+var entry = function (gamedata) {
   if (this.$isDevelopment) {
     console.log(`entry-helper.js - entry(): ${gamedata._id}`);
   }
@@ -25,16 +25,18 @@ var entry = function(gamedata) {
   entry.originalPublisher = [];
   for (var publisher in gamedata._source.publishers) {
     var originalPublisher = gamedata._source.publishers[publisher].name;
-    var originalPublisherCountry = gamedata._source.publishers[publisher].country ;
+    var originalPublisherCountry = gamedata._source.publishers[publisher].country;
     entry.originalPublisher.push({ name: originalPublisher, country: originalPublisherCountry });
   }
 
-  entry.genretype = gamedata._source.genreType;
+  entry.genretypeCombined = gamedata._source.genreType;
   if (gamedata._source.genreType && gamedata._source.genreSubType) {
-    entry.genre = gamedata._source.genreType + "/" + gamedata._source.genreSubType;
+    entry.genretypeCombined = gamedata._source.genreType + "/" + gamedata._source.genreSubType;
   } else if (gamedata._source.genreType && !gamedata._source.genreSubType) {
-    entry.genre = gamedata._source.genreType;
+    entry.genretypeCombined = gamedata._source.genreType;
   }
+  entry.genretype = gamedata._source.genreType;
+  entry.genresubtype = gamedata._source.genreSubType;
 
   entry.score = {};
   entry.score.score = gamedata._source.score.score;

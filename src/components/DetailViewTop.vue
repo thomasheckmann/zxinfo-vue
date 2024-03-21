@@ -31,10 +31,17 @@
                 <router-link :to="{ path: '/search', query: { machinetype: entry.machineType } }">{{
                   entry.machineType
                 }}</router-link
-                ><br /><router-link :to="{ path: '/search', query: { genretype: entry.genreType } }">{{
-                  entry.genre
-                }}</router-link
                 ><br />
+                <div v-if="entry.genretype && entry.genresubtype" class="d-inline-block text-truncate" style="max-width: 100%;">
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype, genresubtype: entry.genresubtype } }">+ </router-link>
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genretype }}</router-link> / 
+        <router-link :to="{ path: '/search', query: { genresubtype: entry.genresubtype } }">{{ entry.genresubtype }}</router-link>
+      </div>
+      <div v-if="entry.genretype && !entry.genresubtype" class="d-inline-block text-truncate" style="max-width: 100%;">
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genretype }}</router-link>
+      </div>
+      <div v-if="!entry.genretypeCombined"><br /></div>
+                <br />
                 <v-rating
                   v-model="entry.score.score"
                   background-color="grey lighten-1"

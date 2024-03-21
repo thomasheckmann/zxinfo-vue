@@ -99,10 +99,8 @@ export default {
       this.isLoading = true;
       this.letter = this.$route.params.letter.toLowerCase();
       if (this.$route.query.machinetype) this.selectedMachine = this.$route.query.machinetype;
-      var dataURL =
-        this.$api_base_url +
-        `/games/byletter/${encodeURIComponent(this.letter)}?mode=tiny&size=${this.getPageSize}&offset=${this.pageindex}`;
-      if (this.selectedMachine) {
+      var dataURL = `${this.$api_base_url}/entries/byletter/${encodeURIComponent(this.letter)}?mode=tiny&size=${this.getPageSize}&offset=${this.pageindex}`;
+        if (this.selectedMachine) {
         dataURL = dataURL + `&machinetype=${encodeURIComponent(this.selectedMachine)}`;
       }
       if (this.$isDevelopment) console.log(`ByLetterView.vue - loadMore(): calling ZXInfo API ${dataURL}`);

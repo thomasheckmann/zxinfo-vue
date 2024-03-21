@@ -60,7 +60,8 @@ export default {
   },
   methods: {
     loadentry(entryid) {
-      var dataURL = this.$api_base_url + "/games/" + entryid + "?mode=compact";
+      //var dataURL = this.$api_base_url + "/games/" + entryid + "?mode=compact";
+      const dataURL = `${this.$api_base_url}/entries/${entryid}?mode=compact`;
       if (this.$isDevelopment)
         console.log(`NNN.vue - loadentry(): calling ZXInfo API ${dataURL}`);
       axios

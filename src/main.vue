@@ -11,66 +11,43 @@
     <v-app-bar app clipped-left dark color="black">
       <v-app-bar-nav-icon title="MENU" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <template
-        v-if="!$vuetify.breakpoint.xs || this.isByLetter || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage"
-      >
+        v-if="!$vuetify.breakpoint.xs || this.isByLetter || this.isHome || this.isGraphPage || this.isAnimatedLoadingPage">
         <v-toolbar-title>
-          <router-link title="HOME" to="/" class="text-decoration-none text-h4 font-weight-black white--text">ZXInfo</router-link>
-          </v-toolbar-title>
+          <router-link title="HOME" to="/"
+            class="text-decoration-none text-h4 font-weight-black white--text">ZXInfo</router-link>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
       </template>
       <div v-if="$isDevelopment">{{ $vuetify.breakpoint.name }} - {{ this.$route.name }}</div>
 
       <!-- search bar -->
       <v-toolbar v-if="showSearchBar" flat class="py-4" color="black" min-width="75%">
-        <v-combobox
-          @change="showinfo"
-          @keypress="showAutoselectMenu"
-          @keyup.enter="submitSearch"
-          :menu-props="{ value: autoselectMenu }"
-          v-model="completeSelected"
-          :items="completeOptions"
-          :loading="isLoadingOptions"
-          :search-input.sync="searchTerm"
-          hide-no-data
-          no-filter
-          item-text="text"
-          item-value="text"
-          :label="labelText"
-          :prepend-inner-icon="'mdi-magnify'"
-          @click:prepend-inner="submitSearch"
+        <v-combobox @change="showinfo" @keypress="showAutoselectMenu" @keyup.enter="submitSearch"
+          :menu-props="{ value: autoselectMenu }" v-model="completeSelected" :items="completeOptions"
+          :loading="isLoadingOptions" :search-input.sync="searchTerm" hide-no-data no-filter item-text="text"
+          item-value="text" :label="labelText" :prepend-inner-icon="'mdi-magnify'" @click:prepend-inner="submitSearch"
           @click:append-outer="filterdrawer = !filterdrawer"
-          :append-outer-icon="isEntrySearch ? 'mdi-filter-variant' : ''"
-          clearable
-          return-object
-          dense
-          :error="errormessage !== ''"
-          :error-messages="errormessage"
-          full-width
-          solo
-        >
+          :append-outer-icon="isEntrySearch ? 'mdi-filter-variant' : ''" clearable return-object dense
+          :error="errormessage !== ''" :error-messages="errormessage" full-width solo>
           <template v-slot:item="{ item }">
             <div v-if="isEntrySearch || isDetailPage">
-              <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'" left>book</v-icon
-              ><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')" left
-                >mdi-bank</v-icon
-              >
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')" left
-                >mdi-account</v-icon
-              >
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')" left
-                >mdi-account-multiple</v-icon
-              >
-              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''" left
-                >mdi-map-marker-question</v-icon
-              >
+              <v-icon v-if="item.type == 'SOFTWARE'" left>games</v-icon><v-icon v-if="item.type == 'BOOK'"
+                left>book</v-icon><v-icon v-if="item.type == 'HARDWARE'" left>mouse</v-icon>
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Company')"
+                left>mdi-bank</v-icon>
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Person')"
+                left>mdi-account</v-icon>
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype.startsWith('Nickname')"
+                left>mdi-account-multiple</v-icon>
+              <v-icon v-if="['AUTHOR', 'PUBLISHER'].includes(item.type) && item.labeltype == ''"
+                left>mdi-map-marker-question</v-icon>
               <span v-html="highlight(item.text)"></span>
             </div>
             <div v-if="isPublisherPage || isAuthorPage">
-              <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon
-              ><v-icon v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon
-              ><v-icon v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon
-              ><v-icon v-if="item.labeltype == ''" left>mdi-map-marker-question</v-icon>
+              <v-icon v-if="item.labeltype.startsWith('Company')" left>mdi-bank</v-icon><v-icon
+                v-if="item.labeltype.startsWith('Person')" left>mdi-account</v-icon><v-icon
+                v-if="item.labeltype.startsWith('Nickname')" left>mdi-account-multiple</v-icon><v-icon
+                v-if="item.labeltype == ''" left>mdi-map-marker-question</v-icon>
               <span v-html="highlight(item.text)"></span>
             </div>
           </template>
@@ -103,7 +80,8 @@
               </template>
               <v-list-item v-for="subItem in group.items" :key="subItem.key">
                 <v-list-item-action class="ma-0">
-                  <v-checkbox color="primary" v-model="facets[key].selected" :value="subItem.key.toString()"></v-checkbox>
+                  <v-checkbox color="primary" v-model="facets[key].selected"
+                    :value="subItem.key.toString()"></v-checkbox>
                 </v-list-item-action>
                 <v-list-item-content class="py-0 pl-4">
                   <v-list-item-title v-text="subItem.key"></v-list-item-title>
@@ -132,32 +110,18 @@
       </template>
     </v-navigation-drawer>
 
-    <v-main
-      ><!-- v-container (fluid) -> v-row -> v-vol -->
-      <router-view
-        :facets="facets"
-        :queryparameters="queryparameters"
-        :pagesize="this.getPageSize"
-        :pageindex="pageindex"
-        :cards="cards"
-        :allResults="allResults"
-        :searchNumberOfResults="searchNumberOfResults"
-        :searchTimeOf="searchTimeOf"
-        :isLoading="isLoading"
-        @loadMore="loadMore"
-        @loadPage="loadPage"
-        @replaceURL="replaceURL"
-        class="view"
-      ></router-view
-    ></v-main>
+    <v-main><!-- v-container (fluid) -> v-row -> v-vol -->
+      <router-view :facets="facets" :queryparameters="queryparameters" :pagesize="this.getPageSize"
+        :pageindex="pageindex" :cards="cards" :allResults="allResults" :searchNumberOfResults="searchNumberOfResults"
+        :searchTimeOf="searchTimeOf" :isLoading="isLoading" @loadMore="loadMore" @loadPage="loadPage"
+        @replaceURL="replaceURL" class="view"></router-view></v-main>
     <v-footer app padless class="caption .font-weight-thin">
       <v-container fluid>
         <v-row justify="space-between" align="center" class="px-4">
           <span>&copy; 2021 info@zxinfo.dk</span>
-          <span class="text-center"><a href="https://api.zxinfo.dk/v3/">Public API</a></span
-          ><span><a href="https://github.com/thomasheckmann/zxinfo-vue">GitHub</a></span>
-        </v-row></v-container
-      >
+          <span class="text-center"><a href="https://api.zxinfo.dk/v3/">Public API</a></span><span><a
+              href="https://github.com/thomasheckmann/zxinfo-vue">GitHub</a></span>
+        </v-row></v-container>
     </v-footer>
   </v-app>
 </template>
@@ -166,7 +130,7 @@ import navigationmenu from "@/components/NavigationMenu";
 import axios from "axios";
 
 // QUeryBuilder Helper
-var buildQuery = function(data) {
+var buildQuery = function (data) {
   // If the data is already a string, return it as-is
   if (typeof data === "string") return data;
 
@@ -222,10 +186,10 @@ export default {
         contenttype: { name: "contenttype", value: "" },
         xrated: { name: "xrated", value: "" },
         mia: { name: "mia", value: "" },
-        originalpublication: { name: "originalpublication", value: "" },
       },
       facets: {
         // key = name in agg output, paramname = parameter name for search
+        // must match filtere_<name> in JSON
         machinetypes: {
           aggName: "aggMachineTypes",
           icon: "mdi-desktop-classic",
@@ -234,24 +198,22 @@ export default {
           selected: [],
           paramname: "machinetype",
         },
-        type: {
-          aggName: "aggType",
+        genretype: {
+          aggName: "aggGenreType",
           icon: "mdi-drama-masks",
           title: "Genre type",
           items: [],
           selected: [],
           paramname: "genretype",
         },
-        // subtype: { icon: "mdi-drama-masks", title: "Genre subtype", items: [], selected: [], paramname: "genresubtype" },
-        year: {
-          aggName: "aggOriginalYearOfRelease",
-          icon: "mdi-timetable",
-          title: "Year",
+        genresubtype: {
+          aggName: "aggGenreSubType",
+          icon: "mdi-drama-masks",
+          title: "Subtype",
           items: [],
           selected: [],
-          paramname: "year",
+          paramname: "genresubtype",
         },
-        // TODO: Should be handled seperate, as it contains: controls.controls. FIX in es-service
         controls: {
           aggName: "aggControls",
           icon: "mdi-controller-classic",
@@ -259,14 +221,6 @@ export default {
           items: [],
           selected: [],
           paramname: "control",
-        },
-        multiplayertype: {
-          aggName: "aggMultiplayerType",
-          icon: "mdi-account-multiple",
-          title: "Multiplayer type",
-          items: [],
-          selected: [],
-          paramname: "multiplayertype",
         },
         multiplayermode: {
           aggName: "aggMultiplayerMode",
@@ -276,22 +230,13 @@ export default {
           selected: [],
           paramname: "multiplayermode",
         },
-        /**
-        originalpublication: {
-          aggName: "aggOriginalPublication",
-          icon: "mdi-rocket",
-          title: "Original publication",
+        multiplayertype: {
+          aggName: "aggMultiplayerType",
+          icon: "mdi-account-multiple",
+          title: "Multiplayer type",
           items: [],
           selected: [],
-          paramname: "originalpublication",
-        }, */
-        language: {
-          aggName: "aggLanguage",
-          icon: "mdi-message",
-          title: "Language",
-          items: [],
-          selected: [],
-          paramname: "language",
+          paramname: "multiplayertype",
         },
         availability: {
           aggName: "aggAvailability",
@@ -300,6 +245,22 @@ export default {
           items: [],
           selected: [],
           paramname: "availability",
+        },
+        language: {
+          aggName: "aggLanguage",
+          icon: "mdi-message",
+          title: "Language",
+          items: [],
+          selected: [],
+          paramname: "language",
+        },
+        yearofrelease: {
+          aggName: "aggOriginalYearOfRelease",
+          icon: "mdi-timetable",
+          title: "Year",
+          items: [],
+          selected: [],
+          paramname: "year",
         },
       },
       isLoading: false,
@@ -400,7 +361,7 @@ export default {
       if (this.isEntrySearch || this.isDetailPage) path = "search";
       if (this.isPublisherPage) path = "publisher";
       if (this.isAuthorPage) path = "author";
-      this.$router.replace({ path: `/${path}/${encodeURIComponent(queryparam)}`, query: filterquery }, () => {});
+      this.$router.replace({ path: `/${path}/${encodeURIComponent(queryparam)}`, query: filterquery }, () => { });
     },
     toggleNavigation() {
       this.filterdrawer = !this.filterdrawer;
@@ -463,7 +424,7 @@ export default {
       this.pageindex = p;
       this.loadMore();
     },
-    loadMore: function() {
+    loadMore: function () {
       if (this.$isDevelopment) console.log("main.vue - loadMore()");
       this.isLoading = true;
       this.allResults = true;
@@ -500,11 +461,12 @@ export default {
       }
 
       var p = {
-        query: searchText,
+        // query: searchText,
         mode: "tiny",
         includeagg: "true",
         size: this.getPageSize,
         offset: this.pageindex,
+        titlesonly: false
       };
 
       // add filters
@@ -525,11 +487,13 @@ export default {
       }
 
       var dataURL;
-      if (this.isEntrySearch || this.isDetailPage) dataURL = this.$api_base_url + "/search?" + buildQuery(p);
+      if (this.isEntrySearch || this.isDetailPage) {
+        dataURL = `${this.$api_base_url}/search/${encodeURIComponent(searchText)}?${buildQuery(p)}`; //this.$api_base_url + "/search?" + buildQuery(p);
+      }
       if (this.isPublisherPage)
-        dataURL = this.$api_base_url + "/publishers/" + encodeURIComponent(this.$route.params.query) + "/games?" + buildQuery(p);
+        dataURL = `${this.$api_base_url}/entries/bypublisher/${encodeURIComponent(this.$route.params.query)}?${buildQuery(p)}`;
       if (this.isAuthorPage)
-        dataURL = this.$api_base_url + "/authors/" + encodeURIComponent(this.$route.params.query) + "/games?" + buildQuery(p);
+        dataURL = `${this.$api_base_url}/entries/byauthor/${encodeURIComponent(this.$route.params.query)}?${buildQuery(p)}`;
       if (dataURL) {
         if (this.$isDevelopment) console.log(`main.vue - loadMore(): buildQuery: ${buildQuery(p)}`);
         if (this.$isDevelopment) console.log(`main.vue - loadMore(): calling ZXInfo API ${dataURL}`);
@@ -543,9 +507,10 @@ export default {
               for (var agg in this.facets) {
                 this.facets[agg].items = [];
                 const aggName = this.facets[agg].aggName;
-
-                for (var i = 0; i < cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets.length; i++) {
-                  this.facets[agg].items.push(cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets[i]);
+                if (cards.aggregations.all_entries[aggName] !== undefined) {
+                  for (var i = 0; i < cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets.length; i++) {
+                    this.facets[agg].items.push(cards.aggregations.all_entries[aggName]["filtered_" + agg].buckets[i]);
+                  }
                 }
               }
             }
@@ -601,7 +566,7 @@ export default {
   },
   computed: {
     // Only return non-empty facets
-    activeFacets: function() {
+    activeFacets: function () {
       var active = {};
       for (var agg in this.facets) {
         if (this.facets[agg].items.length) {

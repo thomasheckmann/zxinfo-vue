@@ -29,7 +29,7 @@ export default {
       this.isLoading = true;
       if (this.$isDevelopment) console.log("CALLING ZXINFO API...(): " + this.$api_base_url);
       axios
-        .get(this.$api_base_url + "/games/" + this.entry + "?mode=tiny", {
+        .get(this.$api_base_url + "/entries/" + this.entry + "?mode=tiny", {
           timeout: 5000,
         })
         .then((response) => {

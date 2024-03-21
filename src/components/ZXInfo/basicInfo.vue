@@ -25,9 +25,9 @@
             }}</router-link>
             <span v-if="entry.originalPublication"
               >/
-              <router-link :to="{ path: '/search', query: { originalpublication: entry.originalPublication } }">{{
+              {{
                 entry.originalPublication
-              }}</router-link></span
+              }}</span
             >
           </td>
         </tr>

@@ -64,7 +64,7 @@ export default {
       this.$router.push({ path: `/search/${encodeURIComponent(this.searchText)}` });
     },
     random() {
-      var dataURL = this.$api_base_url + "/games/random/1?mode=tiny";
+      const dataURL = `${this.$api_base_url}/entries/random/1?mode=tiny`;
       if (this.$isDevelopment) console.log(`Home.vue - reandom(): calling ZXInfo API ${dataURL}`);
       axios
         .get(dataURL, { timeout: 500 })

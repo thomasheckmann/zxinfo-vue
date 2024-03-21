@@ -24,10 +24,15 @@
       </div>
       <div v-if="!entry.machinetype"><br /></div>
       <div v-if="entry.isbn">ISBN: {{ entry.isbn }}</div>
-      <div v-if="entry.genretype" class="d-inline-block text-truncate" style="max-width: 100%;">
-        <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genre }}</router-link>
+      <div v-if="entry.genretype && entry.genresubtype" class="d-inline-block text-truncate" style="max-width: 100%;">
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype, genresubtype: entry.genresubtype } }">+ </router-link>
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genretype }}</router-link> / 
+        <router-link :to="{ path: '/search', query: { genresubtype: entry.genresubtype } }">{{ entry.genresubtype }}</router-link>
       </div>
-      <div v-if="!entry.genretype"><br /></div>
+      <div v-if="entry.genretype && !entry.genresubtype" class="d-inline-block text-truncate" style="max-width: 100%;">
+        <router-link :to="{ path: '/search', query: { genretype: entry.genretype } }">{{ entry.genretype }}</router-link>
+      </div>
+      <div v-if="!entry.genretypeCombined"><br /></div>
     </v-card-text>
   </v-card>
 </template>
