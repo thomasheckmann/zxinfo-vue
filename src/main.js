@@ -14,6 +14,7 @@ if (Vue.prototype.$isDevelopment) {
   Vue.prototype.$api_base_url = "http://localhost:8300/v4";
 } else {
   Vue.prototype.$api_base_url = "https://api.zxinfo.dk/v4";
+  Vue.prototype.$api_base_url3 = "https://api.zxinfo.dk/v3";
 }
 
 console.log("##############################################");
