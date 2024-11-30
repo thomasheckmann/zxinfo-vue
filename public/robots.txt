@@ -1,2 +1,24 @@
-User-agent: * Disallow: 
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: trendictionbot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: dotbot
+Crawl-delay: 3456
+
+User-agent: DataForSeoBot
+Crawl-delay: 3456
+
+User-Agent: ImagesiftBot
+Crawl-delay: 3456
+
+User-agent: *
+Disallow:
 
