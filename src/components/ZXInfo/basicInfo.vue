@@ -18,17 +18,11 @@
           <td style="white-space: normal;">{{ entry.alsoKnownAs }}</td>
         </tr>
         <tr :style="!$isDevelopment && !entry.availability ? 'display: none;' : ''">
-          <td :class="entry.availability ? 'font-weight-bold' : 'font-weight-light'">Availability / Publication</td>
+          <td :class="entry.availability ? 'font-weight-bold' : 'font-weight-light'">Availability</td>
           <td style="white-space: normal;">
             <router-link :to="{ path: '/search', query: { availability: entry.availability } }">{{
               entry.availability
             }}</router-link>
-            <span v-if="entry.originalPublication"
-              >/
-              {{
-                entry.originalPublication
-              }}</span
-            >
           </td>
         </tr>
         <tr :style="!entry.originalYearOfRelease && !$isDevelopment ? 'display: none;' : ''">
@@ -42,7 +36,12 @@
         <tr :style="!entry.originalPublishers && !$isDevelopment ? 'display: none;' : ''">
           <td :class="entry.originalPublishers ? 'font-weight-bold' : 'font-weight-light'">Original Publisher(s)</td>
           <td valign="top">
-            <v-list flat dense class="pa-0">
+<span v-if="entry.originalPublication"
+              >
+              {{
+                entry.originalPublication
+              }}</span
+            >            <v-list flat dense class="pa-0">
               <v-list-item
                 style="min-height:16px;"
                 class="pa-0 ma-0 auto"
