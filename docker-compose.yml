@@ -6,7 +6,7 @@ services:
       context: ../zxinfo-vue
       dockerfile: Dockerfile
     ports:
-      - "127.0.0.1:8200:80"
+      - "127.0.0.1:8200:8080"
     expose:
       - "8200"
     environment:
