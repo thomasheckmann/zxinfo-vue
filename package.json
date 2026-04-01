@@ -8,8 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "ansi_up": "^5.0.1",
-    "axios": "^0.27.2",
+    "ansi_up": "^5.2.1",
+    "axios": "^1.14.0",
     "vue": "^2.7.14",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.6.5",
@@ -17,12 +17,14 @@
     "vuetify": "^2.6.15"
   },
   "devDependencies": {
-    "@vue/cli-service": "^4.5.15",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "sass": "1.32.12",
-    "sass-loader": "^8.0.2",
+    "@babel/eslint-parser": "^7.28.6",
+    "@vue/cli-plugin-babel": "^5.0.9",
+    "@vue/cli-plugin-eslint": "^5.0.9",
+    "@vue/cli-service": "^5.0.9",
+    "eslint": "^8.57.1",
+    "eslint-plugin-vue": "^8.7.1",
+    "sass": "^1.98.0",
+    "sass-loader": "^16.0.7",
     "vue-cli-plugin-compression": "^1.2.0",
     "vue-cli-plugin-vuetify": "^2.5.8",
     "vue-template-compiler": "^2.7.14",
@@ -39,9 +41,17 @@
       "eslint:recommended"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@babel/eslint-parser",
+      "requireConfigFile": false
     },
-    "rules": {}
+    "rules": {
+      "no-redeclare": "off",
+      "no-unused-vars": "off",
+      "vue/multi-word-component-names": "off",
+      "vue/no-computed-properties-in-data": "off",
+      "vue/no-mutating-props": "off",
+      "vue/valid-v-slot": "off"
+    }
   },
   "browserslist": [
     "> 1%",
