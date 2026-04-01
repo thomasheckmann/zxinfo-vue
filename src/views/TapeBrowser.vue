@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import crypto from "crypto";
 import axios from "axios";
 
 import GameCard from "@/components/GameCardSmall";
@@ -175,15 +174,16 @@ export default {
         return;
       }
       var reader = new FileReader();
-      var shasum = crypto.createHash("sha512");
       reader.readAsArrayBuffer(this.currentFile);
-      reader.onload = () => {
+      reader.onload = async () => {
         this.data = reader.result;
-        shasum.update(new Uint8Array(this.data));
+        const digest = await window.crypto.subtle.digest("SHA-512", this.data);
+        this.sha512 = Array.from(new Uint8Array(digest))
+          .map((byte) => byte.toString(16).padStart(2, "0"))
+          .join("");
       };
       reader.onloadend = () => {
         this.loadTape();
-        this.sha512 = shasum.digest("hex");
 
         var dataURL = this.$api_base_url + `/filecheck/${this.sha512}`;
         if (this.$isDevelopment) console.log(`TapeBrowser.vue - upload(): calling ZXInfo API ${dataURL}`);
@@ -194,10 +194,11 @@ export default {
             this.loadEntry(entryId);
           })
           .catch((error) => {
-            if (error.response.status === 404) {
+            const status = error && error.response ? error.response.status : null;
+            if (status === 404) {
               this.message = `File not found in ZXDB: ${this.sha512}`;
             } else {
-              this.message = error.code + ": " + error.message;
+              this.message = (error && error.code ? error.code : "ERROR") + ": " + (error && error.message ? error.message : "Request failed");
             }
           });
       };
