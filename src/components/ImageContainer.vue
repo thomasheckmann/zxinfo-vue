@@ -196,8 +196,8 @@ export default {
       // load .SCR file into scrdata;
       const scrURL = `https://zxinfo.dk/media${this.item.scrUrl}`;
       axios.get(scrURL, { responseType: "arraybuffer" }).then((response) => {
-        let buffer = Buffer.from(response.data, "utf8");
-        this.loadScreen(Array.prototype.slice.call(buffer, 0));
+        const bytes = Array.from(new Uint8Array(response.data));
+        this.loadScreen(bytes);
       });
     }
   },
