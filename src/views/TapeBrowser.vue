@@ -194,10 +194,11 @@ export default {
             this.loadEntry(entryId);
           })
           .catch((error) => {
-            if (error.response.status === 404) {
+            const status = error && error.response ? error.response.status : null;
+            if (status === 404) {
               this.message = `File not found in ZXDB: ${this.sha512}`;
             } else {
-              this.message = error.code + ": " + error.message;
+              this.message = (error && error.code ? error.code : "ERROR") + ": " + (error && error.message ? error.message : "Request failed");
             }
           });
       };
